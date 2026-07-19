@@ -92,7 +92,7 @@ function Hero() {
           </div>
 
           <p className="text-ink-subtle mt-5 text-sm">
-            Free to join · Learn on any laptop · Certificates on completion
+            Free to join · Learn on any laptop · Badges on completion
           </p>
         </div>
 
@@ -221,10 +221,7 @@ function HowItWorks() {
   return (
     <Section>
       <Container size="wide">
-        <SectionHeading
-          eyebrow="How it works"
-          title="Three steps to your first certificate"
-        />
+        <SectionHeading eyebrow="How it works" title="Three steps to your first badge" />
 
         <ol className="mt-14 grid gap-6 md:grid-cols-3">
           {steps.map((step, index) => (

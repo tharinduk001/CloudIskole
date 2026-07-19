@@ -43,7 +43,7 @@ export default function RefundsPage() {
               You request it within 7 calendar days of your enrolment being activated.
             </li>
             <li>You have completed 25% or less of the course lessons.</li>
-            <li>You have not been issued a certificate for the course.</li>
+            <li>You have not completed the course.</li>
           </ul>
         </Clause>
 
@@ -69,8 +69,8 @@ export default function RefundsPage() {
         <Clause title="4. When we cannot refund">
           <ul>
             <li>
-              You have completed more than 25% of the course, or been issued its
-              certificate, and none of the circumstances in section 3 apply.
+              You have completed more than 25% of the course, or completed it entirely,
+              and none of the circumstances in section 3 apply.
             </li>
             <li>More than 30 days have passed since enrolment.</li>
             <li>Free courses — nothing was paid, so there is nothing to refund.</li>
@@ -114,10 +114,7 @@ export default function RefundsPage() {
               We refund the amount you paid us. Any bank charges your own bank applies to
               receive the transfer are yours.
             </li>
-            <li>
-              Your access to the course ends when the refund is approved, and any
-              certificate issued for it is revoked.
-            </li>
+            <li>Your access to the course ends when the refund is approved.</li>
           </ul>
         </Clause>
 

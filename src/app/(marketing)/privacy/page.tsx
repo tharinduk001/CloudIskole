@@ -59,7 +59,7 @@ export default function PrivacyPage() {
             <li>Courses you enrol in and lessons you complete.</li>
             <li>Quiz and exam attempts, answers and marks.</li>
             <li>Sessions you register for and attend.</li>
-            <li>XP, streaks, badges and certificates earned.</li>
+            <li>XP, streaks and badges earned.</li>
           </ul>
 
           <h3>Information collected automatically</h3>
@@ -80,9 +80,7 @@ export default function PrivacyPage() {
             <li>
               To create and operate your account and deliver the courses you enrol in.
             </li>
-            <li>
-              To record your progress, marks, certificates and leaderboard position.
-            </li>
+            <li>To record your progress, marks, badges and leaderboard position.</li>
             <li>
               To send you service messages by email and SMS — registration confirmations,
               enrolment confirmations, payment updates and session reminders.
@@ -161,8 +159,8 @@ export default function PrivacyPage() {
               cannot read another student&rsquo;s data.
             </li>
             <li>
-              Payment slips, certificates and course materials are stored in private
-              storage reachable only through short-lived, access-checked links.
+              Payment slips and course materials are stored in private storage reachable
+              only through short-lived, access-checked links.
             </li>
             <li>
               Payment and administrative actions are written to an append-only audit log

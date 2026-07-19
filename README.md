@@ -91,7 +91,7 @@ All seven phases are complete:
 - **Phase 3** — Admin dashboard, bank-transfer payments, audit UI, notifications.
 - **Phase 4** — Quizzes and exams.
 - **Phase 5** — Live sessions.
-- **Phase 6** — XP, streaks, badges, certificates, leaderboard.
+- **Phase 6** — XP, streaks, badges, leaderboard.
 - **Phase 7** — Rate limiting, Sentry, Playwright e2e suite, CI, security
   review, launch checklist.
 

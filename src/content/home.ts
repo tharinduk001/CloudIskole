@@ -70,9 +70,9 @@ export const features = [
   },
   {
     icon: "award" as const,
-    title: "Certificates that verify",
+    title: "Badges that mean something",
     description:
-      "Finish a course and earn a certificate with a unique code an employer can check online. Real proof, not a PDF anyone can fake.",
+      "Earn badges as you learn — finish courses, build streaks, pass exams — and carry them with you as verifiable digital credentials.",
   },
 ];
 
@@ -88,9 +88,9 @@ export const steps = [
       "Work through video and written lessons at your own pace, then test yourself with quizzes.",
   },
   {
-    title: "Earn your certificate",
+    title: "Earn your badges",
     description:
-      "Pass the final exam, collect your verifiable certificate, and put it on your CV and LinkedIn.",
+      "Pass the final exam, collect your badges, and put them on your CV and LinkedIn.",
   },
 ];
 
@@ -123,6 +123,6 @@ export const faqs = [
   {
     question: "Will this actually help me get a job?",
     answer:
-      "Cloud and DevOps are among the highest-paying entry points in the Sri Lankan tech industry, and the shortage is real. We focus on the specific tools listed in local job postings, and you finish with projects and certificates you can show.",
+      "Cloud and DevOps are among the highest-paying entry points in the Sri Lankan tech industry, and the shortage is real. We focus on the specific tools listed in local job postings, and you finish with projects and badges you can show.",
   },
 ];

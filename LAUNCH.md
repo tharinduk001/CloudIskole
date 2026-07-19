@@ -54,8 +54,8 @@ payments, at which point Vercel's ToS requires Pro.
    production + preview domains only" item from the security model — an open
    allow-list lets a third party redirect your OAuth flow to their own site.
 6. Storage buckets are created by the migrations already (`payment-slips`,
-   `course-assets`, `certificates`, `avatars`) with their RLS policies. Verify
-   in Storage → Policies that all four exist.
+   `course-assets`, `avatars`) with their RLS policies. Verify in Storage →
+   Policies that all three exist.
 7. Copy the project URL, anon/publishable key, and service-role key — you'll
    need them for step 4.
 
@@ -179,8 +179,7 @@ Once deployed to the real domain, run through this by hand once:
 - [ ] Take a quiz, confirm grading and the leaderboard update.
 - [ ] Register for a session, confirm the reminder cron fires (check
       `notifications` table `status` moves to `sent`).
-- [ ] Finish a course, confirm a certificate issues and `/verify/<code>`
-      resolves publicly.
+- [ ] Finish a course, confirm the Course Graduate badge is awarded.
 - [ ] Run [PageSpeed Insights](https://pagespeed.web.dev) against the live
       home page and a course page — this repo's sandbox can't launch Chrome
       headlessly to run Lighthouse locally (verified: `chrome-launcher` fails

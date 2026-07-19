@@ -25,7 +25,7 @@ const values = [
     icon: Compass,
     title: "Only what gets you hired",
     description:
-      "We read local job postings and teach the tools they name. No filler modules, no certificates for skills nobody is recruiting for.",
+      "We read local job postings and teach the tools they name. No filler modules, no badges for skills nobody is recruiting for.",
   },
   {
     icon: Sprout,
@@ -37,7 +37,7 @@ const values = [
     icon: HeartHandshake,
     title: "Honest about outcomes",
     description:
-      "We will not promise you a job. We will give you real skills, real projects and a certificate an employer can verify.",
+      "We will not promise you a job. We will give you real skills, real projects and badges you can show an employer.",
   },
 ];
 

@@ -9,10 +9,10 @@ import { requireAdmin } from "@/lib/data/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Badge and certificate management for the admin dashboard.
+ * Badge management for the admin dashboard.
  *
- * Both tables carry an "admin full access" RLS policy (0007_gamification.sql),
- * so — same trust model as the course/quiz builders — these run through the
+ * Carries an "admin full access" RLS policy (0007_gamification.sql), so —
+ * same trust model as the course/quiz builders — this runs through the
  * signed-in admin's own session, not the service-role client. There is no
  * secret column here the way there is on `sessions.join_url`.
  */
@@ -87,92 +87,4 @@ export async function deleteBadge(badgeId: string): Promise<ActionResult> {
   }
   revalidatePath("/admin/badges");
   return { status: "success" };
-}
-
-const revokeSchema = z.object({
-  certificateId: z.uuid(),
-  reason: z.string().trim().min(3, "Give a reason.").max(300),
-});
-
-export async function revokeCertificate(
-  _prev: ActionResult,
-  formData: FormData,
-): Promise<ActionResult> {
-  await requireAdmin();
-
-  const parsed = revokeSchema.safeParse({
-    certificateId: formData.get("certificateId"),
-    reason: formData.get("reason"),
-  });
-
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: parsed.error.issues[0]?.message ?? "Please provide a reason.",
-    };
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("certificates")
-    .update({ revoked_at: new Date().toISOString(), revoke_reason: parsed.data.reason })
-    .eq("id", parsed.data.certificateId);
-
-  if (error) {
-    console.error("revokeCertificate failed", error);
-    return { status: "error", message: "Could not revoke this certificate." };
-  }
-
-  revalidatePath("/admin/certificates");
-  return { status: "success", message: "Certificate revoked." };
-}
-
-const externalBadgeSchema = z.object({
-  certificateId: z.uuid(),
-  externalBadgeUrl: z
-    .string()
-    .trim()
-    .url("Enter a valid URL.")
-    .max(500)
-    .optional()
-    .or(z.literal("")),
-});
-
-/**
- * Records an externally-issued digital badge URL (e.g. credentials.
- * certdirectory.io) manually, per the build plan's fallback: evaluate that
- * API when this phase is reached, and if it has no public API, an admin
- * records the badge URL by hand once issued there.
- */
-export async function setCertificateExternalBadgeUrl(
-  _prev: ActionResult,
-  formData: FormData,
-): Promise<ActionResult> {
-  await requireAdmin();
-
-  const parsed = externalBadgeSchema.safeParse({
-    certificateId: formData.get("certificateId"),
-    externalBadgeUrl: formData.get("externalBadgeUrl") || undefined,
-  });
-
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: parsed.error.issues[0]?.message ?? "Enter a valid URL.",
-    };
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("certificates")
-    .update({ external_badge_url: parsed.data.externalBadgeUrl || null })
-    .eq("id", parsed.data.certificateId);
-
-  if (error) {
-    console.error("setCertificateExternalBadgeUrl failed", error);
-    return { status: "error", message: "Could not save the badge URL." };
-  }
-
-  revalidatePath("/admin/certificates");
-  return { status: "success", message: "Saved." };
 }

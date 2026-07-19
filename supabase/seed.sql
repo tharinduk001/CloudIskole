@@ -96,7 +96,7 @@ Free tier gives you 750 hours per month of a `t2.micro` instance — enough to r
 
 ## Why it matters
 
-S3 is where CloudIskole itself stores payment slips, course PDFs and certificates. It is durable (AWS states 99.999999999% durability), cheap, and accessible over plain HTTPS.
+S3 is where CloudIskole itself stores payment slips and course PDFs. It is durable (AWS states 99.999999999% durability), cheap, and accessible over plain HTTPS.
 
 ## Storage classes
 

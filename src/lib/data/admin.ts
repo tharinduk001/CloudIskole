@@ -248,25 +248,6 @@ export async function listBadgesAdmin(): Promise<BadgeRow[]> {
   return data;
 }
 
-export type CertificateAdminRow = Database["public"]["Tables"]["certificates"]["Row"] & {
-  student: { full_name: string; email: string };
-  course: { title: string };
-};
-
-/** Every certificate, most recent first — RLS's admin policy is the real gate. */
-export async function listCertificatesAdmin(): Promise<CertificateAdminRow[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("certificates")
-    .select(
-      "*, student:profiles!certificates_user_id_fkey(full_name, email), course:courses(title)",
-    )
-    .order("issued_at", { ascending: false });
-
-  if (error) throw new Error(`Failed to load certificates: ${error.message}`);
-  return data as unknown as CertificateAdminRow[];
-}
-
 export type SessionRegistrationAdminRow =
   Database["public"]["Tables"]["session_registrations"]["Row"] & {
     student: { full_name: string; email: string };

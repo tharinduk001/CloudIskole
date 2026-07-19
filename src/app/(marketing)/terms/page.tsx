@@ -113,8 +113,8 @@ export default function TermsPage() {
           </ul>
           <p>
             We may suspend or terminate an account that breaches these rules. Where a
-            breach involves cheating, we may additionally void the affected marks,
-            certificates and leaderboard position.
+            breach involves cheating, we may additionally void the affected marks, badges
+            and leaderboard position.
           </p>
         </Clause>
 
@@ -132,12 +132,15 @@ export default function TermsPage() {
           </p>
         </Clause>
 
-        <Clause title="7. Certificates">
+        <Clause title="7. Badges">
           <p>
-            Certificates confirm that you completed a specific course and met its passing
-            mark. They are not an academic qualification, are not accredited by any
-            university or government body, and do not guarantee employment. We may revoke
-            a certificate obtained through cheating or misrepresentation.
+            Badges confirm that you met a specific achievement — completing a course,
+            passing an exam, maintaining a streak. They are not an academic qualification,
+            are not accredited by any university or government body, and do not guarantee
+            employment. We may revoke a badge obtained through cheating or
+            misrepresentation. Digital credentials issued through a third-party platform
+            (such as credentials.certdirectory.io) are governed separately by that
+            platform&rsquo;s own terms.
           </p>
         </Clause>
 

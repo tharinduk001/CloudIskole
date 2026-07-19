@@ -193,71 +193,6 @@ export type Database = {
           },
         ]
       }
-      certificates: {
-        Row: {
-          code: string
-          course_id: string
-          external_badge_url: string | null
-          id: string
-          issued_at: string
-          pdf_path: string | null
-          revoke_reason: string | null
-          revoked_at: string | null
-          user_id: string
-        }
-        Insert: {
-          code: string
-          course_id: string
-          external_badge_url?: string | null
-          id?: string
-          issued_at?: string
-          pdf_path?: string | null
-          revoke_reason?: string | null
-          revoked_at?: string | null
-          user_id: string
-        }
-        Update: {
-          code?: string
-          course_id?: string
-          external_badge_url?: string | null
-          id?: string
-          issued_at?: string
-          pdf_path?: string | null
-          revoke_reason?: string | null
-          revoked_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "certificates_course_id_fkey"
-            columns: ["course_id"]
-            isOneToOne: false
-            referencedRelation: "courses"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "certificates_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_all_time"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "certificates_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_monthly"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "certificates_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       contact_messages: {
         Row: {
           created_at: string
@@ -1503,16 +1438,6 @@ export type Database = {
       }
     }
     Views: {
-      certificate_verification: {
-        Row: {
-          code: string | null
-          course_title: string | null
-          holder_name: string | null
-          is_valid: boolean | null
-          issued_at: string | null
-        }
-        Relationships: []
-      }
       leaderboard_all_time: {
         Row: {
           avatar_url: string | null

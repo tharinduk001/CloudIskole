@@ -1224,7 +1224,7 @@ reset role;
 rollback to savepoint s15;
 
 -- ===========================================================================
--- 16 · Gamification — XP wiring, streak hardening, certificates, badges
+-- 16 · Gamification — XP wiring, streak hardening, badges
 -- ===========================================================================
 
 savepoint s16;
@@ -1274,7 +1274,7 @@ select tests.ok(
   'completing an already-completed lesson again does not double-pay XP'
 );
 
--- --- course completion -> XP, certificate, and the graduate badge, once ---
+-- --- course completion -> XP and the graduate badge, once -----------------
 
 select tests.act_as(:'bob');
 select public.recompute_enrollment_progress('aaaaaaaa-0000-4000-8000-000000000001');
@@ -1287,12 +1287,6 @@ select tests.ok(
   'completing a course (100% of its lessons) awards 50 XP'
 );
 select tests.ok(
-  (select code from public.certificates
-   where user_id = :'bob' and course_id = 'aaaaaaaa-0000-4000-8000-000000000001')
-    ~ '^CI-[A-Z0-9]{4}-[A-Z0-9]{4}$',
-  'course completion auto-issues a certificate with a well-formed code'
-);
-select tests.ok(
   exists (
     select 1 from public.user_badges ub
     join public.badges b on b.id = ub.badge_id
@@ -1302,7 +1296,7 @@ select tests.ok(
 );
 
 -- Recomputing again (e.g. a page reload re-posting the same lesson) must not
--- re-award XP or mint a second certificate.
+-- re-award XP or re-award the badge.
 select tests.act_as(:'bob');
 select public.recompute_enrollment_progress('aaaaaaaa-0000-4000-8000-000000000001');
 reset role;
@@ -1313,8 +1307,10 @@ select tests.ok(
   'recomputing an already-completed course again does not double-pay XP'
 );
 select tests.ok(
-  (select count(*) from public.certificates where user_id = :'bob') = 1,
-  'recomputing an already-completed course again does not mint a second certificate'
+  (select count(*) from public.user_badges ub
+   join public.badges b on b.id = ub.badge_id
+   where ub.user_id = :'bob' and b.slug = 'first-course-complete') = 1,
+  'recomputing an already-completed course again does not re-award the badge'
 );
 
 -- --- quiz pass -> XP, once per quiz across retakes -------------------------
@@ -1445,38 +1441,6 @@ select tests.ok(
   'a student who has not opted in is excluded from the leaderboard entirely'
 );
 reset role;
-
--- --- certificate_verification exposes proof, not PII ----------------------
-
--- Fetch the code as superuser first: an anon caller has no SELECT grant on
--- the certificates base table itself (only on the verification view), so
--- the code has to come from outside the anon-impersonated query below.
-select code from public.certificates
-where user_id = :'bob' and course_id = 'aaaaaaaa-0000-4000-8000-000000000001' \gset g_cert_
-
-select tests.act_as_anon();
-select tests.ok(
-  (select holder_name from public.certificate_verification where code = :'g_cert_code')
-    is not null,
-  'anyone can verify a certificate by its code'
-);
-select tests.ok(
-  (select count(*) from public.certificate_verification where code = 'CI-0000-0000') = 0,
-  'a made-up certificate code verifies to nothing'
-);
-reset role;
-
-do $$
-begin
-  if exists (
-    select 1 from information_schema.columns
-    where table_schema = 'public' and table_name = 'certificate_verification'
-      and column_name in ('email', 'phone', 'user_id')
-  ) then
-    raise exception 'FAIL  certificate_verification exposes a column beyond the public proof shape';
-  end if;
-  raise notice '  PASS  certificate_verification has no PII columns (email/phone/user_id)';
-end $$;
 
 rollback to savepoint s16;
 
