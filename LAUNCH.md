@@ -35,9 +35,19 @@ payments, at which point Vercel's ToS requires Pro.
    ones already proven against 145 RLS assertions locally.
 3. Do **not** run `supabase/seed.sql` against production — it's sample course
    data for local dev only.
-4. **Paste `supabase/templates/magic_link.html`** into Authentication → Emails
-   → Magic Link in the dashboard. The stock template emails a clickable link;
-   the sign-in UI asks for a 6-digit code, so codes won't arrive without this.
+4. **Paste both email templates into the dashboard** — the stock templates
+   email a clickable link; the sign-in UI asks for a 6-digit code, so codes
+   won't arrive without this:
+   - `supabase/templates/magic_link.html` → Authentication → Emails → Magic
+     Link (every sign-in after the first).
+   - `supabase/templates/confirmation.html` → Authentication → Emails →
+     Confirm signup (the *first* sign-in from a new address, since it also
+     creates the account — a separate template from Magic Link, easy to miss).
+4b. **Set Email OTP length to 6** under Authentication → Providers → Email (or
+   Authentication → Settings). `supabase/config.toml`'s `otp_length = 6` only
+   governs the local CLI stack — a hosted project keeps its own platform
+   default until you set this explicitly, which won't match the 6-digit input
+   on the sign-in form.
 5. Authentication → URL Configuration: set the Site URL to your production
    domain and add it (plus any Vercel preview domain pattern) to the redirect
    allow-list. This is the "Supabase Auth redirect allowlist restricted to

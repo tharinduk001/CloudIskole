@@ -61,12 +61,22 @@ privilege-escalation bug during Phase 1 — run it after every schema change.
 1. Create a Supabase project; copy the URL, anon key and service-role key into
    your host's environment (see `.env.example`).
 2. `npx supabase link --project-ref <ref>` then `npx supabase db push`.
-3. **Paste `supabase/templates/magic_link.html` into Authentication → Emails →
-   Magic Link.** The stock Supabase template emails a clickable link, but the
-   sign-in UI asks for a 6-digit code, so codes will not arrive without this.
-4. Add your Google OAuth client under Authentication → Providers, and add
+3. **Paste both email templates in** — the stock Supabase templates email a
+   clickable link, but the sign-in UI asks for a 6-digit code, so codes will
+   not arrive without this:
+   - `supabase/templates/magic_link.html` → Authentication → Emails → Magic Link
+     (used on every sign-in after the first).
+   - `supabase/templates/confirmation.html` → Authentication → Emails → Confirm
+     signup (used the *first* time an address signs in, since it's also
+     creating the account — easy to miss if you only patch Magic Link).
+4. **Set the email OTP length to 6** under Authentication → Providers → Email
+   (or Authentication → Settings, depending on dashboard version). The
+   `otp_length = 6` in `supabase/config.toml` only applies to the local CLI
+   stack, not a hosted project — left on its platform default, the emailed
+   code won't match the sign-in form's 6-digit input.
+5. Add your Google OAuth client under Authentication → Providers, and add
    `https://<domain>/auth/callback` to the redirect allow-list.
-5. Promote your first admin. `admin_set_user_role()` requires an existing admin,
+6. Promote your first admin. `admin_set_user_role()` requires an existing admin,
    so the first one is set directly from the SQL editor:
    ```sql
    update public.profiles set role = 'admin' where email = 'you@example.com';
