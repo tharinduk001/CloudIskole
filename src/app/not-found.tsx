@@ -4,6 +4,10 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 
+// See src/app/(marketing)/layout.tsx: nonce-based CSP requires dynamic
+// rendering, or every script on this page is silently blocked.
+export const dynamic = "force-dynamic";
+
 export default function NotFound() {
   return (
     <div className="bg-wash flex min-h-svh flex-col items-center justify-center px-5 text-center">

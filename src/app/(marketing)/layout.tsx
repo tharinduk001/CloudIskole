@@ -2,11 +2,22 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 
 /**
- * No profile fetch here, deliberately. Pages in this route group (home,
- * about, legal, the course catalogue) should generate as static HTML — see
- * the comment in `SiteHeader` for why its auth-aware state is fetched
- * client-side instead of being read from cookies at this layout level.
+ * No profile fetch here, deliberately — see the comment in `SiteHeader` for
+ * why its auth-aware state is fetched client-side instead of being read from
+ * cookies at this layout level.
+ *
+ * Forced dynamic despite the above: this group was originally meant to
+ * generate as static HTML, but nonce-based CSP (src/proxy.ts) cannot be
+ * injected into a page prerendered at build time — Next.js's own docs are
+ * explicit that a static page has no request/response headers to read the
+ * nonce from. Left static, every script on these pages was silently blocked
+ * in production: the mobile nav menu did nothing, and the contact form
+ * never became interactive. Correctness wins over the CDN-caching win here;
+ * see LAUNCH.md for the (currently unused) SRI-based alternative that would
+ * restore static generation without weakening the CSP.
  */
+export const dynamic = "force-dynamic";
+
 export default function MarketingLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Nonce-based CSP (src/proxy.ts) can only be injected into a page rendered
+// per-request — a statically prerendered page has no request/response
+// headers to read the nonce from, so every script on it gets silently
+// blocked in production. This page's entire content is the AuthPanel client
+// component, so it must render dynamically to be usable at all.
+export const dynamic = "force-dynamic";
+
 export default function SignInPage() {
   // AuthPanel reads search params, so it must sit inside Suspense.
   return (
