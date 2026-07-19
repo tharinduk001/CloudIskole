@@ -1,0 +1,19 @@
+name: Notification outbox
+
+# Vercel Hobby caps built-in crons at once a day, which is too slow for
+# OTP-adjacent and session-reminder sends — see src/app/api/cron/notifications/route.ts.
+# `claim_notifications()` uses FOR UPDATE SKIP LOCKED, so overlapping runs
+# (a slow run plus a fresh scheduled tick) never double-send.
+on:
+  schedule:
+    - cron: "*/5 * * * *" # every 5 minutes
+  workflow_dispatch: # lets you trigger a run manually from the Actions tab
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger the outbox worker
+        run: |
+          curl -sf -X POST https://cloudiskole.tharinduk001.com/api/cron/notifications \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
