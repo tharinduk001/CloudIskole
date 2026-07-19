@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, CalendarDays, Radio, Trophy } from "lucide-react";
+import { ArrowRight, Award, BookOpen, CalendarDays, Flame, Radio, Trophy } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Container, Section } from "@/components/ui/layout";
 import { requireProfile } from "@/lib/data/auth";
 import { getNextLesson, listMyEnrollments } from "@/lib/data/courses";
+import { getMyGamification } from "@/lib/data/gamification";
 import { listMyRegistrations } from "@/lib/data/sessions";
 import { formatLevel } from "@/lib/format";
 
@@ -47,6 +48,8 @@ export default async function DashboardPage() {
     .sort((a, b) => a.session.starts_at.localeCompare(b.session.starts_at))
     .slice(0, 3);
 
+  const gamification = await getMyGamification(profile.id);
+
   return (
     <Section className="py-12">
       <Container size="wide">
@@ -56,6 +59,38 @@ export default async function DashboardPage() {
             ? "Pick up where you left off, or explore something new."
             : "Your courses, sessions and results will appear here as you go."}
         </p>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <Card className="flex items-center gap-3 p-5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-teal-50 text-teal-600">
+              <Trophy className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-display text-2xl font-semibold">{gamification.totalXp}</p>
+              <p className="text-ink-muted text-xs">Total XP</p>
+            </div>
+          </Card>
+          <Card className="flex items-center gap-3 p-5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gold-50 text-gold-700">
+              <Flame className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-display text-2xl font-semibold">{gamification.streak}</p>
+              <p className="text-ink-muted text-xs">Day streak</p>
+            </div>
+          </Card>
+          <Link href="/profile#badges">
+            <Card interactive className="flex h-full items-center gap-3 p-5">
+              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-teal-50 text-teal-600">
+                <Award className="size-5" aria-hidden="true" />
+              </span>
+              <div>
+                <p className="font-display text-2xl font-semibold">{gamification.badges.length}</p>
+                <p className="text-ink-muted text-xs">Badges earned</p>
+              </div>
+            </Card>
+          </Link>
+        </div>
 
         {enrollments.length > 0 ? (
           <div className="mt-10">
@@ -149,7 +184,7 @@ export default async function DashboardPage() {
         ) : null}
 
         {enrollments.length === 0 && upcomingSessions.length === 0 ? (
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
             <Card className="p-6">
               <span className="grid size-11 place-items-center rounded-xl bg-teal-50 text-teal-600">
                 <BookOpen className="size-5" aria-hidden="true" />
@@ -180,17 +215,6 @@ export default async function DashboardPage() {
                   <ArrowRight aria-hidden="true" />
                 </Link>
               </Button>
-            </Card>
-
-            <Card className="p-6">
-              <span className="grid size-11 place-items-center rounded-xl bg-teal-50 text-teal-600">
-                <Trophy className="size-5" aria-hidden="true" />
-              </span>
-              <h2 className="font-display mt-4 text-lg font-semibold">Your XP</h2>
-              <p className="font-display mt-3 text-3xl font-semibold text-teal-600">0</p>
-              <p className="text-ink-muted mt-2 text-sm leading-relaxed">
-                Earn XP by finishing lessons, passing quizzes and attending sessions.
-              </p>
             </Card>
           </div>
         ) : null}

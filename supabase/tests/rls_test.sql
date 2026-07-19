@@ -1224,6 +1224,263 @@ reset role;
 rollback to savepoint s15;
 
 -- ===========================================================================
+-- 16 · Gamification — XP wiring, streak hardening, certificates, badges
+-- ===========================================================================
+
+savepoint s16;
+
+-- --- activity_date can no longer be asserted by the client ----------------
+
+select tests.act_as(:'bob');
+select tests.must_fail(
+  format($f$insert into public.user_activity_days (user_id, activity_date)
+             values (%L, current_date + 10)$f$, :'bob'),
+  'a student cannot fabricate an activity day directly any more (0016 dropped that policy)'
+);
+reset role;
+
+-- --- lesson completion -> XP, idempotent on re-upsert ----------------------
+
+insert into public.enrollments (user_id, course_id, status)
+values (:'bob', 'aaaaaaaa-0000-4000-8000-000000000001', 'active');
+
+select tests.act_as(:'bob');
+insert into public.lesson_progress (user_id, lesson_id, course_id, completed_at)
+values (:'bob', 'cccccccc-0000-4000-8000-000000000003',
+        'aaaaaaaa-0000-4000-8000-000000000001', now())
+on conflict (user_id, lesson_id) do update set completed_at = excluded.completed_at;
+reset role;
+
+select tests.ok(
+  (select points from public.xp_events
+   where user_id = :'bob' and source = 'lesson.completed'
+     and source_id = 'cccccccc-0000-4000-8000-000000000003') = 10,
+  'finishing a lesson awards 10 XP'
+);
+
+-- Re-upserting the same completed lesson (the app's own upsert-on-conflict
+-- pattern) must not pay out a second time.
+select tests.act_as(:'bob');
+insert into public.lesson_progress (user_id, lesson_id, course_id, completed_at)
+values (:'bob', 'cccccccc-0000-4000-8000-000000000003',
+        'aaaaaaaa-0000-4000-8000-000000000001', now())
+on conflict (user_id, lesson_id) do update set completed_at = excluded.completed_at;
+reset role;
+
+select tests.ok(
+  (select count(*) from public.xp_events
+   where user_id = :'bob' and source = 'lesson.completed'
+     and source_id = 'cccccccc-0000-4000-8000-000000000003') = 1,
+  'completing an already-completed lesson again does not double-pay XP'
+);
+
+-- --- course completion -> XP, certificate, and the graduate badge, once ---
+
+select tests.act_as(:'bob');
+select public.recompute_enrollment_progress('aaaaaaaa-0000-4000-8000-000000000001');
+reset role;
+
+select tests.ok(
+  (select points from public.xp_events
+   where user_id = :'bob' and source = 'course.completed'
+     and source_id = 'aaaaaaaa-0000-4000-8000-000000000001') = 50,
+  'completing a course (100% of its lessons) awards 50 XP'
+);
+select tests.ok(
+  (select code from public.certificates
+   where user_id = :'bob' and course_id = 'aaaaaaaa-0000-4000-8000-000000000001')
+    ~ '^CI-[A-Z0-9]{4}-[A-Z0-9]{4}$',
+  'course completion auto-issues a certificate with a well-formed code'
+);
+select tests.ok(
+  exists (
+    select 1 from public.user_badges ub
+    join public.badges b on b.id = ub.badge_id
+    where ub.user_id = :'bob' and b.slug = 'first-course-complete'
+  ),
+  'first course completion awards the Course Graduate badge'
+);
+
+-- Recomputing again (e.g. a page reload re-posting the same lesson) must not
+-- re-award XP or mint a second certificate.
+select tests.act_as(:'bob');
+select public.recompute_enrollment_progress('aaaaaaaa-0000-4000-8000-000000000001');
+reset role;
+
+select tests.ok(
+  (select count(*) from public.xp_events
+   where user_id = :'bob' and source = 'course.completed') = 1,
+  'recomputing an already-completed course again does not double-pay XP'
+);
+select tests.ok(
+  (select count(*) from public.certificates where user_id = :'bob') = 1,
+  'recomputing an already-completed course again does not mint a second certificate'
+);
+
+-- --- quiz pass -> XP, once per quiz across retakes -------------------------
+
+insert into public.enrollments (user_id, course_id, status)
+values (:'bob', 'aaaaaaaa-0000-4000-8000-000000000002', 'active');
+
+select tests.act_as(:'bob');
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as g_attempt1 \gset
+select public.submit_quiz_attempt(
+  :'g_attempt1',
+  jsonb_build_object('eeeeeeee-0000-4000-8000-000000000001', 'ffffffff-0000-4000-8000-000000000001')
+);
+reset role;
+
+select tests.ok(
+  (select points from public.xp_events
+   where user_id = :'bob' and source = 'quiz.passed'
+     and source_id = 'dddddddd-0000-4000-8000-000000000001') = 20,
+  'passing a quiz awards 20 XP'
+);
+
+select tests.act_as(:'bob');
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as g_attempt2 \gset
+select public.submit_quiz_attempt(
+  :'g_attempt2',
+  jsonb_build_object('eeeeeeee-0000-4000-8000-000000000001', 'ffffffff-0000-4000-8000-000000000001')
+);
+reset role;
+
+select tests.ok(
+  (select count(*) from public.xp_events
+   where user_id = :'bob' and source = 'quiz.passed'
+     and source_id = 'dddddddd-0000-4000-8000-000000000001') = 1,
+  'passing the same quiz again on a retake does not double-pay XP'
+);
+
+-- --- session attendance -> XP, only on a genuine false -> true flip -------
+
+insert into public.sessions (id, slug, title, starts_at, duration_minutes, status)
+values ('77777777-0000-4000-8000-000000000001', 'gamification-test-session',
+        'Gamification test session', now() - interval '10 minutes', 60, 'upcoming');
+
+select tests.act_as(:'bob');
+insert into public.session_registrations (id, session_id, user_id)
+values ('88888888-0000-4000-8000-000000000001',
+        '77777777-0000-4000-8000-000000000001', :'bob');
+reset role;
+
+update public.sessions set status = 'live'
+where id = '77777777-0000-4000-8000-000000000001';
+
+select tests.act_as(:'admin');
+update public.session_registrations set attended = true
+  where id = '88888888-0000-4000-8000-000000000001';
+reset role;
+
+select tests.ok(
+  (select points from public.xp_events
+   where user_id = :'bob' and source = 'session.attended'
+     and source_id = '77777777-0000-4000-8000-000000000001') = 15,
+  'staff marking attendance awards 15 XP'
+);
+
+-- Toggle off then on again — a correction, not a second attendance.
+select tests.act_as(:'admin');
+update public.session_registrations set attended = false
+  where id = '88888888-0000-4000-8000-000000000001';
+update public.session_registrations set attended = true
+  where id = '88888888-0000-4000-8000-000000000001';
+reset role;
+
+select tests.ok(
+  (select count(*) from public.xp_events
+   where user_id = :'bob' and source = 'session.attended'
+     and source_id = '77777777-0000-4000-8000-000000000001') = 1,
+  'toggling attendance off and back on does not double-pay XP'
+);
+
+-- --- streak badge fires once six prior days plus today reach seven --------
+
+insert into public.user_activity_days (user_id, activity_date)
+select :'bob', ((now() at time zone 'Asia/Colombo')::date - g)
+from generate_series(1, 6) as g;
+
+select tests.ok(
+  not exists (
+    select 1 from public.user_badges ub
+    join public.badges b on b.id = ub.badge_id
+    where ub.user_id = :'bob' and b.slug = 'streak-7'
+  ),
+  'six days of backfilled activity alone does not yet award the 7-day streak badge'
+);
+
+-- The badge check only runs inside record_activity(), which only runs from
+-- an actual XP-earning action — not merely because a row now exists in
+-- user_activity_days. Trigger one more (a fresh quiz attempt) so today's
+-- streak recalculation actually happens with the backfilled days in place.
+select tests.act_as(:'bob');
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as g_attempt3 \gset
+select public.submit_quiz_attempt(
+  :'g_attempt3',
+  jsonb_build_object('eeeeeeee-0000-4000-8000-000000000001', 'ffffffff-0000-4000-8000-000000000001')
+);
+reset role;
+
+select tests.ok(
+  exists (
+    select 1 from public.user_badges ub
+    join public.badges b on b.id = ub.badge_id
+    where ub.user_id = :'bob' and b.slug = 'streak-7'
+  ),
+  'seven consecutive active days (six backfilled + today) awards the streak badge'
+);
+
+-- --- leaderboard: opt-in only, and it's the true global total -------------
+
+update public.profiles set leaderboard_opt_in = true where id = :'bob';
+update public.profiles set leaderboard_opt_in = false where id = :'alice';
+
+select tests.act_as_anon();
+select tests.ok(
+  exists (select 1 from public.leaderboard_all_time where user_id = :'bob'),
+  'an opted-in student appears on the public leaderboard'
+);
+select tests.ok(
+  not exists (select 1 from public.leaderboard_all_time where user_id = :'alice'),
+  'a student who has not opted in is excluded from the leaderboard entirely'
+);
+reset role;
+
+-- --- certificate_verification exposes proof, not PII ----------------------
+
+-- Fetch the code as superuser first: an anon caller has no SELECT grant on
+-- the certificates base table itself (only on the verification view), so
+-- the code has to come from outside the anon-impersonated query below.
+select code from public.certificates
+where user_id = :'bob' and course_id = 'aaaaaaaa-0000-4000-8000-000000000001' \gset g_cert_
+
+select tests.act_as_anon();
+select tests.ok(
+  (select holder_name from public.certificate_verification where code = :'g_cert_code')
+    is not null,
+  'anyone can verify a certificate by its code'
+);
+select tests.ok(
+  (select count(*) from public.certificate_verification where code = 'CI-0000-0000') = 0,
+  'a made-up certificate code verifies to nothing'
+);
+reset role;
+
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'certificate_verification'
+      and column_name in ('email', 'phone', 'user_id')
+  ) then
+    raise exception 'FAIL  certificate_verification exposes a column beyond the public proof shape';
+  end if;
+  raise notice '  PASS  certificate_verification has no PII columns (email/phone/user_id)';
+end $$;
+
+rollback to savepoint s16;
+
+-- ===========================================================================
 -- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and

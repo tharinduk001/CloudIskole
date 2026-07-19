@@ -21,7 +21,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const PROTECTED_PREFIXES = ["/dashboard", "/admin", "/my"];
 
 /** Paths a signed-in user has no reason to see. */
-const AUTH_ONLY_PREFIXES = ["/sign-in", "/sign-up", "/verify"];
+const AUTH_ONLY_PREFIXES = ["/sign-in", "/sign-up"];
 
 function buildCsp(nonce: string, supabaseUrl: string, isDev: boolean): string {
   // Supabase Realtime uses a websocket on the same host.

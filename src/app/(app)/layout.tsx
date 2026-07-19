@@ -25,7 +25,7 @@ export default async function AppLayout({
         Skip to content
       </a>
 
-      <header className="border-line bg-surface sticky top-0 z-50 border-b">
+      <header className="border-line bg-surface sticky top-0 z-50 border-b print:hidden">
         <Container size="wide">
           <div className="flex h-16 items-center justify-between gap-4">
             <Link

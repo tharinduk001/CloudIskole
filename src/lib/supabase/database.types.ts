@@ -1695,6 +1695,7 @@ export type Database = {
         Args: { p_course_id: string; p_user_id?: string }
         Returns: undefined
       }
+      record_activity: { Args: { p_user_id: string }; Returns: undefined }
       reject_order: {
         Args: { p_actor_id: string; p_order_id: string; p_reason: string }
         Returns: undefined
