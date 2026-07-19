@@ -6,14 +6,76 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 
 import { Logo } from "@/components/brand/logo";
+import { UserMenu, type HeaderProfile } from "@/components/site/user-menu";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/layout";
 import { brand } from "@/lib/brand";
 import { mainNav } from "@/lib/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   const pathname = usePathname();
+
+  /**
+   * Auth state is fetched client-side, deliberately, rather than as a prop
+   * from a Server Component layout. This route group holds the public,
+   * content-only pages (home, about, legal, the course catalogue) that
+   * should serve as static HTML from the CDN; a layout that calls
+   * `cookies()` to look up the signed-in user forces every page beneath it
+   * into per-request dynamic rendering — Next.js cannot statically render
+   * part of a tree and dynamically render the rest without opting the whole
+   * app into Partial Prerendering. Pages that already need per-user data
+   * (a course's enrollment state, the dashboard) fetch it themselves; this
+   * header does not need to hold up everything else's static generation to
+   * show an avatar.
+   *
+   * Trade-off accepted: a signed-in visitor may see the signed-out "Sign in"
+   * button for one client render before this swaps in, rather than the
+   * layout blocking on a cookie read before sending any HTML.
+   */
+  const [profile, setProfile] = React.useState<HeaderProfile | null>(null);
+
+  React.useEffect(() => {
+    const supabase = createClient();
+    let cancelled = false;
+
+    async function loadProfile() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        if (!cancelled) setProfile(null);
+        return;
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("id, full_name, email, avatar_url, role")
+        .eq("id", user.id)
+        .single();
+
+      if (!cancelled) setProfile(data);
+    }
+
+    void loadProfile();
+
+    // Keeps the header in sync across sign-in, sign-out and token refresh —
+    // including the moment a magic-link/OTP redirect lands back on a
+    // marketing page after auth completes elsewhere.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      void loadProfile();
+    });
+
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
+  }, []);
+
   /**
    * The mobile menu stores the path it was opened on rather than a boolean.
    * Navigating changes `pathname`, so the menu closes itself — no effect
@@ -90,12 +152,18 @@ export function SiteHeader() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href="/sign-up">Get started</Link>
-            </Button>
+            {profile ? (
+              <UserMenu profile={profile} />
+            ) : (
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/sign-in">Sign in</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link href="/sign-up">Get started</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           <button
@@ -139,12 +207,20 @@ export function SiteHeader() {
             </nav>
 
             <div className="mt-6 flex flex-col gap-3">
-              <Button asChild size="lg">
-                <Link href="/sign-up">Get started free</Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link href="/sign-in">Sign in</Link>
-              </Button>
+              {profile ? (
+                <Button asChild size="lg">
+                  <Link href="/dashboard">Go to dashboard</Link>
+                </Button>
+              ) : (
+                <>
+                  <Button asChild size="lg">
+                    <Link href="/sign-up">Get started free</Link>
+                  </Button>
+                  <Button asChild variant="secondary" size="lg">
+                    <Link href="/sign-in">Sign in</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </Container>
         </div>

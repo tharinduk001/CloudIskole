@@ -18,6 +18,37 @@ export function Textarea({ className, ...props }: React.ComponentProps<"textarea
   );
 }
 
+export function Select({ className, ...props }: React.ComponentProps<"select">) {
+  return (
+    <select className={cn(controlBase, "h-11 px-4 text-sm", className)} {...props} />
+  );
+}
+
+/** Checkbox with its label, sized and spaced for touch. */
+export function CheckboxField({
+  label,
+  description,
+  ...props
+}: React.ComponentProps<"input"> & { label: string; description?: string }) {
+  const id = React.useId();
+  return (
+    <div className="flex items-start gap-3">
+      <input
+        {...props}
+        id={id}
+        type="checkbox"
+        className="border-line-strong mt-0.5 size-4.5 shrink-0 rounded accent-teal-600"
+      />
+      <label htmlFor={id} className="text-sm leading-relaxed">
+        <span className="text-ink font-medium">{label}</span>
+        {description ? (
+          <span className="text-ink-muted block text-xs">{description}</span>
+        ) : null}
+      </label>
+    </div>
+  );
+}
+
 export function Label({ className, ...props }: React.ComponentProps<"label">) {
   return <label className={cn("text-ink text-sm font-medium", className)} {...props} />;
 }

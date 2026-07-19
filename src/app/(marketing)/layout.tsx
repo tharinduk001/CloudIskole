@@ -1,6 +1,12 @@
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 
+/**
+ * No profile fetch here, deliberately. Pages in this route group (home,
+ * about, legal, the course catalogue) should generate as static HTML — see
+ * the comment in `SiteHeader` for why its auth-aware state is fetched
+ * client-side instead of being read from cookies at this layout level.
+ */
 export default function MarketingLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

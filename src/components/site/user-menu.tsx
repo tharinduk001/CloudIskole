@@ -7,6 +7,18 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth/actions";
 import type { Profile } from "@/lib/data/auth";
 
+/**
+ * Only the columns this menu actually renders. Kept narrow deliberately: the
+ * marketing header fetches this client-side (see `SiteHeader`), and every
+ * extra column requested there is one more thing sent to a browser on every
+ * page view. `Profile` still structurally satisfies this type, so server
+ * callers (the signed-in app shell) can keep passing the full object.
+ */
+export type HeaderProfile = Pick<
+  Profile,
+  "id" | "full_name" | "email" | "avatar_url" | "role"
+>;
+
 /** Initials fallback when a student has no Google avatar. */
 function initials(name: string, email: string): string {
   const source = name.trim() || email;
@@ -19,7 +31,7 @@ function initials(name: string, email: string): string {
   );
 }
 
-export function UserMenu({ profile }: { profile: Profile }) {
+export function UserMenu({ profile }: { profile: HeaderProfile }) {
   const displayName = profile.full_name || profile.email.split("@")[0] || "Student";
 
   return (

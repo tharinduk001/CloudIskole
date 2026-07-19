@@ -23,10 +23,15 @@ export type Profile = {
   phone: string | null;
   phone_verified_at: string | null;
   district: string | null;
+  al_year: number | null;
   role: "student" | "admin";
   leaderboard_opt_in: boolean;
+  marketing_opt_in: boolean;
   created_at: string;
 };
+
+const PROFILE_COLUMNS =
+  "id, email, full_name, avatar_url, phone, phone_verified_at, district, al_year, role, leaderboard_opt_in, marketing_opt_in, created_at";
 
 /**
  * The verified current user, or a redirect to sign-in.
@@ -53,9 +58,7 @@ export async function requireProfile(next = "/dashboard"): Promise<Profile> {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select(
-      "id, email, full_name, avatar_url, phone, phone_verified_at, district, role, leaderboard_opt_in, created_at",
-    )
+    .select(PROFILE_COLUMNS)
     .eq("id", user.id)
     .single();
 
@@ -98,9 +101,7 @@ export async function getOptionalProfile(): Promise<Profile | null> {
 
   const { data } = await supabase
     .from("profiles")
-    .select(
-      "id, email, full_name, avatar_url, phone, phone_verified_at, district, role, leaderboard_opt_in, created_at",
-    )
+    .select(PROFILE_COLUMNS)
     .eq("id", user.id)
     .single();
 

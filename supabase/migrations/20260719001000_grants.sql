@@ -92,6 +92,17 @@ revoke update on table public.orders from authenticated;
 revoke update, delete on table public.bank_transfers from authenticated;
 grant update on table public.bank_transfers to service_role;
 
+-- Enrollment progress and status move only through recompute_enrollment_progress()
+-- and grant_enrollment(). Without this revoke, the RLS layer is the only
+-- defence, and an UPDATE a student isn't entitled to make doesn't error — it
+-- silently matches zero rows (Postgres does not raise when a policy's USING
+-- clause excludes a row from UPDATE, only when INSERT's WITH CHECK fails).
+-- That is a genuinely worse failure mode for the app to hit by accident than
+-- a loud "permission denied", which is exactly what happened here: an early
+-- version of the lesson-complete flow updated this table directly, and the
+-- write silently did nothing instead of erroring.
+revoke update on table public.enrollments from authenticated;
+
 -- Attempts and their answers are written by the grading functions only.
 revoke insert, update, delete on table public.quiz_attempts from authenticated;
 revoke insert, update, delete on table public.quiz_attempt_answers from authenticated;

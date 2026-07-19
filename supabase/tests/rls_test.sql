@@ -107,11 +107,24 @@ values
    true, 0, 'draft');
 
 insert into public.modules (id, course_id, title)
-values ('bbbbbbbb-0000-4000-8000-000000000001',
-        'aaaaaaaa-0000-4000-8000-000000000002', 'Module 1');
+values
+  ('bbbbbbbb-0000-4000-8000-000000000001',
+   'aaaaaaaa-0000-4000-8000-000000000002', 'Module 1'),
+  -- Gives the free course (which Alice can actually self-enroll in) a real
+  -- lesson of its own, so the progress/completion tests below exercise the
+  -- course a student can genuinely reach 100% of, rather than a lesson that
+  -- happens to share an id prefix with a different, paid course.
+  ('bbbbbbbb-0000-4000-8000-000000000002',
+   'aaaaaaaa-0000-4000-8000-000000000001', 'Getting Started');
 
 insert into public.lessons (id, module_id, course_id, title, slug, type, content_mdx, is_preview)
 values
+  -- Not a preview lesson: Alice reaches it via her enrollment, not via the
+  -- public-preview policy, so this does not disturb the anon preview-count
+  -- assertions below (which expect exactly one public preview lesson).
+  ('cccccccc-0000-4000-8000-000000000003', 'bbbbbbbb-0000-4000-8000-000000000002',
+   'aaaaaaaa-0000-4000-8000-000000000001', 'Intro to Linux', 'intro-to-linux',
+   'text', 'Welcome content', false),
   ('cccccccc-0000-4000-8000-000000000001', 'bbbbbbbb-0000-4000-8000-000000000001',
    'aaaaaaaa-0000-4000-8000-000000000002', 'Free Preview', 'free-preview',
    'text', 'Preview content', true),
@@ -142,9 +155,13 @@ values
 savepoint s1;
 select tests.act_as_anon();
 
+-- Counts below are scoped to this file's own fixture rows (id LIKE
+-- 'aaaaaaaa-%' etc.) rather than the whole table, so this suite gives the
+-- same result whether run against an empty database or one already carrying
+-- seed/production data.
 select tests.ok(
-  (select count(*) from public.courses) = 2,
-  'anon sees only the 2 published courses, not the draft'
+  (select count(*) from public.courses where id::text like 'aaaaaaaa-%') = 2,
+  'anon sees only the 2 published fixture courses, not the draft'
 );
 
 select tests.ok(
@@ -154,8 +171,8 @@ select tests.ok(
 );
 
 select tests.ok(
-  (select count(*) from public.lessons) = 1,
-  'anon sees only the preview lesson, not the paid one'
+  (select count(*) from public.lessons where id::text like 'cccccccc-%') = 1,
+  'anon sees only the preview fixture lesson, not the paid one'
 );
 
 -- These tables carry no grant for anon at all, so the request is refused at
@@ -281,6 +298,59 @@ select tests.ok(
   'Alice CAN self-enroll in a free course'
 );
 
+-- Progress can only move through recompute_enrollment_progress(), never by
+-- writing progress_pct/status directly. UPDATE is revoked from `authenticated`
+-- at the table-grant level (see 20260719001000_grants.sql) specifically so
+-- this fails LOUDLY — an RLS-only defence would let the statement "succeed"
+-- while silently matching zero rows, which is the actual bug this migration
+-- fixes: an earlier version of the lesson-complete flow updated this table
+-- directly and the write silently did nothing.
+select tests.act_as(:'alice');
+
+select tests.must_fail(
+  format('update public.enrollments set progress_pct = 100 where user_id = %L', :'alice'),
+  'Alice cannot set her own progress_pct directly (permission denied, not a silent no-op)'
+);
+
+select tests.must_fail(
+  format($f$update public.enrollments set status = 'completed', completed_at = now()
+           where user_id = %L$f$, :'alice'),
+  'Alice cannot mark her own enrollment completed directly'
+);
+
+select public.recompute_enrollment_progress('aaaaaaaa-0000-4000-8000-000000000001');
+
+select tests.ok(
+  (select progress_pct from public.enrollments where user_id = :'alice') = 0,
+  'recompute_enrollment_progress correctly reports 0% before any lesson is completed'
+);
+reset role;
+
+-- Superuser marks Alice's one lesson in this course complete, then Alice
+-- recomputes her own progress (the actual call path the app uses).
+insert into public.lesson_progress (user_id, lesson_id, course_id, completed_at)
+values (:'alice', 'cccccccc-0000-4000-8000-000000000003',
+        'aaaaaaaa-0000-4000-8000-000000000001', now());
+
+select tests.act_as(:'alice');
+select public.recompute_enrollment_progress('aaaaaaaa-0000-4000-8000-000000000001');
+
+select tests.ok(
+  (select progress_pct from public.enrollments where user_id = :'alice') = 100,
+  'recompute_enrollment_progress reaches 100% once the (single) lesson is done'
+);
+select tests.ok(
+  (select status from public.enrollments where user_id = :'alice') = 'completed',
+  'recompute_enrollment_progress flips status to completed at 100%'
+);
+
+select tests.must_fail(
+  format($f$select public.recompute_enrollment_progress(
+             'aaaaaaaa-0000-4000-8000-000000000001', %L)$f$, :'bob'),
+  'Alice cannot recompute progress on Bob''s behalf'
+);
+reset role;
+
 rollback to savepoint s4;
 
 -- ===========================================================================
@@ -405,7 +475,8 @@ select tests.ok(
 
 select tests.ok(
   (select count(*) from public.audit_logs
-   where action = 'enrollment.granted') = 1,
+   where action = 'enrollment.granted'
+     and after ->> 'order_id' = '99999999-0000-4000-8000-000000000002') = 1,
   'grant_enrollment writes an audit log entry'
 );
 
@@ -500,25 +571,84 @@ rollback to savepoint s8;
 savepoint s9;
 select tests.act_as(:'admin');
 
+-- Scoped to this file's own fixture users, same reasoning as the course
+-- counts above: the suite must pass identically against a fresh database or
+-- one already carrying real signups from manual/browser testing.
 select tests.ok(
-  (select count(*) from public.profiles) = 3,
-  'an admin can read all profiles'
+  (select count(*) from public.profiles
+   where id in (:'alice', :'bob', :'admin')) = 3,
+  'an admin can read all (fixture) profiles'
 );
 
 select tests.ok(
-  (select count(*) from public.quiz_options) = 2,
+  (select count(*) from public.quiz_options where id::text like 'ffffffff-%') = 2,
   'an admin CAN read the answer key'
 );
 
 select tests.ok(
-  (select count(*) from public.courses) = 3,
-  'an admin can see draft courses'
+  (select count(*) from public.courses where id::text like 'aaaaaaaa-%') = 3,
+  'an admin can see draft fixture courses'
 );
 
 rollback to savepoint s9;
 
 -- ===========================================================================
--- 10 · Every public table has RLS enabled
+-- 10 · Public course outline (syllabus) function
+--
+-- Regression coverage for a real bug: the course detail page used to list
+-- lessons straight from `public.lessons`, which RLS filters to preview-only
+-- for an unenrolled visitor — so locked modules rendered completely empty
+-- instead of showing what the course contains. get_course_outline_public()
+-- fixes this by exposing structure (title/type/duration) without content.
+-- ===========================================================================
+
+savepoint s10;
+
+-- Give the draft course a real module/lesson (as superuser) so the next
+-- assertion actually exercises the function's status check, rather than
+-- trivially returning zero rows because the course has no lessons at all.
+insert into public.modules (id, course_id, title)
+values ('bbbbbbbb-0000-4000-8000-000000000099',
+        'aaaaaaaa-0000-4000-8000-000000000003', 'Draft Module');
+insert into public.lessons (id, module_id, course_id, title, slug, type, content_mdx)
+values ('cccccccc-0000-4000-8000-000000000099', 'bbbbbbbb-0000-4000-8000-000000000099',
+        'aaaaaaaa-0000-4000-8000-000000000003', 'Draft Lesson', 'draft-lesson',
+        'text', 'Not yet public');
+
+select tests.act_as_anon();
+
+select tests.ok(
+  (select count(*) from public.get_course_outline_public(
+    'aaaaaaaa-0000-4000-8000-000000000002')) = 2,
+  'the public outline lists BOTH lessons of a paid course, preview and locked alike'
+);
+
+select tests.ok(
+  (select count(*) from public.get_course_outline_public(
+    'aaaaaaaa-0000-4000-8000-000000000002')
+   where lesson_id = 'cccccccc-0000-4000-8000-000000000002') = 1,
+  'the locked (non-preview) lesson appears in the outline by title...'
+);
+
+select tests.ok(
+  not exists (
+    select 1 from information_schema.routines
+    where routine_name = 'get_course_outline_public'
+      and routine_definition ilike '%content_mdx%'
+  ),
+  '...but the function never selects content_mdx, youtube_id or attachment_path'
+);
+
+select tests.ok(
+  (select count(*) from public.get_course_outline_public(
+    'aaaaaaaa-0000-4000-8000-000000000003')) = 0,
+  'the outline of a DRAFT course is empty for anon, even though it has a real lesson'
+);
+
+rollback to savepoint s10;
+
+-- ===========================================================================
+-- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and
 -- forgetting the `alter table ... enable row level security` line.

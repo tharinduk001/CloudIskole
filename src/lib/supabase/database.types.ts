@@ -1576,6 +1576,21 @@ export type Database = {
         }
       }
       current_streak: { Args: { p_user_id: string }; Returns: number }
+      get_course_outline_public: {
+        Args: { p_course_id: string }
+        Returns: {
+          duration_seconds: number
+          is_preview: boolean
+          lesson_id: string
+          lesson_slug: string
+          lesson_sort_order: number
+          lesson_title: string
+          lesson_type: Database["public"]["Enums"]["lesson_type"]
+          module_id: string
+          module_sort_order: number
+          module_title: string
+        }[]
+      }
       get_quiz_paper: { Args: { p_quiz_id: string }; Returns: Json }
       grant_enrollment: {
         Args: { p_actor_id?: string; p_note?: string; p_order_id: string }
@@ -1584,6 +1599,10 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       is_enrolled: { Args: { p_course_id: string }; Returns: boolean }
       is_trusted_write: { Args: never; Returns: boolean }
+      recompute_enrollment_progress: {
+        Args: { p_course_id: string; p_user_id?: string }
+        Returns: undefined
+      }
       reject_order: {
         Args: { p_actor_id: string; p_order_id: string; p_reason: string }
         Returns: undefined

@@ -23,15 +23,15 @@ machine. Supabase Studio is at <http://127.0.0.1:54323>.
 
 ## Scripts
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Dev server |
-| `npm run build` | Production build (fails on type errors) |
-| `npm run check` | typecheck + lint + secret guard |
-| `npm run db:reset` | Drop and reapply every migration |
-| `npm run db:test` | **Adversarial RLS suite — run after any migration** |
-| `npm run db:types` | Regenerate `database.types.ts` from the live schema |
-| `npm run guard:secrets` | Fail if a server-only key can reach the browser |
+| Command                 | What it does                                        |
+| ----------------------- | --------------------------------------------------- |
+| `npm run dev`           | Dev server                                          |
+| `npm run build`         | Production build (fails on type errors)             |
+| `npm run check`         | typecheck + lint + secret guard                     |
+| `npm run db:reset`      | Drop and reapply every migration                    |
+| `npm run db:test`       | **Adversarial RLS suite — run after any migration** |
+| `npm run db:types`      | Regenerate `database.types.ts` from the live schema |
+| `npm run guard:secrets` | Fail if a server-only key can reach the browser     |
 
 ## Security model
 
