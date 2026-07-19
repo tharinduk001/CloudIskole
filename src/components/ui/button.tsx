@@ -12,13 +12,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         /** Primary call to action. One per view, ideally. */
-        primary:
-          "bg-teal-600 text-white shadow-xs hover:bg-teal-700 active:bg-teal-800",
+        primary: "bg-teal-600 text-white shadow-xs hover:bg-teal-700 active:bg-teal-800",
         /** Secondary action sitting beside a primary. */
         secondary:
           "border border-line-strong bg-surface text-ink shadow-xs hover:border-teal-300 hover:bg-teal-50 hover:text-teal-700",
         /** High-emphasis accent — used sparingly, e.g. "Enroll free". */
-        accent: "bg-gold-400 text-teal-900 shadow-xs hover:bg-gold-300 active:bg-gold-500",
+        accent:
+          "bg-gold-400 text-teal-900 shadow-xs hover:bg-gold-300 active:bg-gold-500",
         /** Low-emphasis action inside dense UI. */
         ghost: "text-ink-muted hover:bg-teal-50 hover:text-teal-700",
         /** Destructive action: delete, reject, cancel enrollment. */
@@ -39,8 +39,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ComponentProps<"button">,
-    VariantProps<typeof buttonVariants> {
+  extends React.ComponentProps<"button">, VariantProps<typeof buttonVariants> {
   /**
    * Render as the child element instead of a `<button>`, keeping the styles.
    * Use for links that should look like buttons:
@@ -57,9 +56,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : "button";
-  return (
-    <Comp className={cn(buttonVariants({ variant, size }), className)} {...props} />
-  );
+  return <Comp className={cn(buttonVariants({ variant, size }), className)} {...props} />;
 }
 
 export { buttonVariants };

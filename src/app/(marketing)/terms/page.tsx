@@ -25,8 +25,8 @@ export default function TermsPage() {
         <Clause title="1. Agreement">
           <p>
             By creating an account or using {brand.name}, you agree to these terms. If you
-            do not agree, please do not use the platform. You must be at least 16 years old
-            to register.
+            do not agree, please do not use the platform. You must be at least 16 years
+            old to register.
           </p>
         </Clause>
 
@@ -55,11 +55,12 @@ export default function TermsPage() {
             </li>
             <li>
               Paid courses grant you personal access from the date your payment is
-              confirmed. Unless stated otherwise on the course page, access does not expire.
+              confirmed. Unless stated otherwise on the course page, access does not
+              expire.
             </li>
             <li>
-              We may update course content, replace lessons, or reschedule sessions to keep
-              material current.
+              We may update course content, replace lessons, or reschedule sessions to
+              keep material current.
             </li>
           </ul>
         </Clause>
@@ -87,7 +88,8 @@ export default function TermsPage() {
             </li>
           </ul>
           <p>
-            Refunds are governed by our <Link href="/refunds">refunds &amp; returns policy</Link>.
+            Refunds are governed by our{" "}
+            <Link href="/refunds">refunds &amp; returns policy</Link>.
           </p>
         </Clause>
 
@@ -95,8 +97,8 @@ export default function TermsPage() {
           <p>You agree not to:</p>
           <ul>
             <li>
-              Share, resell, re-upload or publicly post course videos, notes, quizzes or any
-              other material from the platform.
+              Share, resell, re-upload or publicly post course videos, notes, quizzes or
+              any other material from the platform.
             </li>
             <li>
               Attempt to obtain quiz or exam answers other than by taking the assessment
@@ -119,9 +121,10 @@ export default function TermsPage() {
         <Clause title="6. Intellectual property">
           <p>
             All course material on the platform — videos, written lessons, slides,
-            exercises and assessments — remains our property or that of its licensors. Your
-            enrolment gives you a personal, non-transferable licence to use that material
-            for your own learning. It does not transfer ownership or permit redistribution.
+            exercises and assessments — remains our property or that of its licensors.
+            Your enrolment gives you a personal, non-transferable licence to use that
+            material for your own learning. It does not transfer ownership or permit
+            redistribution.
           </p>
           <p>
             Content you submit remains yours, but you grant us the licence needed to store
@@ -133,50 +136,53 @@ export default function TermsPage() {
           <p>
             Certificates confirm that you completed a specific course and met its passing
             mark. They are not an academic qualification, are not accredited by any
-            university or government body, and do not guarantee employment. We may revoke a
-            certificate obtained through cheating or misrepresentation.
+            university or government body, and do not guarantee employment. We may revoke
+            a certificate obtained through cheating or misrepresentation.
           </p>
         </Clause>
 
         <Clause title="8. Live sessions">
           <p>
-            Session times are given in Sri Lanka Standard Time. We may reschedule or cancel
-            a session; where we do, registered students are notified and, for paid sessions,
-            offered a recording or an alternative date. Sessions may be recorded and made
-            available to enrolled students.
+            Session times are given in Sri Lanka Standard Time. We may reschedule or
+            cancel a session; where we do, registered students are notified and, for paid
+            sessions, offered a recording or an alternative date. Sessions may be recorded
+            and made available to enrolled students.
           </p>
         </Clause>
 
         <Clause title="9. Availability">
           <p>
             We work to keep the platform available at all times, but we do not guarantee
-            uninterrupted service. Access may be interrupted for maintenance, or by failures
-            in networks and third-party providers outside our control.
+            uninterrupted service. Access may be interrupted for maintenance, or by
+            failures in networks and third-party providers outside our control.
           </p>
         </Clause>
 
         <Clause title="10. Limitation of liability">
           <p>
             To the fullest extent permitted by Sri Lankan law, our total liability arising
-            from your use of the platform is limited to the amount you paid us in the twelve
-            months before the claim. We are not liable for indirect or consequential loss,
-            including loss of employment, income or opportunity.
+            from your use of the platform is limited to the amount you paid us in the
+            twelve months before the claim. We are not liable for indirect or
+            consequential loss, including loss of employment, income or opportunity.
           </p>
-          <p>Nothing in these terms excludes liability that cannot lawfully be excluded.</p>
+          <p>
+            Nothing in these terms excludes liability that cannot lawfully be excluded.
+          </p>
         </Clause>
 
         <Clause title="11. Termination">
           <p>
-            You may close your account at any time by contacting us. We may suspend or close
-            an account that breaches these terms. Where we close a paid account without
-            cause, we will refund the unused portion of any fee on a fair basis.
+            You may close your account at any time by contacting us. We may suspend or
+            close an account that breaches these terms. Where we close a paid account
+            without cause, we will refund the unused portion of any fee on a fair basis.
           </p>
         </Clause>
 
         <Clause title="12. Governing law">
           <p>
-            These terms are governed by the laws of the Democratic Socialist Republic of Sri
-            Lanka, and the courts of Sri Lanka have exclusive jurisdiction over any dispute.
+            These terms are governed by the laws of the Democratic Socialist Republic of
+            Sri Lanka, and the courts of Sri Lanka have exclusive jurisdiction over any
+            dispute.
           </p>
         </Clause>
 

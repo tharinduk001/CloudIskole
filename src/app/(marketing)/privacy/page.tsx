@@ -45,8 +45,8 @@ export default function PrivacyPage() {
             <li>
               <strong>Payment records</strong> — for bank transfers, the deposit slip you
               upload and the reference number issued to you. We do not collect or store
-              card numbers; when card payments are introduced they will be handled entirely
-              by a licensed payment provider.
+              card numbers; when card payments are introduced they will be handled
+              entirely by a licensed payment provider.
             </li>
             <li>
               <strong>Messages</strong> — anything you send us through the contact form or
@@ -77,8 +77,12 @@ export default function PrivacyPage() {
 
         <Clause title="3. How we use your information">
           <ul>
-            <li>To create and operate your account and deliver the courses you enrol in.</li>
-            <li>To record your progress, marks, certificates and leaderboard position.</li>
+            <li>
+              To create and operate your account and deliver the courses you enrol in.
+            </li>
+            <li>
+              To record your progress, marks, certificates and leaderboard position.
+            </li>
             <li>
               To send you service messages by email and SMS — registration confirmations,
               enrolment confirmations, payment updates and session reminders.
@@ -96,9 +100,9 @@ export default function PrivacyPage() {
         <Clause title="4. Your choices">
           <ul>
             <li>
-              <strong>Leaderboard visibility</strong> — appearing on the public leaderboard
-              is optional and off unless you choose it. You can change this at any time in
-              your profile.
+              <strong>Leaderboard visibility</strong> — appearing on the public
+              leaderboard is optional and off unless you choose it. You can change this at
+              any time in your profile.
             </li>
             <li>
               <strong>Marketing messages</strong> — you may opt out at any time. Essential
@@ -112,9 +116,9 @@ export default function PrivacyPage() {
             </li>
           </ul>
           <p>
-            Where we must keep records to meet financial or legal obligations — payment and
-            audit records in particular — we will retain those even after an account is
-            closed, and will tell you when this applies.
+            Where we must keep records to meet financial or legal obligations — payment
+            and audit records in particular — we will retain those even after an account
+            is closed, and will tell you when this applies.
           </p>
         </Clause>
 
@@ -174,9 +178,9 @@ export default function PrivacyPage() {
         <Clause title="7. Cookies">
           <p>
             We use cookies that are strictly necessary to run the service — principally to
-            keep you signed in and to protect against cross-site request forgery. We do not
-            use advertising or cross-site tracking cookies. Blocking essential cookies will
-            prevent you from signing in.
+            keep you signed in and to protect against cross-site request forgery. We do
+            not use advertising or cross-site tracking cookies. Blocking essential cookies
+            will prevent you from signing in.
           </p>
         </Clause>
 
@@ -199,8 +203,8 @@ export default function PrivacyPage() {
         <Clause title="10. Contact">
           <p>
             Questions about this policy or your data can be sent to{" "}
-            <a href={`mailto:${brand.contact.email}`}>{brand.contact.email}</a>, or through
-            our <Link href="/contact">contact page</Link>.
+            <a href={`mailto:${brand.contact.email}`}>{brand.contact.email}</a>, or
+            through our <Link href="/contact">contact page</Link>.
           </p>
         </Clause>
       </LegalBody>

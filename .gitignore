@@ -47,3 +47,7 @@ next-env.d.ts
 # supabase
 /supabase/.temp
 /supabase/.branches
+
+# supabase local
+/supabase/.branches
+/supabase/.temp

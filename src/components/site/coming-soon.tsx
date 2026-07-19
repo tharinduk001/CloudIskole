@@ -9,13 +9,7 @@ import { Container, Section } from "@/components/ui/layout";
  * in a later phase. Better than a 404: the link works, and it says plainly
  * what is coming rather than pretending the feature is there.
  */
-export function ComingSoon({
-  feature,
-  detail,
-}: {
-  feature: string;
-  detail: string;
-}) {
+export function ComingSoon({ feature, detail }: { feature: string; detail: string }) {
   return (
     <Section>
       <Container size="narrow">

@@ -12,7 +12,9 @@
     "format:check": "prettier --check .",
     "check": "npm run typecheck && npm run lint && npm run guard:secrets",
     "guard:secrets": "node scripts/guard-secrets.mjs",
-    "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts"
+    "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts",
+    "db:test": "docker exec -i supabase_db_CloudIskole psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f - < supabase/tests/rls_test.sql",
+    "db:reset": "supabase db reset"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -29,6 +31,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.82.0",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
   },
@@ -41,6 +44,7 @@
     "eslint-config-next": "16.2.10",
     "prettier": "^3.9.5",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "supabase": "^2.109.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

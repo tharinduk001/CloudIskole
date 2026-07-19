@@ -14,7 +14,14 @@ import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const [open, setOpen] = React.useState(false);
+  /**
+   * The mobile menu stores the path it was opened on rather than a boolean.
+   * Navigating changes `pathname`, so the menu closes itself — no effect
+   * syncing state to a route change, and no cascading render.
+   */
+  const [openedOnPath, setOpenedOnPath] = React.useState<string | null>(null);
+  const open = openedOnPath === pathname;
+
   const [scrolled, setScrolled] = React.useState(false);
 
   // The header is transparent over the hero and gains a border + blur once
@@ -25,9 +32,6 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // Close the mobile menu on navigation.
-  React.useEffect(() => setOpen(false), [pathname]);
 
   // Prevent the page behind the mobile menu from scrolling.
   React.useEffect(() => {
@@ -41,14 +45,13 @@ export function SiteHeader() {
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") setOpenedOnPath(null);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <header
@@ -97,11 +100,11 @@ export function SiteHeader() {
 
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpenedOnPath(open ? null : pathname)}
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="text-ink hover:bg-teal-50 -mr-2 grid size-11 place-items-center rounded-xl lg:hidden"
+            className="text-ink -mr-2 grid size-11 place-items-center rounded-xl hover:bg-teal-50 lg:hidden"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>

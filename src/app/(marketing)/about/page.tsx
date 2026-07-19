@@ -59,16 +59,17 @@ export default function AboutPage() {
               time is usually spent waiting rather than building.
             </p>
             <p>
-              Meanwhile, the local tech industry has a genuine shortage of Cloud and DevOps
-              engineers. These are among the best-paid entry points into the field, and
-              unlike many careers, they do not require a degree to begin — they require
-              demonstrable skill.
+              Meanwhile, the local tech industry has a genuine shortage of Cloud and
+              DevOps engineers. These are among the best-paid entry points into the field,
+              and unlike many careers, they do not require a degree to begin — they
+              require demonstrable skill.
             </p>
             <p>
-              The problem is access. International platforms price their courses in dollars
-              and assume background knowledge that A/L students have not been given. Local
-              institutes are expensive and largely confined to Colombo. Neither is built
-              for a student in Matara or Vavuniya with a laptop and a year to spare.
+              The problem is access. International platforms price their courses in
+              dollars and assume background knowledge that A/L students have not been
+              given. Local institutes are expensive and largely confined to Colombo.
+              Neither is built for a student in Matara or Vavuniya with a laptop and a
+              year to spare.
             </p>
             <p className="text-ink font-medium">
               {brand.name} is built for exactly that student: practical Cloud, DevOps and
@@ -108,8 +109,8 @@ export default function AboutPage() {
               Want to talk to us?
             </h2>
             <p className="text-ink-muted mx-auto mt-4 max-w-xl text-base leading-relaxed">
-              Whether you are a student deciding where to start, or an employer looking for
-              trained juniors, we would like to hear from you.
+              Whether you are a student deciding where to start, or an employer looking
+              for trained juniors, we would like to hear from you.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Button asChild size="lg">

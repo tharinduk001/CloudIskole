@@ -19,7 +19,7 @@ export function Card({
       className={cn(
         "border-line bg-surface rounded-2xl border",
         interactive &&
-          "hover:border-teal-200 hover:shadow-md transition-[box-shadow,border-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-0.5",
+          "transition-[box-shadow,border-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-md",
         className,
       )}
       {...props}
@@ -41,7 +41,9 @@ export function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
 }
 
 export function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p className={cn("text-ink-muted text-sm leading-relaxed", className)} {...props} />;
+  return (
+    <p className={cn("text-ink-muted text-sm leading-relaxed", className)} {...props} />
+  );
 }
 
 export function CardContent({ className, ...props }: React.ComponentProps<"div">) {

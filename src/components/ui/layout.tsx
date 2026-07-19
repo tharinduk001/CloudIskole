@@ -23,10 +23,7 @@ export function Container({
 }
 
 /** Standard vertical rhythm between page sections. */
-export function Section({
-  className,
-  ...props
-}: React.ComponentProps<"section">) {
+export function Section({ className, ...props }: React.ComponentProps<"section">) {
   return <section className={cn("py-16 sm:py-20 lg:py-28", className)} {...props} />;
 }
 

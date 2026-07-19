@@ -21,7 +21,9 @@ export function PageHeader({
               {eyebrow}
             </span>
           ) : null}
-          <h1 className="font-display mt-3 text-4xl leading-[1.1] sm:text-5xl">{title}</h1>
+          <h1 className="font-display mt-3 text-4xl leading-[1.1] sm:text-5xl">
+            {title}
+          </h1>
           {description ? (
             <p className="text-ink-muted mt-5 text-lg leading-relaxed">{description}</p>
           ) : null}

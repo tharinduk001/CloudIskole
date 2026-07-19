@@ -30,7 +30,10 @@ const SERVER_ONLY_ENV = [
 
 /** Literals that look like real credentials rather than placeholders. */
 const CREDENTIAL_PATTERNS = [
-  { name: "Supabase service_role JWT", re: /eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}/ },
+  {
+    name: "Supabase service_role JWT",
+    re: /eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}/,
+  },
   { name: "Supabase secret key", re: /\bsb_secret_[A-Za-z0-9_-]{16,}/ },
   { name: "Resend API key", re: /\bre_[A-Za-z0-9]{24,}/ },
 ];
@@ -103,7 +106,12 @@ for (const file of walk(SRC)) {
   for (const { name, re } of CREDENTIAL_PATTERNS) {
     const m = re.exec(source);
     if (m) {
-      report(file, source, m.index, `Looks like a hardcoded ${name}. Move it to .env.local.`);
+      report(
+        file,
+        source,
+        m.index,
+        `Looks like a hardcoded ${name}. Move it to .env.local.`,
+      );
     }
   }
 }

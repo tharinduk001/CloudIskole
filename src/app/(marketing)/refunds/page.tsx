@@ -39,7 +39,9 @@ export default function RefundsPage() {
         <Clause title="2. Full refund — no questions asked">
           <p>You are entitled to a full refund when all of the following are true:</p>
           <ul>
-            <li>You request it within 7 calendar days of your enrolment being activated.</li>
+            <li>
+              You request it within 7 calendar days of your enrolment being activated.
+            </li>
             <li>You have completed 25% or less of the course lessons.</li>
             <li>You have not been issued a certificate for the course.</li>
           </ul>
@@ -50,8 +52,8 @@ export default function RefundsPage() {
           <ul>
             <li>We cancel a course or fail to deliver the material advertised.</li>
             <li>
-              You were charged twice for the same enrolment, or charged in error. Duplicate
-              payments are always refunded.
+              You were charged twice for the same enrolment, or charged in error.
+              Duplicate payments are always refunded.
             </li>
             <li>
               A technical fault on our side prevented you from accessing the course and we
@@ -104,8 +106,9 @@ export default function RefundsPage() {
               holder, in Sri Lankan Rupees.
             </li>
             <li>
-              Once approved, funds are normally sent within <strong>7 working days</strong>
-              , and your bank may take a further few days to credit them.
+              Once approved, funds are normally sent within{" "}
+              <strong>7 working days</strong>, and your bank may take a further few days
+              to credit them.
             </li>
             <li>
               We refund the amount you paid us. Any bank charges your own bank applies to
@@ -121,18 +124,18 @@ export default function RefundsPage() {
         <Clause title="7. Failed and unmatched payments">
           <p>
             If a bank transfer fails, is rejected, or cannot be matched to an order, no
-            enrolment is created and no fee is retained. Every such event is recorded in our
-            payment log. If money left your account but no enrolment appeared, contact us
-            with your deposit slip and we will trace it.
+            enrolment is created and no fee is retained. Every such event is recorded in
+            our payment log. If money left your account but no enrolment appeared, contact
+            us with your deposit slip and we will trace it.
           </p>
         </Clause>
 
         <Clause title="8. Disagreements">
           <p>
-            If you are unhappy with a refund decision, reply to our email and ask for it to
-            be reviewed. We will look at it again and give you a final written decision. This
-            policy does not affect any statutory rights you have under Sri Lankan consumer
-            law.
+            If you are unhappy with a refund decision, reply to our email and ask for it
+            to be reviewed. We will look at it again and give you a final written
+            decision. This policy does not affect any statutory rights you have under Sri
+            Lankan consumer law.
           </p>
         </Clause>
 
