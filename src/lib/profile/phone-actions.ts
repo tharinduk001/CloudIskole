@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import type { ActionResult } from "@/lib/actions/result";
 import { sendSms } from "@/lib/notifications/textlk";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
 const phoneSchema = z.object({
@@ -39,6 +40,15 @@ export async function requestPhoneOtp(
 
   if (!user) {
     return { status: "error", message: "Please sign in." };
+  }
+
+  // Defense-in-depth on top of `request_phone_otp()`'s own per-user cooldown:
+  // this catches one account cycling through many numbers, which SMS credit
+  // makes real money.
+  const ip = await getClientIp();
+  const limited = await rateLimit("phone.request-otp", `${ip}:${user.id}`, 5, 3600);
+  if (!limited.allowed) {
+    return { status: "error", message: "Too many attempts. Please wait a while and try again." };
   }
 
   const { data: code, error } = await supabase.rpc("request_phone_otp", {

@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import type { ActionResult } from "@/lib/actions/result";
 import type { QuizResult } from "@/lib/data/quizzes";
+import { rateLimit } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
 const startSchema = z.object({ quizId: z.uuid(), returnTo: z.string().trim().min(1) });
@@ -72,6 +73,17 @@ export async function submitQuizAttempt(attemptId: string, answers: Record<strin
   }
 
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const limited = await rateLimit("quiz.submit", user.id, 30, 3600);
+    if (!limited.allowed) {
+      return { status: "error" as const, message: "Too many submissions. Please wait a while and try again." };
+    }
+  }
+
   const { data, error } = await supabase.rpc("submit_quiz_attempt", {
     p_attempt_id: parsed.data.attemptId,
     p_answers: JSON.parse(parsed.data.answers),

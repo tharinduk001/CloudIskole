@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "node:crypto";
+
 import type { NextRequest } from "next/server";
 
 import { serverEnv } from "@/lib/env";
@@ -26,8 +28,16 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "CRON_SECRET is not configured" }, { status: 501 });
   }
 
-  const auth = request.headers.get("authorization");
-  if (auth !== `Bearer ${CRON_SECRET}`) {
+  const auth = request.headers.get("authorization") ?? "";
+  const expected = `Bearer ${CRON_SECRET}`;
+  const authBuf = Buffer.from(auth);
+  const expectedBuf = Buffer.from(expected);
+  // Constant-time comparison: a naive `!==` leaks how many leading bytes of
+  // the secret matched via response timing.
+  const authorized =
+    authBuf.length === expectedBuf.length && timingSafeEqual(authBuf, expectedBuf);
+
+  if (!authorized) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 

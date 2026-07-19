@@ -32,6 +32,7 @@ machine. Supabase Studio is at <http://127.0.0.1:54323>.
 | `npm run db:test`       | **Adversarial RLS suite — run after any migration** |
 | `npm run db:types`      | Regenerate `database.types.ts` from the live schema |
 | `npm run guard:secrets` | Fail if a server-only key can reach the browser     |
+| `npm run test:e2e`      | Playwright suite on the critical flows              |
 
 ## Security model
 
@@ -73,8 +74,17 @@ privilege-escalation bug during Phase 1 — run it after every schema change.
 
 ## Phase status
 
-- **Phase 1 — done.** Foundation, design system, public site, auth, full schema.
-- Phase 2 — courses, lessons, enrollment, student dashboard.
-- Phase 3 — admin dashboard, bank-transfer payments, audit UI, notifications.
-- Phase 4 — quizzes and exams. Phase 5 — live sessions.
-- Phase 6 — XP, leaderboards, certificates. Phase 7 — hardening and launch.
+All seven phases are complete:
+
+- **Phase 1** — Foundation, design system, public site, auth, full schema.
+- **Phase 2** — Courses, lessons, enrollment, student dashboard.
+- **Phase 3** — Admin dashboard, bank-transfer payments, audit UI, notifications.
+- **Phase 4** — Quizzes and exams.
+- **Phase 5** — Live sessions.
+- **Phase 6** — XP, streaks, badges, certificates, leaderboard.
+- **Phase 7** — Rate limiting, Sentry, Playwright e2e suite, CI, security
+  review, launch checklist.
+
+**Ready to deploy — see [`LAUNCH.md`](./LAUNCH.md)** for the full path from
+here to a live production domain (accounts needed, env vars, DNS, first-admin
+bootstrap, post-launch verification).

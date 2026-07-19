@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { toFieldErrors, type ActionResult } from "@/lib/actions/result";
+import { rateLimit } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
 const contactSchema = z.object({
@@ -69,6 +70,14 @@ export async function submitContactMessage(
   const headerList = await headers();
   const forwardedFor = headerList.get("x-forwarded-for");
   const ip = forwardedFor?.split(",")[0]?.trim() ?? null;
+
+  const limited = await rateLimit("contact.submit", ip ?? "unknown", 5, 3600);
+  if (!limited.allowed) {
+    return {
+      status: "error",
+      message: "You've sent a few messages already — please wait a bit before sending another.",
+    };
+  }
 
   const { error } = await supabase.from("contact_messages").insert({
     name: parsed.data.name,

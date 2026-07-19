@@ -8,6 +8,7 @@ import {
   toFieldErrors,
   type ActionResult,
 } from "@/lib/actions/result";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
 /** Only allow same-site redirect targets — never an absolute URL from input. */
@@ -45,6 +46,12 @@ export async function sendEmailOtp(
       message: "Please check the form.",
       fieldErrors: toFieldErrors(parsed.error),
     };
+  }
+
+  const ip = await getClientIp();
+  const limited = await rateLimit("auth.send-otp", `${ip}:${parsed.data.email}`, 5, 600);
+  if (!limited.allowed) {
+    return { status: "error", message: "Too many attempts. Please wait a minute and try again." };
   }
 
   const supabase = await createClient();
@@ -89,6 +96,12 @@ export async function verifyEmailOtp(
       message: "Please check the code.",
       fieldErrors: toFieldErrors(parsed.error),
     };
+  }
+
+  const ip = await getClientIp();
+  const limited = await rateLimit("auth.verify-otp", `${ip}:${parsed.data.email}`, 10, 600);
+  if (!limited.allowed) {
+    return { status: "error", message: "Too many attempts. Please wait a minute and try again." };
   }
 
   const supabase = await createClient();
