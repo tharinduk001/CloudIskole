@@ -33,7 +33,7 @@ export default async function AdminCoursesPage() {
 
       <Card className="mt-6 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
             <tr>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Price</th>
@@ -52,7 +52,7 @@ export default async function AdminCoursesPage() {
                   </Link>
                   <div className="text-ink-subtle text-xs">/{course.slug}</div>
                 </td>
-                <td className="px-4 py-3 text-ink">
+                <td className="text-ink px-4 py-3">
                   {course.is_free ? "Free" : formatLkr(course.price_cents)}
                 </td>
                 <td className="px-4 py-3">

@@ -22,7 +22,10 @@ import { createClient } from "@/lib/supabase/server";
 
 const courseSchema = z.object({
   id: z.uuid().optional(),
-  slug: z.string().trim().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
+  slug: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
   title: z.string().trim().min(3).max(200),
   subtitle: z.string().trim().max(300).optional(),
   description: z.string().trim().max(4000).optional(),
@@ -46,7 +49,10 @@ const courseSchema = z.object({
     .transform((v) => (v ? Number(v) : 0)),
 });
 
-export async function upsertCourse(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertCourse(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const isFree = formData.get("isFree") === "on";
@@ -98,12 +104,19 @@ export async function upsertCourse(_prev: ActionResult, formData: FormData): Pro
     return { status: "success", message: "Course saved." };
   }
 
-  const { data: created, error } = await supabase.from("courses").insert(row).select("id").single();
+  const { data: created, error } = await supabase
+    .from("courses")
+    .insert(row)
+    .select("id")
+    .single();
   if (error || !created) {
     console.error("upsertCourse insert failed", error);
     return {
       status: "error",
-      message: error?.code === "23505" ? "That slug is already in use." : "Could not create this course.",
+      message:
+        error?.code === "23505"
+          ? "That slug is already in use."
+          : "Could not create this course.",
     };
   }
 
@@ -120,7 +133,10 @@ export async function setCourseStatus(
 
   const { error } = await supabase
     .from("courses")
-    .update({ status, published_at: status === "published" ? new Date().toISOString() : undefined })
+    .update({
+      status,
+      published_at: status === "published" ? new Date().toISOString() : undefined,
+    })
     .eq("id", courseId);
 
   if (error) {
@@ -139,10 +155,17 @@ const moduleSchema = z.object({
   courseId: z.uuid(),
   title: z.string().trim().min(2).max(200),
   summary: z.string().trim().max(500).optional(),
-  sortOrder: z.string().trim().optional().transform((v) => (v ? Number(v) : 0)),
+  sortOrder: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : 0)),
 });
 
-export async function upsertModule(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertModule(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = moduleSchema.safeParse({
@@ -178,7 +201,10 @@ export async function upsertModule(_prev: ActionResult, formData: FormData): Pro
   return { status: "success", message: "Module saved." };
 }
 
-export async function deleteModule(moduleId: string, courseId: string): Promise<ActionResult> {
+export async function deleteModule(
+  moduleId: string,
+  courseId: string,
+): Promise<ActionResult> {
   await requireAdmin();
   const supabase = await createClient();
   const { error } = await supabase.from("modules").delete().eq("id", moduleId);
@@ -195,17 +221,31 @@ const lessonSchema = z.object({
   moduleId: z.uuid(),
   courseId: z.uuid(),
   title: z.string().trim().min(2).max(200),
-  slug: z.string().trim().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
+  slug: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
   type: z.enum(["video", "text", "pdf"]),
   youtubeId: z.string().trim().max(20).optional(),
   contentMdx: z.string().optional(),
   attachmentPath: z.string().trim().max(500).optional(),
-  durationSeconds: z.string().trim().optional().transform((v) => (v ? Number(v) : undefined)),
+  durationSeconds: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : undefined)),
   isPreview: z.union([z.literal("on"), z.null()]).optional(),
-  sortOrder: z.string().trim().optional().transform((v) => (v ? Number(v) : 0)),
+  sortOrder: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : 0)),
 });
 
-export async function upsertLesson(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertLesson(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = lessonSchema.safeParse({
@@ -265,7 +305,10 @@ export async function upsertLesson(_prev: ActionResult, formData: FormData): Pro
     console.error("upsertLesson failed", error);
     return {
       status: "error",
-      message: error.code === "23505" ? "That slug is already used in this course." : "Could not save this lesson.",
+      message:
+        error.code === "23505"
+          ? "That slug is already used in this course."
+          : "Could not save this lesson.",
     };
   }
 
@@ -273,7 +316,10 @@ export async function upsertLesson(_prev: ActionResult, formData: FormData): Pro
   return { status: "success", message: "Lesson saved." };
 }
 
-export async function deleteLesson(lessonId: string, courseId: string): Promise<ActionResult> {
+export async function deleteLesson(
+  lessonId: string,
+  courseId: string,
+): Promise<ActionResult> {
   await requireAdmin();
   const supabase = await createClient();
   const { error } = await supabase.from("lessons").delete().eq("id", lessonId);

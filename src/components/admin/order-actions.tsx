@@ -10,7 +10,10 @@ import { idleResult } from "@/lib/actions/result";
 import { approveOrder, rejectOrder } from "@/lib/admin/orders-actions";
 
 export function OrderActions({ orderId }: { orderId: string }) {
-  const [approveState, approveAction, approving] = useActionState(approveOrder, idleResult);
+  const [approveState, approveAction, approving] = useActionState(
+    approveOrder,
+    idleResult,
+  );
   const [rejectState, rejectAction, rejecting] = useActionState(rejectOrder, idleResult);
   const [showReject, setShowReject] = React.useState(false);
 
@@ -38,7 +41,11 @@ export function OrderActions({ orderId }: { orderId: string }) {
         <form action={approveAction}>
           <input type="hidden" name="orderId" value={orderId} />
           <Button type="submit" disabled={approving || rejecting}>
-            {approving ? <Loader2 className="animate-spin" aria-hidden="true" /> : <CheckCircle2 aria-hidden="true" />}
+            {approving ? (
+              <Loader2 className="animate-spin" aria-hidden="true" />
+            ) : (
+              <CheckCircle2 aria-hidden="true" />
+            )}
             Approve &amp; grant enrollment
           </Button>
         </form>
@@ -60,12 +67,20 @@ export function OrderActions({ orderId }: { orderId: string }) {
       ) : null}
 
       {showReject ? (
-        <form action={rejectAction} className="border-line flex flex-col gap-3 rounded-xl border p-4">
+        <form
+          action={rejectAction}
+          className="border-line flex flex-col gap-3 rounded-xl border p-4"
+        >
           <input type="hidden" name="orderId" value={orderId} />
           <Field label="Reason for rejection" required>
             {(props) => <Textarea {...props} name="reason" required maxLength={500} />}
           </Field>
-          <Button type="submit" variant="danger" disabled={rejecting} className="self-start">
+          <Button
+            type="submit"
+            variant="danger"
+            disabled={rejecting}
+            className="self-start"
+          >
             {rejecting ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
             Confirm rejection
           </Button>

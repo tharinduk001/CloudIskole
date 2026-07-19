@@ -18,8 +18,14 @@ import { requestPhoneOtp, verifyPhoneOtp } from "@/lib/profile/phone-actions";
  * forcing it at signup.
  */
 export function PhoneVerifyCard({ currentPhone }: { currentPhone: string | null }) {
-  const [requestState, requestAction, requesting] = useActionState(requestPhoneOtp, idleResult);
-  const [verifyState, verifyAction, verifying] = useActionState(verifyPhoneOtp, idleResult);
+  const [requestState, requestAction, requesting] = useActionState(
+    requestPhoneOtp,
+    idleResult,
+  );
+  const [verifyState, verifyAction, verifying] = useActionState(
+    verifyPhoneOtp,
+    idleResult,
+  );
   const [codeSent, setCodeSent] = React.useState(false);
 
   if (verifyState.status === "success") {
@@ -62,7 +68,10 @@ export function PhoneVerifyCard({ currentPhone }: { currentPhone: string | null 
           </Button>
         </form>
       ) : (
-        <form action={verifyAction} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+        <form
+          action={verifyAction}
+          className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end"
+        >
           <Field label="6-digit code" className="flex-1">
             {(props) => (
               <Input

@@ -6,7 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
 type SessionPublicRow = Database["public"]["Views"]["sessions_public"]["Row"];
-export type SessionRegistrationRow = Database["public"]["Tables"]["session_registrations"]["Row"];
+export type SessionRegistrationRow =
+  Database["public"]["Tables"]["session_registrations"]["Row"];
 
 /**
  * `sessions_public`'s generated Row type marks every column nullable —
@@ -78,14 +79,20 @@ export async function listSessions(): Promise<{
 
 export async function getSessionBySlug(slug: string): Promise<SessionSummary> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("sessions_public").select("*").eq("slug", slug).maybeSingle();
+  const { data, error } = await supabase
+    .from("sessions_public")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
 
   if (error || !data) notFound();
   return toSessionSummary(data);
 }
 
 /** The signed-in student's own registration for a session, or null. */
-export async function getMyRegistration(sessionId: string): Promise<SessionRegistrationRow | null> {
+export async function getMyRegistration(
+  sessionId: string,
+): Promise<SessionRegistrationRow | null> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -136,15 +143,21 @@ export async function listMyRegistrations(
     .select("*")
     .in("id", sessionIds);
 
-  if (sessionsError) throw new Error(`Failed to load your sessions: ${sessionsError.message}`);
+  if (sessionsError)
+    throw new Error(`Failed to load your sessions: ${sessionsError.message}`);
 
-  const bySessionId = new Map((sessions ?? []).map(toSessionSummary).map((s) => [s.id, s]));
+  const bySessionId = new Map(
+    (sessions ?? []).map(toSessionSummary).map((s) => [s.id, s]),
+  );
   return registrations
     .map((registration) => {
       const session = bySessionId.get(registration.session_id);
       return session ? { registration, session } : null;
     })
-    .filter((row): row is { registration: SessionRegistrationRow; session: SessionSummary } => row !== null);
+    .filter(
+      (row): row is { registration: SessionRegistrationRow; session: SessionSummary } =>
+        row !== null,
+    );
 }
 
 /**
@@ -154,7 +167,9 @@ export async function listMyRegistrations(
  */
 export async function getJoinUrl(sessionId: string): Promise<string | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("get_session_join_url", { p_session_id: sessionId });
+  const { data, error } = await supabase.rpc("get_session_join_url", {
+    p_session_id: sessionId,
+  });
   if (error) return null;
   return data;
 }

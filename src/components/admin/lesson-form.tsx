@@ -30,17 +30,24 @@ export function LessonForm({
   }, [state]);
 
   return (
-    <form action={action} className="border-line bg-paper flex flex-col gap-4 rounded-xl border p-4">
+    <form
+      action={action}
+      className="border-line bg-paper flex flex-col gap-4 rounded-xl border p-4"
+    >
       {lesson ? <input type="hidden" name="id" value={lesson.id} /> : null}
       <input type="hidden" name="courseId" value={courseId} />
       <input type="hidden" name="moduleId" value={moduleId} />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Title" required>
-          {(props) => <Input {...props} name="title" required defaultValue={lesson?.title} />}
+          {(props) => (
+            <Input {...props} name="title" required defaultValue={lesson?.title} />
+          )}
         </Field>
         <Field label="Slug" required hint="Unique within the course">
-          {(props) => <Input {...props} name="slug" required defaultValue={lesson?.slug} />}
+          {(props) => (
+            <Input {...props} name="slug" required defaultValue={lesson?.slug} />
+          )}
         </Field>
       </div>
 
@@ -61,26 +68,53 @@ export function LessonForm({
         </Field>
         <Field label="Duration (seconds)">
           {(props) => (
-            <Input {...props} name="durationSeconds" type="number" defaultValue={lesson?.duration_seconds ?? ""} />
+            <Input
+              {...props}
+              name="durationSeconds"
+              type="number"
+              defaultValue={lesson?.duration_seconds ?? ""}
+            />
           )}
         </Field>
         <Field label="Sort order">
-          {(props) => <Input {...props} name="sortOrder" type="number" defaultValue={lesson?.sort_order ?? 0} />}
+          {(props) => (
+            <Input
+              {...props}
+              name="sortOrder"
+              type="number"
+              defaultValue={lesson?.sort_order ?? 0}
+            />
+          )}
         </Field>
       </div>
 
       {type === "video" ? (
-        <Field label="YouTube video id" required hint="The 11-character id, e.g. dQw4w9WgXcQ">
-          {(props) => <Input {...props} name="youtubeId" defaultValue={lesson?.youtube_id ?? ""} />}
+        <Field
+          label="YouTube video id"
+          required
+          hint="The 11-character id, e.g. dQw4w9WgXcQ"
+        >
+          {(props) => (
+            <Input {...props} name="youtubeId" defaultValue={lesson?.youtube_id ?? ""} />
+          )}
         </Field>
       ) : type === "text" ? (
         <Field label="Lesson content (MDX)" required>
           {(props) => (
-            <Textarea {...props} name="contentMdx" rows={10} defaultValue={lesson?.content_mdx ?? ""} />
+            <Textarea
+              {...props}
+              name="contentMdx"
+              rows={10}
+              defaultValue={lesson?.content_mdx ?? ""}
+            />
           )}
         </Field>
       ) : (
-        <Field label="Attachment path" required hint="Path inside the private course-assets bucket">
+        <Field
+          label="Attachment path"
+          required
+          hint="Path inside the private course-assets bucket"
+        >
           {(props) => (
             <Input
               {...props}
@@ -105,7 +139,11 @@ export function LessonForm({
           {lesson ? "Save lesson" : "Add lesson"}
         </Button>
         {onDone ? (
-          <button type="button" onClick={onDone} className="text-ink-subtle text-xs hover:underline">
+          <button
+            type="button"
+            onClick={onDone}
+            className="text-ink-subtle text-xs hover:underline"
+          >
             Cancel
           </button>
         ) : null}

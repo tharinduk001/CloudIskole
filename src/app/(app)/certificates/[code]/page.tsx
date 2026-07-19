@@ -4,9 +4,15 @@ import { Liyawel } from "@/components/brand/liyawel";
 import { Logo } from "@/components/brand/logo";
 import { PrintButton } from "@/components/certificates/print-button";
 import { Container, Section } from "@/components/ui/layout";
-import { getCertificateForViewer, getCertificateHolderName } from "@/lib/data/gamification";
+import {
+  getCertificateForViewer,
+  getCertificateHolderName,
+} from "@/lib/data/gamification";
 
-export const metadata: Metadata = { title: "Your certificate", robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: "Your certificate",
+  robots: { index: false, follow: false },
+};
 
 const dateFormatter = new Intl.DateTimeFormat("en-LK", {
   timeZone: "Asia/Colombo",
@@ -34,7 +40,8 @@ export default async function CertificatePage({
 
         {cert.revoked_at ? (
           <p className="border-danger/20 bg-danger-soft text-danger mt-6 rounded-xl border px-4 py-3 text-sm print:hidden">
-            This certificate was revoked{cert.revoke_reason ? `: ${cert.revoke_reason}` : "."}
+            This certificate was revoked
+            {cert.revoke_reason ? `: ${cert.revoke_reason}` : "."}
           </p>
         ) : null}
 
@@ -48,9 +55,13 @@ export default async function CertificatePage({
               Certificate of completion
             </p>
             <p className="text-ink-muted mt-6 text-base">This certifies that</p>
-            <p className="font-display mt-2 text-3xl font-semibold sm:text-4xl">{holderName}</p>
+            <p className="font-display mt-2 text-3xl font-semibold sm:text-4xl">
+              {holderName}
+            </p>
             <p className="text-ink-muted mt-6 text-base">has successfully completed</p>
-            <p className="font-display mt-2 text-2xl font-semibold sm:text-3xl">{cert.course.title}</p>
+            <p className="font-display mt-2 text-2xl font-semibold sm:text-3xl">
+              {cert.course.title}
+            </p>
 
             <p className="text-ink-subtle mt-10 text-sm">
               Issued {dateFormatter.format(new Date(cert.issued_at))}

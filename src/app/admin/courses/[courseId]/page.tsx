@@ -22,7 +22,10 @@ export default async function AdminCourseDetailPage({
     <div className="max-w-3xl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-2xl font-semibold">{course.title}</h1>
-        <PublishControls status={course.status} onChange={setCourseStatus.bind(null, course.id)} />
+        <PublishControls
+          status={course.status}
+          onChange={setCourseStatus.bind(null, course.id)}
+        />
       </div>
 
       <Card className="mt-6 p-6">

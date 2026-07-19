@@ -75,7 +75,8 @@ export async function submitContactMessage(
   if (!limited.allowed) {
     return {
       status: "error",
-      message: "You've sent a few messages already — please wait a bit before sending another.",
+      message:
+        "You've sent a few messages already — please wait a bit before sending another.",
     };
   }
 

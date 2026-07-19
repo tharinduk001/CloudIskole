@@ -9,7 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { deleteLesson, deleteModule } from "@/lib/admin/courses-actions";
 import type { AdminModule } from "@/lib/data/admin";
 
-export function ModuleEditor({ courseId, module: mod }: { courseId: string; module: AdminModule }) {
+export function ModuleEditor({
+  courseId,
+  module: mod,
+}: {
+  courseId: string;
+  module: AdminModule;
+}) {
   const [addingLesson, setAddingLesson] = React.useState(false);
   const [editingLessonId, setEditingLessonId] = React.useState<string | null>(null);
 
@@ -18,9 +24,12 @@ export function ModuleEditor({ courseId, module: mod }: { courseId: string; modu
       <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-ink text-sm font-semibold">
-            {mod.title} <span className="text-ink-subtle font-normal">· sort {mod.sort_order}</span>
+            {mod.title}{" "}
+            <span className="text-ink-subtle font-normal">· sort {mod.sort_order}</span>
           </h3>
-          {mod.summary ? <p className="text-ink-muted mt-0.5 text-xs">{mod.summary}</p> : null}
+          {mod.summary ? (
+            <p className="text-ink-muted mt-0.5 text-xs">{mod.summary}</p>
+          ) : null}
         </div>
         <ConfirmDeleteButton
           label="Delete module"
@@ -44,9 +53,15 @@ export function ModuleEditor({ courseId, module: mod }: { courseId: string; modu
             ) : (
               <div className="flex items-center gap-3 px-4 py-3">
                 {lesson.type === "video" ? (
-                  <PlayCircle className="text-ink-subtle size-4 shrink-0" aria-hidden="true" />
+                  <PlayCircle
+                    className="text-ink-subtle size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <FileText className="text-ink-subtle size-4 shrink-0" aria-hidden="true" />
+                  <FileText
+                    className="text-ink-subtle size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                 )}
                 <button
                   type="button"
@@ -77,7 +92,11 @@ export function ModuleEditor({ courseId, module: mod }: { courseId: string; modu
 
       <div className="mt-3">
         {addingLesson ? (
-          <LessonForm courseId={courseId} moduleId={mod.id} onDone={() => setAddingLesson(false)} />
+          <LessonForm
+            courseId={courseId}
+            moduleId={mod.id}
+            onDone={() => setAddingLesson(false)}
+          />
         ) : (
           <button
             type="button"

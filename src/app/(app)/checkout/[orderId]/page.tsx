@@ -10,7 +10,11 @@ import { Card } from "@/components/ui/card";
 import { Container, Section } from "@/components/ui/layout";
 import { requireProfile } from "@/lib/data/auth";
 import { bankTransferAccount } from "@/lib/payments/bank-details";
-import { getBankTransferForOrder, getOrderForCheckout, getSlipSignedUrl } from "@/lib/data/payments";
+import {
+  getBankTransferForOrder,
+  getOrderForCheckout,
+  getSlipSignedUrl,
+} from "@/lib/data/payments";
 import { formatLkr } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Checkout" };
@@ -33,7 +37,10 @@ export default async function CheckoutPage({
         <p className="text-ink-muted mt-1 text-sm">{order.course.title}</p>
 
         <div className="mt-8 flex flex-col gap-6">
-          <OrderStatusCard order={order} rejectReason={bankTransfer?.reject_reason ?? null} />
+          <OrderStatusCard
+            order={order}
+            rejectReason={bankTransfer?.reject_reason ?? null}
+          />
 
           {order.status === "paid" ? (
             <Card className="p-6 text-center">
@@ -55,13 +62,17 @@ export default async function CheckoutPage({
                   <dt className="text-ink-muted">Branch</dt>
                   <dd className="text-ink font-medium">{bankTransferAccount.branch}</dd>
                   <dt className="text-ink-muted">Account name</dt>
-                  <dd className="text-ink font-medium">{bankTransferAccount.accountName}</dd>
+                  <dd className="text-ink font-medium">
+                    {bankTransferAccount.accountName}
+                  </dd>
                   <dt className="text-ink-muted">Account number</dt>
                   <dd className="text-ink font-mono font-medium">
                     {bankTransferAccount.accountNumber}
                   </dd>
                   <dt className="text-ink-muted">Amount</dt>
-                  <dd className="text-ink font-semibold">{formatLkr(order.amount_cents)}</dd>
+                  <dd className="text-ink font-semibold">
+                    {formatLkr(order.amount_cents)}
+                  </dd>
                   <dt className="text-ink-muted">Reference</dt>
                   <dd>
                     <span className="rounded-md bg-teal-50 px-2 py-1 font-mono font-semibold text-teal-700">
@@ -70,8 +81,9 @@ export default async function CheckoutPage({
                   </dd>
                 </dl>
                 <p className="text-ink-subtle mt-4 text-xs leading-relaxed">
-                  Write <strong className="text-ink">{order.reference_code}</strong> on your
-                  transfer so we can match it to your order, then upload your receipt below.
+                  Write <strong className="text-ink">{order.reference_code}</strong> on
+                  your transfer so we can match it to your order, then upload your receipt
+                  below.
                 </p>
               </Card>
 
@@ -79,12 +91,13 @@ export default async function CheckoutPage({
                 <PhoneVerifyCard currentPhone={profile.phone} />
               ) : order.status === "under_review" ? (
                 <Card className="p-6">
-                  <Clock3 className="size-5 text-gold-600" aria-hidden="true" />
+                  <Clock3 className="text-gold-600 size-5" aria-hidden="true" />
                   <p className="text-ink mt-2 text-sm font-medium">
                     Your slip is being reviewed.
                   </p>
                   <p className="text-ink-muted mt-1 text-xs">
-                    We&rsquo;ll email you once it&rsquo;s confirmed — usually within one business day.
+                    We&rsquo;ll email you once it&rsquo;s confirmed — usually within one
+                    business day.
                   </p>
                   {slipUrl ? (
                     <a
@@ -140,7 +153,11 @@ function OrderStatusCard({
     <div className="flex items-center gap-2">
       <Badge
         variant={
-          order.status === "paid" ? "success" : order.status === "under_review" ? "warning" : "neutral"
+          order.status === "paid"
+            ? "success"
+            : order.status === "under_review"
+              ? "warning"
+              : "neutral"
         }
       >
         {order.status === "pending"

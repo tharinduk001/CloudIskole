@@ -18,8 +18,18 @@ export default async function AdminOverviewPage() {
       icon: ReceiptText,
       highlight: stats.pendingReview > 0,
     },
-    { label: "Students", value: stats.totalStudents, href: "/admin/courses", icon: Users },
-    { label: "Courses", value: stats.totalCourses, href: "/admin/courses", icon: BookOpen },
+    {
+      label: "Students",
+      value: stats.totalStudents,
+      href: "/admin/courses",
+      icon: Users,
+    },
+    {
+      label: "Courses",
+      value: stats.totalCourses,
+      href: "/admin/courses",
+      icon: BookOpen,
+    },
   ];
 
   return (

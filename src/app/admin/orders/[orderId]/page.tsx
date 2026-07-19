@@ -16,7 +16,9 @@ export default async function AdminOrderDetailPage({
 }) {
   const { orderId } = await params;
   const order = await getOrderForAdmin(orderId);
-  const slipUrl = order.bank_transfer ? await getAdminSlipUrl(order.bank_transfer.slip_path) : null;
+  const slipUrl = order.bank_transfer
+    ? await getAdminSlipUrl(order.bank_transfer.slip_path)
+    : null;
 
   const decidable = order.status === "under_review" || order.status === "pending";
 
@@ -40,7 +42,9 @@ export default async function AdminOrderDetailPage({
           <dt className="text-ink-muted">Amount</dt>
           <dd className="text-ink font-semibold">{formatLkr(order.amount_cents)}</dd>
           <dt className="text-ink-muted">Opened</dt>
-          <dd className="text-ink">{new Date(order.created_at).toLocaleString("en-LK")}</dd>
+          <dd className="text-ink">
+            {new Date(order.created_at).toLocaleString("en-LK")}
+          </dd>
           {order.bank_transfer ? (
             <>
               <dt className="text-ink-muted">Depositor</dt>
@@ -77,7 +81,10 @@ export default async function AdminOrderDetailPage({
         </Card>
       ) : order.status === "rejected" ? (
         <p className="text-ink-muted mt-4 text-sm">
-          Rejected{order.bank_transfer?.reject_reason ? `: ${order.bank_transfer.reject_reason}` : "."}
+          Rejected
+          {order.bank_transfer?.reject_reason
+            ? `: ${order.bank_transfer.reject_reason}`
+            : "."}
         </p>
       ) : null}
     </div>

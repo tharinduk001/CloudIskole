@@ -20,13 +20,13 @@ export default async function AdminCertificatesPage() {
     <div>
       <h1 className="font-display text-2xl font-semibold">Certificates</h1>
       <p className="text-ink-muted mt-1 text-sm">
-        Issued automatically when a student finishes a course. Record an external digital badge
-        URL here once issued on the provider&rsquo;s side.
+        Issued automatically when a student finishes a course. Record an external digital
+        badge URL here once issued on the provider&rsquo;s side.
       </p>
 
       <Card className="mt-6 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
             <tr>
               <th className="px-4 py-3">Student</th>
               <th className="px-4 py-3">Course</th>
@@ -43,8 +43,12 @@ export default async function AdminCertificatesPage() {
                   <div className="text-ink-subtle text-xs">{cert.student.email}</div>
                 </td>
                 <td className="text-ink-muted px-4 py-3">{cert.course.title}</td>
-                <td className="text-ink-muted px-4 py-3 font-mono text-xs">{cert.code}</td>
-                <td className="text-ink-muted px-4 py-3">{dateFormatter.format(new Date(cert.issued_at))}</td>
+                <td className="text-ink-muted px-4 py-3 font-mono text-xs">
+                  {cert.code}
+                </td>
+                <td className="text-ink-muted px-4 py-3">
+                  {dateFormatter.format(new Date(cert.issued_at))}
+                </td>
                 <td className="px-4 py-3">
                   <CertificateRowActions
                     certificateId={cert.id}

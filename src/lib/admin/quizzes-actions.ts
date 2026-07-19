@@ -24,17 +24,35 @@ const quizSchema = z.object({
   scope: z.enum(["lesson", "course", "exam"]),
   courseId: z.uuid().optional(),
   lessonId: z.uuid().optional(),
-  slug: z.string().trim().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
+  slug: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
   title: z.string().trim().min(3).max(200),
   description: z.string().trim().max(2000).optional(),
-  timeLimitMinutes: z.string().trim().optional().transform((v) => (v ? Number(v) : undefined)),
-  passMarkPct: z.string().trim().optional().transform((v) => (v ? Number(v) : 60)),
-  maxAttempts: z.string().trim().optional().transform((v) => (v ? Number(v) : undefined)),
+  timeLimitMinutes: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : undefined)),
+  passMarkPct: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : 60)),
+  maxAttempts: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : undefined)),
   shuffleQuestions: z.union([z.literal("on"), z.null()]).optional(),
   shuffleOptions: z.union([z.literal("on"), z.null()]).optional(),
 });
 
-export async function upsertQuiz(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertQuiz(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const scope = formData.get("scope");
@@ -58,7 +76,10 @@ export async function upsertQuiz(_prev: ActionResult, formData: FormData): Promi
   }
 
   if (parsed.data.scope !== "exam" && !parsed.data.courseId) {
-    return { status: "error", message: "A course-scoped or lesson-scoped quiz needs a course." };
+    return {
+      status: "error",
+      message: "A course-scoped or lesson-scoped quiz needs a course.",
+    };
   }
   if (parsed.data.scope === "lesson" && !parsed.data.lessonId) {
     return { status: "error", message: "A lesson-scoped quiz needs a lesson id." };
@@ -90,12 +111,19 @@ export async function upsertQuiz(_prev: ActionResult, formData: FormData): Promi
     return { status: "success", message: "Quiz saved." };
   }
 
-  const { data: created, error } = await supabase.from("quizzes").insert(row).select("id").single();
+  const { data: created, error } = await supabase
+    .from("quizzes")
+    .insert(row)
+    .select("id")
+    .single();
   if (error || !created) {
     console.error("upsertQuiz insert failed", error);
     return {
       status: "error",
-      message: error?.code === "23505" ? "That slug is already in use." : "Could not create this quiz.",
+      message:
+        error?.code === "23505"
+          ? "That slug is already in use."
+          : "Could not create this quiz.",
     };
   }
 
@@ -126,11 +154,22 @@ const questionSchema = z.object({
   quizId: z.uuid(),
   body: z.string().trim().min(3).max(2000),
   explanation: z.string().trim().max(2000).optional(),
-  points: z.string().trim().optional().transform((v) => (v ? Number(v) : 1)),
-  sortOrder: z.string().trim().optional().transform((v) => (v ? Number(v) : 0)),
+  points: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : 1)),
+  sortOrder: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : 0)),
 });
 
-export async function upsertQuestion(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertQuestion(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = questionSchema.safeParse({
@@ -156,7 +195,10 @@ export async function upsertQuestion(_prev: ActionResult, formData: FormData): P
   };
 
   if (parsed.data.id) {
-    const { error } = await supabase.from("quiz_questions").update(row).eq("id", parsed.data.id);
+    const { error } = await supabase
+      .from("quiz_questions")
+      .update(row)
+      .eq("id", parsed.data.id);
     if (error) {
       console.error("upsertQuestion update failed", error);
       return { status: "error", message: "Could not save this question." };
@@ -173,7 +215,10 @@ export async function upsertQuestion(_prev: ActionResult, formData: FormData): P
   return { status: "success", message: "Question saved." };
 }
 
-export async function deleteQuestion(questionId: string, quizId: string): Promise<ActionResult> {
+export async function deleteQuestion(
+  questionId: string,
+  quizId: string,
+): Promise<ActionResult> {
   await requireAdmin();
   const supabase = await createClient();
   const { error } = await supabase.from("quiz_questions").delete().eq("id", questionId);
@@ -191,7 +236,11 @@ const optionSchema = z.object({
   quizId: z.uuid(),
   body: z.string().trim().min(1).max(500),
   isCorrect: z.union([z.literal("on"), z.null()]).optional(),
-  sortOrder: z.string().trim().optional().transform((v) => (v ? Number(v) : 0)),
+  sortOrder: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => (v ? Number(v) : 0)),
 });
 
 /**
@@ -199,7 +248,10 @@ const optionSchema = z.object({
  * question is unmarked first — single-answer MCQs only, so "correct" is
  * exclusive by construction rather than left for the grader to assume.
  */
-export async function upsertOption(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertOption(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = optionSchema.safeParse({
@@ -249,7 +301,10 @@ export async function upsertOption(_prev: ActionResult, formData: FormData): Pro
   return { status: "success", message: "Option saved." };
 }
 
-export async function deleteOption(optionId: string, quizId: string): Promise<ActionResult> {
+export async function deleteOption(
+  optionId: string,
+  quizId: string,
+): Promise<ActionResult> {
   await requireAdmin();
   const supabase = await createClient();
   const { error } = await supabase.from("quiz_options").delete().eq("id", optionId);

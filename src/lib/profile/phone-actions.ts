@@ -30,7 +30,10 @@ export async function requestPhoneOtp(
 ): Promise<ActionResult> {
   const parsed = phoneSchema.safeParse({ phone: formData.get("phone") });
   if (!parsed.success) {
-    return { status: "error", message: parsed.error.issues[0]?.message ?? "Invalid phone number." };
+    return {
+      status: "error",
+      message: parsed.error.issues[0]?.message ?? "Invalid phone number.",
+    };
   }
 
   const supabase = await createClient();
@@ -48,7 +51,10 @@ export async function requestPhoneOtp(
   const ip = await getClientIp();
   const limited = await rateLimit("phone.request-otp", `${ip}:${user.id}`, 5, 3600);
   if (!limited.allowed) {
-    return { status: "error", message: "Too many attempts. Please wait a while and try again." };
+    return {
+      status: "error",
+      message: "Too many attempts. Please wait a while and try again.",
+    };
   }
 
   const { data: code, error } = await supabase.rpc("request_phone_otp", {
@@ -73,7 +79,8 @@ export async function requestPhoneOtp(
     console.error("requestPhoneOtp: SMS send failed", sms.error);
     return {
       status: "error",
-      message: "We generated a code but could not send the SMS. Please try again shortly.",
+      message:
+        "We generated a code but could not send the SMS. Please try again shortly.",
     };
   }
 
@@ -88,7 +95,10 @@ export async function requestPhoneOtp(
 }
 
 const otpSchema = z.object({
-  code: z.string().trim().regex(/^[0-9]{6}$/, "Enter the 6-digit code."),
+  code: z
+    .string()
+    .trim()
+    .regex(/^[0-9]{6}$/, "Enter the 6-digit code."),
 });
 
 /** Verifies the code the student typed back in. */

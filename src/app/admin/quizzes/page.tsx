@@ -38,7 +38,7 @@ export default async function AdminQuizzesPage() {
 
       <Card className="mt-6 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
             <tr>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Scope</th>
@@ -58,7 +58,9 @@ export default async function AdminQuizzesPage() {
                   </Link>
                   <div className="text-ink-subtle text-xs">/{quiz.slug}</div>
                 </td>
-                <td className="px-4 py-3 text-ink">{scopeLabel[quiz.scope] ?? quiz.scope}</td>
+                <td className="text-ink px-4 py-3">
+                  {scopeLabel[quiz.scope] ?? quiz.scope}
+                </td>
                 <td className="text-ink-muted px-4 py-3">
                   {(quiz.course as { title: string } | null)?.title ?? "—"}
                 </td>

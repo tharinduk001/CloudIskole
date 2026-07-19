@@ -6,7 +6,10 @@ import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
 import { idleResult } from "@/lib/actions/result";
-import { revokeCertificate, setCertificateExternalBadgeUrl } from "@/lib/admin/gamification-actions";
+import {
+  revokeCertificate,
+  setCertificateExternalBadgeUrl,
+} from "@/lib/admin/gamification-actions";
 
 export function CertificateRowActions({
   certificateId,
@@ -17,8 +20,14 @@ export function CertificateRowActions({
   revoked: boolean;
   externalBadgeUrl: string | null;
 }) {
-  const [badgeState, badgeAction, badgePending] = useActionState(setCertificateExternalBadgeUrl, idleResult);
-  const [revokeState, revokeAction, revokePending] = useActionState(revokeCertificate, idleResult);
+  const [badgeState, badgeAction, badgePending] = useActionState(
+    setCertificateExternalBadgeUrl,
+    idleResult,
+  );
+  const [revokeState, revokeAction, revokePending] = useActionState(
+    revokeCertificate,
+    idleResult,
+  );
   const [showRevoke, setShowRevoke] = useState(false);
 
   return (
@@ -33,19 +42,34 @@ export function CertificateRowActions({
           className="h-8 w-56 text-xs"
         />
         <Button type="submit" size="sm" variant="secondary" disabled={badgePending}>
-          {badgePending ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" /> : "Save"}
+          {badgePending ? (
+            <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+          ) : (
+            "Save"
+          )}
         </Button>
       </form>
-      {badgeState.status === "error" ? <p className="text-danger text-xs">{badgeState.message}</p> : null}
+      {badgeState.status === "error" ? (
+        <p className="text-danger text-xs">{badgeState.message}</p>
+      ) : null}
 
       {revoked ? (
         <span className="text-danger text-xs font-medium">Revoked</span>
       ) : showRevoke ? (
         <form action={revokeAction} className="flex items-center gap-2">
           <input type="hidden" name="certificateId" value={certificateId} />
-          <Input name="reason" placeholder="Reason" required className="h-8 w-40 text-xs" />
+          <Input
+            name="reason"
+            placeholder="Reason"
+            required
+            className="h-8 w-40 text-xs"
+          />
           <Button type="submit" size="sm" variant="danger" disabled={revokePending}>
-            {revokePending ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" /> : "Confirm"}
+            {revokePending ? (
+              <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+            ) : (
+              "Confirm"
+            )}
           </Button>
         </form>
       ) : (
@@ -57,7 +81,9 @@ export function CertificateRowActions({
           Revoke
         </button>
       )}
-      {revokeState.status === "error" ? <p className="text-danger text-xs">{revokeState.message}</p> : null}
+      {revokeState.status === "error" ? (
+        <p className="text-danger text-xs">{revokeState.message}</p>
+      ) : null}
     </div>
   );
 }

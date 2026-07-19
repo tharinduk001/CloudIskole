@@ -40,6 +40,10 @@ export async function sendEmail(
 
     return { ok: true, skipped: false };
   } catch (err) {
-    return { ok: false, skipped: false, error: err instanceof Error ? err.message : String(err) };
+    return {
+      ok: false,
+      skipped: false,
+      error: err instanceof Error ? err.message : String(err),
+    };
   }
 }

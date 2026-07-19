@@ -7,7 +7,10 @@ import { listAuditLogs, listPaymentEvents } from "@/lib/data/admin";
 export const metadata: Metadata = { title: "Audit & payments" };
 
 export default async function AdminAuditPage() {
-  const [auditLogs, paymentEvents] = await Promise.all([listAuditLogs(), listPaymentEvents()]);
+  const [auditLogs, paymentEvents] = await Promise.all([
+    listAuditLogs(),
+    listPaymentEvents(),
+  ]);
 
   return (
     <div className="flex flex-col gap-10">
@@ -18,7 +21,7 @@ export default async function AdminAuditPage() {
         </p>
         <Card className="mt-4 overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+            <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <th className="px-4 py-3">When</th>
                 <th className="px-4 py-3">Order</th>
@@ -44,7 +47,9 @@ export default async function AdminAuditPage() {
                   <td className="text-ink-muted px-4 py-2.5 text-xs">
                     {event.from_status ?? "—"} &rarr; {event.to_status ?? "—"}
                   </td>
-                  <td className="text-ink-muted px-4 py-2.5 text-xs">{event.note ?? "—"}</td>
+                  <td className="text-ink-muted px-4 py-2.5 text-xs">
+                    {event.note ?? "—"}
+                  </td>
                 </tr>
               ))}
               {paymentEvents.length === 0 ? (
@@ -62,11 +67,12 @@ export default async function AdminAuditPage() {
       <div>
         <h2 className="font-display text-2xl font-semibold">Audit log</h2>
         <p className="text-ink-muted mt-1 text-sm">
-          Non-payment administrative actions — role changes, publishing, enrollment grants.
+          Non-payment administrative actions — role changes, publishing, enrollment
+          grants.
         </p>
         <Card className="mt-4 overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+            <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
               <tr>
                 <th className="px-4 py-3">When</th>
                 <th className="px-4 py-3">Action</th>

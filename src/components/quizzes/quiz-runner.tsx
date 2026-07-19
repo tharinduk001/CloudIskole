@@ -105,7 +105,8 @@ export function QuizRunner({
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <p className="text-ink-muted text-sm">
-          Question {index + 1} of {paper.questions.length} &middot; {answeredCount} answered
+          Question {index + 1} of {paper.questions.length} &middot; {answeredCount}{" "}
+          answered
         </p>
         {remainingMs !== null ? (
           <span
@@ -179,11 +180,18 @@ export function QuizRunner({
         </Button>
 
         {index < paper.questions.length - 1 ? (
-          <Button type="button" onClick={() => setIndex((i) => Math.min(paper.questions.length - 1, i + 1))}>
+          <Button
+            type="button"
+            onClick={() => setIndex((i) => Math.min(paper.questions.length - 1, i + 1))}
+          >
             Next
           </Button>
         ) : (
-          <Button type="button" disabled={submitting} onClick={() => void submit(answers)}>
+          <Button
+            type="button"
+            disabled={submitting}
+            onClick={() => void submit(answers)}
+          >
             {submitting ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
             Submit exam
           </Button>

@@ -20,7 +20,9 @@ const statusVariant: Record<string, "success" | "warning" | "danger" | "neutral"
 
 export default async function AdminOrdersPage() {
   const orders = await listAllOrders();
-  const needsReview = orders.filter((o) => o.status === "under_review" || o.status === "pending");
+  const needsReview = orders.filter(
+    (o) => o.status === "under_review" || o.status === "pending",
+  );
 
   return (
     <div>
@@ -31,7 +33,7 @@ export default async function AdminOrdersPage() {
 
       <Card className="mt-6 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
             <tr>
               <th className="px-4 py-3">Reference</th>
               <th className="px-4 py-3">Student</th>
@@ -56,8 +58,8 @@ export default async function AdminOrdersPage() {
                   <div className="text-ink">{order.student.full_name}</div>
                   <div className="text-ink-subtle text-xs">{order.student.email}</div>
                 </td>
-                <td className="px-4 py-3 text-ink">{order.course.title}</td>
-                <td className="px-4 py-3 text-ink">{formatLkr(order.amount_cents)}</td>
+                <td className="text-ink px-4 py-3">{order.course.title}</td>
+                <td className="text-ink px-4 py-3">{formatLkr(order.amount_cents)}</td>
                 <td className="px-4 py-3">
                   <Badge variant={statusVariant[order.status] ?? "neutral"} size="sm">
                     {order.status.replace("_", " ")}

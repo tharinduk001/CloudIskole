@@ -26,10 +26,22 @@ export function QuestionForm({ quizId }: { quizId: string }) {
     >
       <input type="hidden" name="quizId" value={quizId} />
       <Field label="New question" className="min-w-48 flex-1">
-        {(props) => <Textarea {...props} name="body" required rows={2} placeholder="Question text" />}
+        {(props) => (
+          <Textarea
+            {...props}
+            name="body"
+            required
+            rows={2}
+            placeholder="Question text"
+          />
+        )}
       </Field>
       <Button type="submit" disabled={pending} size="sm">
-        {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : <Plus aria-hidden="true" />}
+        {pending ? (
+          <Loader2 className="animate-spin" aria-hidden="true" />
+        ) : (
+          <Plus aria-hidden="true" />
+        )}
         Add question
       </Button>
       {state.status === "error" ? (

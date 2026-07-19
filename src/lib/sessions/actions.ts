@@ -15,7 +15,10 @@ const idSchema = z.object({ sessionId: z.uuid() });
  * has already gone live/completed rejects the insert with a message this
  * maps straight through.
  */
-export async function registerForSession(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function registerForSession(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   const parsed = idSchema.safeParse({ sessionId: formData.get("sessionId") });
   if (!parsed.success) {
     return { status: "error", message: "That session could not be found." };
@@ -47,10 +50,16 @@ export async function registerForSession(_prev: ActionResult, formData: FormData
 
   revalidatePath("/sessions");
   revalidatePath("/dashboard");
-  return { status: "success", message: "You're registered! We'll email you the details." };
+  return {
+    status: "success",
+    message: "You're registered! We'll email you the details.",
+  };
 }
 
-export async function cancelRegistration(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function cancelRegistration(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   const parsed = idSchema.safeParse({ sessionId: formData.get("sessionId") });
   if (!parsed.success) {
     return { status: "error", message: "That session could not be found." };

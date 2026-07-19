@@ -42,7 +42,7 @@ export default async function AdminSessionsPage() {
 
       <Card className="mt-6 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
             <tr>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Starts</th>

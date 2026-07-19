@@ -18,8 +18,13 @@ import { createClient } from "@/lib/supabase/server";
  * re-verified session, never from form input, so a request cannot forge who
  * approved a payment.
  */
-export async function approveOrder(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
-  const parsed = z.object({ orderId: z.uuid() }).safeParse({ orderId: formData.get("orderId") });
+export async function approveOrder(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
+  const parsed = z
+    .object({ orderId: z.uuid() })
+    .safeParse({ orderId: formData.get("orderId") });
   if (!parsed.success) {
     return { status: "error", message: "That order could not be found." };
   }
@@ -45,7 +50,11 @@ export async function approveOrder(_prev: ActionResult, formData: FormData): Pro
     .maybeSingle();
 
   const { data: student } = order
-    ? await adminClient.from("profiles").select("email, full_name").eq("id", order.user_id).maybeSingle()
+    ? await adminClient
+        .from("profiles")
+        .select("email, full_name")
+        .eq("id", order.user_id)
+        .maybeSingle()
     : { data: null };
 
   if (student?.email) {
@@ -58,7 +67,9 @@ export async function approveOrder(_prev: ActionResult, formData: FormData): Pro
       payload: {
         subject: "Your CloudIskole payment is confirmed",
         html: `<p>Hi ${student.full_name ?? "there"},</p><p>Your payment has been confirmed and you're now enrolled${
-          order && "course" in order && order.course ? ` in ${(order.course as { title: string }).title}` : ""
+          order && "course" in order && order.course
+            ? ` in ${(order.course as { title: string }).title}`
+            : ""
         }.</p>`,
       },
     });
@@ -76,7 +87,10 @@ const rejectSchema = z.object({
 });
 
 /** Declines a submitted slip, logging the reason with the same rigour as an approval. */
-export async function rejectOrder(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function rejectOrder(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   const parsed = rejectSchema.safeParse({
     orderId: formData.get("orderId"),
     reason: formData.get("reason"),
@@ -109,7 +123,11 @@ export async function rejectOrder(_prev: ActionResult, formData: FormData): Prom
     .maybeSingle();
 
   const { data: student } = order
-    ? await adminClient.from("profiles").select("email, full_name").eq("id", order.user_id).maybeSingle()
+    ? await adminClient
+        .from("profiles")
+        .select("email, full_name")
+        .eq("id", order.user_id)
+        .maybeSingle()
     : { data: null };
 
   if (student?.email) {
@@ -136,7 +154,9 @@ export async function rejectOrder(_prev: ActionResult, formData: FormData): Prom
 export async function getAdminSlipUrl(path: string): Promise<string | null> {
   await requireAdmin();
   const supabase = await createClient();
-  const { data, error } = await supabase.storage.from("payment-slips").createSignedUrl(path, 60 * 5);
+  const { data, error } = await supabase.storage
+    .from("payment-slips")
+    .createSignedUrl(path, 60 * 5);
   if (error) return null;
   return data.signedUrl;
 }

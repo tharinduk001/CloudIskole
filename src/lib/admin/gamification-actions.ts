@@ -19,13 +19,19 @@ import { createClient } from "@/lib/supabase/server";
 
 const badgeSchema = z.object({
   id: z.uuid().optional(),
-  slug: z.string().trim().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
+  slug: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
   name: z.string().trim().min(2).max(100),
   description: z.string().trim().max(300).optional(),
   icon: z.string().trim().max(8).optional(),
 });
 
-export async function upsertBadge(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertBadge(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = badgeSchema.safeParse({
@@ -60,7 +66,10 @@ export async function upsertBadge(_prev: ActionResult, formData: FormData): Prom
     console.error("upsertBadge failed", error);
     return {
       status: "error",
-      message: error.code === "23505" ? "That slug is already in use." : "Could not save this badge.",
+      message:
+        error.code === "23505"
+          ? "That slug is already in use."
+          : "Could not save this badge.",
     };
   }
 
@@ -85,7 +94,10 @@ const revokeSchema = z.object({
   reason: z.string().trim().min(3, "Give a reason.").max(300),
 });
 
-export async function revokeCertificate(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function revokeCertificate(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = revokeSchema.safeParse({
@@ -94,7 +106,10 @@ export async function revokeCertificate(_prev: ActionResult, formData: FormData)
   });
 
   if (!parsed.success) {
-    return { status: "error", message: parsed.error.issues[0]?.message ?? "Please provide a reason." };
+    return {
+      status: "error",
+      message: parsed.error.issues[0]?.message ?? "Please provide a reason.",
+    };
   }
 
   const supabase = await createClient();
@@ -114,7 +129,13 @@ export async function revokeCertificate(_prev: ActionResult, formData: FormData)
 
 const externalBadgeSchema = z.object({
   certificateId: z.uuid(),
-  externalBadgeUrl: z.string().trim().url("Enter a valid URL.").max(500).optional().or(z.literal("")),
+  externalBadgeUrl: z
+    .string()
+    .trim()
+    .url("Enter a valid URL.")
+    .max(500)
+    .optional()
+    .or(z.literal("")),
 });
 
 /**
@@ -135,7 +156,10 @@ export async function setCertificateExternalBadgeUrl(
   });
 
   if (!parsed.success) {
-    return { status: "error", message: parsed.error.issues[0]?.message ?? "Enter a valid URL." };
+    return {
+      status: "error",
+      message: parsed.error.issues[0]?.message ?? "Enter a valid URL.",
+    };
   }
 
   const supabase = await createClient();

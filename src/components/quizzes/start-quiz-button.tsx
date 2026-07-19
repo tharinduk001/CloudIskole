@@ -25,7 +25,11 @@ export function StartQuizButton({
       <input type="hidden" name="quizId" value={quizId} />
       <input type="hidden" name="returnTo" value={returnTo} />
       <Button type="submit" size={size} disabled={pending} className="w-full sm:w-auto">
-        {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : <PlayCircle aria-hidden="true" />}
+        {pending ? (
+          <Loader2 className="animate-spin" aria-hidden="true" />
+        ) : (
+          <PlayCircle aria-hidden="true" />
+        )}
         {label}
       </Button>
       {state.status === "error" ? (

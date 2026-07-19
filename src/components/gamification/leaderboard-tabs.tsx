@@ -14,7 +14,13 @@ const medalColor: Record<number, string> = {
   3: "text-[#B4813E]",
 };
 
-function LeaderboardTable({ entries, meId }: { entries: LeaderboardEntry[]; meId?: string }) {
+function LeaderboardTable({
+  entries,
+  meId,
+}: {
+  entries: LeaderboardEntry[];
+  meId?: string;
+}) {
   if (entries.length === 0) {
     return (
       <p className="text-ink-muted p-8 text-center text-sm">
@@ -39,7 +45,11 @@ function LeaderboardTable({ entries, meId }: { entries: LeaderboardEntry[]; meId
               medalColor[entry.rank] ?? "text-ink-subtle",
             )}
           >
-            {entry.rank <= 3 ? <Medal className="mx-auto size-4" aria-hidden="true" /> : entry.rank}
+            {entry.rank <= 3 ? (
+              <Medal className="mx-auto size-4" aria-hidden="true" />
+            ) : (
+              entry.rank
+            )}
           </span>
           {entry.avatar_url ? (
             <Image
@@ -58,11 +68,17 @@ function LeaderboardTable({ entries, meId }: { entries: LeaderboardEntry[]; meId
           <div className="min-w-0 flex-1">
             <p className="text-ink truncate text-sm font-medium">
               {entry.full_name}
-              {entry.user_id === meId ? <span className="text-teal-600"> (you)</span> : null}
+              {entry.user_id === meId ? (
+                <span className="text-teal-600"> (you)</span>
+              ) : null}
             </p>
-            {entry.district ? <p className="text-ink-subtle text-xs">{entry.district}</p> : null}
+            {entry.district ? (
+              <p className="text-ink-subtle text-xs">{entry.district}</p>
+            ) : null}
           </div>
-          <span className="text-ink font-display text-sm font-semibold">{entry.xp} XP</span>
+          <span className="text-ink font-display text-sm font-semibold">
+            {entry.xp} XP
+          </span>
         </li>
       ))}
     </ol>
@@ -88,7 +104,9 @@ export function LeaderboardTabs({
           onClick={() => setTab("all_time")}
           className={cn(
             "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-            tab === "all_time" ? "bg-teal-600 text-white" : "text-ink-muted hover:text-ink",
+            tab === "all_time"
+              ? "bg-teal-600 text-white"
+              : "text-ink-muted hover:text-ink",
           )}
         >
           All time
@@ -98,7 +116,9 @@ export function LeaderboardTabs({
           onClick={() => setTab("monthly")}
           className={cn(
             "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-            tab === "monthly" ? "bg-teal-600 text-white" : "text-ink-muted hover:text-ink",
+            tab === "monthly"
+              ? "bg-teal-600 text-white"
+              : "text-ink-muted hover:text-ink",
           )}
         >
           This month

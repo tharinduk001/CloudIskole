@@ -24,7 +24,7 @@ export function AttendanceToggle({
       <label className="inline-flex items-center gap-2 text-sm">
         <input
           type="checkbox"
-          className="accent-teal-600 size-4 rounded"
+          className="size-4 rounded accent-teal-600"
           checked={attended}
           disabled={pending}
           onChange={(e) => {

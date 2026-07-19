@@ -25,7 +25,9 @@ const dateFormatter = new Intl.DateTimeFormat("en-LK", {
 
 function SessionCard({ session }: { session: SessionSummary }) {
   const seatsLeft =
-    session.capacity != null ? Math.max(session.capacity - (session.registered_count ?? 0), 0) : null;
+    session.capacity != null
+      ? Math.max(session.capacity - (session.registered_count ?? 0), 0)
+      : null;
 
   return (
     <Link key={session.id} href={`/sessions/${session.slug}`}>
@@ -43,7 +45,9 @@ function SessionCard({ session }: { session: SessionSummary }) {
         </div>
         <h2 className="font-display mt-3 text-lg font-semibold">{session.title}</h2>
         {session.description ? (
-          <p className="text-ink-muted mt-2 line-clamp-2 text-sm leading-relaxed">{session.description}</p>
+          <p className="text-ink-muted mt-2 line-clamp-2 text-sm leading-relaxed">
+            {session.description}
+          </p>
         ) : null}
         <div className="text-ink-subtle mt-auto flex flex-wrap items-center gap-4 pt-5 text-xs">
           <span className="inline-flex items-center gap-1.5">
@@ -62,7 +66,15 @@ function SessionCard({ session }: { session: SessionSummary }) {
   );
 }
 
-function SessionGroup({ title, sessions, empty }: { title: string; sessions: SessionSummary[]; empty: string }) {
+function SessionGroup({
+  title,
+  sessions,
+  empty,
+}: {
+  title: string;
+  sessions: SessionSummary[];
+  empty: string;
+}) {
   return (
     <div>
       <h2 className="font-display text-xl font-semibold">{title}</h2>

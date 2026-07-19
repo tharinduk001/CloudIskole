@@ -4,7 +4,11 @@ import { AttendanceToggle } from "@/components/admin/attendance-toggle";
 import { SessionForm } from "@/components/admin/session-form";
 import { SessionStatusControls } from "@/components/admin/session-status-controls";
 import { Card } from "@/components/ui/card";
-import { getSessionForAdmin, listCoursesAdmin, listRegistrationsForSession } from "@/lib/data/admin";
+import {
+  getSessionForAdmin,
+  listCoursesAdmin,
+  listRegistrationsForSession,
+} from "@/lib/data/admin";
 
 export const metadata: Metadata = { title: "Edit session" };
 
@@ -36,7 +40,10 @@ export default async function AdminSessionDetailPage({
       </div>
 
       <Card className="mt-6 p-6">
-        <SessionForm session={session} courses={courses.map((c) => ({ id: c.id, title: c.title }))} />
+        <SessionForm
+          session={session}
+          courses={courses.map((c) => ({ id: c.id, title: c.title }))}
+        />
       </Card>
 
       <h2 className="font-display mt-10 text-lg font-semibold">
@@ -45,7 +52,7 @@ export default async function AdminSessionDetailPage({
       </h2>
       <Card className="mt-4 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold uppercase tracking-wide">
+          <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
             <tr>
               <th className="px-4 py-3">Student</th>
               <th className="px-4 py-3">Registered</th>
@@ -59,9 +66,15 @@ export default async function AdminSessionDetailPage({
                   <div className="text-ink font-medium">{reg.student.full_name}</div>
                   <div className="text-ink-subtle text-xs">{reg.student.email}</div>
                 </td>
-                <td className="text-ink-muted px-4 py-3">{dateFormatter.format(new Date(reg.registered_at))}</td>
+                <td className="text-ink-muted px-4 py-3">
+                  {dateFormatter.format(new Date(reg.registered_at))}
+                </td>
                 <td className="px-4 py-3">
-                  <AttendanceToggle sessionId={session.id} userId={reg.user_id} attended={reg.attended} />
+                  <AttendanceToggle
+                    sessionId={session.id}
+                    userId={reg.user_id}
+                    attended={reg.attended}
+                  />
                 </td>
               </tr>
             ))}

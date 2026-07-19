@@ -67,7 +67,7 @@ privilege-escalation bug during Phase 1 — run it after every schema change.
    - `supabase/templates/magic_link.html` → Authentication → Emails → Magic Link
      (used on every sign-in after the first).
    - `supabase/templates/confirmation.html` → Authentication → Emails → Confirm
-     signup (used the *first* time an address signs in, since it's also
+     signup (used the _first_ time an address signs in, since it's also
      creating the account — easy to miss if you only patch Magic Link).
 4. **Set the email OTP length to 6** under Authentication → Providers → Email
    (or Authentication → Settings, depending on dashboard version). The

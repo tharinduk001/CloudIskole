@@ -44,7 +44,11 @@ export async function listLeaderboard(
 ): Promise<LeaderboardEntry[]> {
   const supabase = await createClient();
   const table = period === "all_time" ? "leaderboard_all_time" : "leaderboard_monthly";
-  const { data, error } = await supabase.from(table).select("*").order("rank", { ascending: true }).limit(limit);
+  const { data, error } = await supabase
+    .from(table)
+    .select("*")
+    .order("rank", { ascending: true })
+    .limit(limit);
 
   if (error) throw new Error(`Failed to load leaderboard: ${error.message}`);
   return (data ?? []).map(toLeaderboardEntry);
@@ -64,19 +68,29 @@ export type MyGamification = {
 export async function getMyGamification(userId: string): Promise<MyGamification> {
   const supabase = await createClient();
 
-  const [{ data: xpRows }, { data: streak }, { data: badgeRows }, { data: profile }] = await Promise.all([
-    supabase.from("xp_events").select("points").eq("user_id", userId),
-    supabase.rpc("current_streak", { p_user_id: userId }),
-    supabase.from("user_badges").select("awarded_at, badge:badges(*)").eq("user_id", userId),
-    supabase.from("profiles").select("leaderboard_opt_in").eq("id", userId).maybeSingle(),
-  ]);
+  const [{ data: xpRows }, { data: streak }, { data: badgeRows }, { data: profile }] =
+    await Promise.all([
+      supabase.from("xp_events").select("points").eq("user_id", userId),
+      supabase.rpc("current_streak", { p_user_id: userId }),
+      supabase
+        .from("user_badges")
+        .select("awarded_at, badge:badges(*)")
+        .eq("user_id", userId),
+      supabase
+        .from("profiles")
+        .select("leaderboard_opt_in")
+        .eq("id", userId)
+        .maybeSingle(),
+    ]);
 
   const totalXp = (xpRows ?? []).reduce((sum, r) => sum + r.points, 0);
 
   return {
     totalXp,
     streak: streak ?? 0,
-    badges: ((badgeRows ?? []) as unknown as { awarded_at: string; badge: BadgeRow }[]).map((r) => ({
+    badges: (
+      (badgeRows ?? []) as unknown as { awarded_at: string; badge: BadgeRow }[]
+    ).map((r) => ({
       badge: r.badge,
       awarded_at: r.awarded_at,
     })),
@@ -101,12 +115,19 @@ export async function listMyCertificates(userId: string): Promise<CertificateRow
   return data as unknown as CertificateRow[];
 }
 
-export type CertificateVerification = Database["public"]["Views"]["certificate_verification"]["Row"];
+export type CertificateVerification =
+  Database["public"]["Views"]["certificate_verification"]["Row"];
 
 /** Public verification: proves a certificate is genuine, reveals nothing else. */
-export async function getCertificateByCode(code: string): Promise<CertificateVerification | null> {
+export async function getCertificateByCode(
+  code: string,
+): Promise<CertificateVerification | null> {
   const supabase = await createClient();
-  const { data } = await supabase.from("certificate_verification").select("*").eq("code", code).maybeSingle();
+  const { data } = await supabase
+    .from("certificate_verification")
+    .select("*")
+    .eq("code", code)
+    .maybeSingle();
   return data;
 }
 
@@ -126,7 +147,11 @@ export async function getCertificateForViewer(code: string): Promise<Certificate
 /** The certificate holder's display name, for the printable certificate page. */
 export async function getCertificateHolderName(userId: string): Promise<string> {
   const supabase = await createClient();
-  const { data } = await supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle();
+  const { data } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("id", userId)
+    .maybeSingle();
   // `??` alone doesn't catch this: `full_name` is `not null default ''`, so a
   // student who never set one has an empty string, not null.
   return data?.full_name || "CloudIskole student";

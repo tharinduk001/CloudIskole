@@ -31,7 +31,11 @@ export function ModuleForm({ courseId }: { courseId: string }) {
         {(props) => <Input {...props} name="sortOrder" type="number" defaultValue={0} />}
       </Field>
       <Button type="submit" disabled={pending} size="sm">
-        {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : <Plus aria-hidden="true" />}
+        {pending ? (
+          <Loader2 className="animate-spin" aria-hidden="true" />
+        ) : (
+          <Plus aria-hidden="true" />
+        )}
         Add module
       </Button>
       {state.status === "error" ? (

@@ -74,7 +74,11 @@ export async function listQuizzesForCourse(courseId: string): Promise<QuizRow[]>
 /** A quiz's own metadata (not the paper — that requires the RPC). RLS-gated by enrollment. */
 export async function getQuizBySlug(slug: string): Promise<QuizRow> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("quizzes").select("*").eq("slug", slug).maybeSingle();
+  const { data, error } = await supabase
+    .from("quizzes")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
 
   if (error || !data) notFound();
   return data;
@@ -82,7 +86,11 @@ export async function getQuizBySlug(slug: string): Promise<QuizRow> {
 
 export async function getQuizById(quizId: string): Promise<QuizRow | null> {
   const supabase = await createClient();
-  const { data } = await supabase.from("quizzes").select("*").eq("id", quizId).maybeSingle();
+  const { data } = await supabase
+    .from("quizzes")
+    .select("*")
+    .eq("id", quizId)
+    .maybeSingle();
   return data;
 }
 
@@ -106,7 +114,9 @@ export async function getQuizPaper(quizId: string): Promise<QuizPaper> {
 /** The graded review of an already-submitted attempt, via `get_attempt_result()`. */
 export async function getAttemptResult(attemptId: string): Promise<QuizResult> {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("get_attempt_result", { p_attempt_id: attemptId });
+  const { data, error } = await supabase.rpc("get_attempt_result", {
+    p_attempt_id: attemptId,
+  });
 
   if (error || !data) {
     throw new Error(error?.message ?? "This attempt could not be found.");

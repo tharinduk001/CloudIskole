@@ -9,7 +9,11 @@ import { OptionForm } from "@/components/admin/option-form";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { idleResult } from "@/lib/actions/result";
-import { deleteOption, deleteQuestion, upsertQuestion } from "@/lib/admin/quizzes-actions";
+import {
+  deleteOption,
+  deleteQuestion,
+  upsertQuestion,
+} from "@/lib/admin/quizzes-actions";
 import type { AdminQuestion } from "@/lib/data/admin";
 
 export function QuestionEditor({
@@ -44,20 +48,47 @@ export function QuestionEditor({
         <input type="hidden" name="id" value={question.id} />
         <input type="hidden" name="quizId" value={quizId} />
         <Field label="Question">
-          {(props) => <Textarea {...props} name="body" rows={2} required defaultValue={question.body} />}
+          {(props) => (
+            <Textarea
+              {...props}
+              name="body"
+              rows={2}
+              required
+              defaultValue={question.body}
+            />
+          )}
         </Field>
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Explanation" className="sm:col-span-2" hint="Shown after the student submits">
-            {(props) => <Input {...props} name="explanation" defaultValue={question.explanation ?? ""} />}
+          <Field
+            label="Explanation"
+            className="sm:col-span-2"
+            hint="Shown after the student submits"
+          >
+            {(props) => (
+              <Input
+                {...props}
+                name="explanation"
+                defaultValue={question.explanation ?? ""}
+              />
+            )}
           </Field>
           <Field label="Points">
-            {(props) => <Input {...props} name="points" type="number" defaultValue={question.points} />}
+            {(props) => (
+              <Input
+                {...props}
+                name="points"
+                type="number"
+                defaultValue={question.points}
+              />
+            )}
           </Field>
         </div>
         <Button type="submit" size="sm" disabled={pending} className="self-start">
           Save question
         </Button>
-        {state.status === "error" ? <p className="text-danger text-xs">{state.message}</p> : null}
+        {state.status === "error" ? (
+          <p className="text-danger text-xs">{state.message}</p>
+        ) : null}
       </form>
 
       <div className="mt-4">
@@ -81,9 +112,15 @@ export function QuestionEditor({
             ) : (
               <li key={option.id} className="flex items-center gap-3 px-4 py-2.5">
                 {option.is_correct ? (
-                  <CheckCircle2 className="text-success size-4 shrink-0" aria-hidden="true" />
+                  <CheckCircle2
+                    className="text-success size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <Circle className="text-ink-subtle size-4 shrink-0" aria-hidden="true" />
+                  <Circle
+                    className="text-ink-subtle size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                 )}
                 <button
                   type="button"
@@ -106,7 +143,11 @@ export function QuestionEditor({
         </ul>
         <div className="mt-2">
           {addingOption ? (
-            <OptionForm quizId={quizId} questionId={question.id} onDone={() => setAddingOption(false)} />
+            <OptionForm
+              quizId={quizId}
+              questionId={question.id}
+              onDone={() => setAddingOption(false)}
+            />
           ) : (
             <button
               type="button"

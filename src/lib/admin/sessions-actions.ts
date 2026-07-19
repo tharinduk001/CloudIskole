@@ -35,7 +35,10 @@ type SessionStatus = Database["public"]["Enums"]["session_status"];
 
 const sessionSchema = z.object({
   id: z.uuid().optional(),
-  slug: z.string().trim().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
+  slug: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Lowercase letters, numbers and hyphens only."),
   title: z.string().trim().min(3).max(200),
   description: z.string().trim().max(4000).optional(),
   startsAt: z.string().trim().min(1, "Pick a start date and time."),
@@ -45,8 +48,20 @@ const sessionSchema = z.object({
     .optional()
     .transform((v) => (v ? Number(v) : 60)),
   hostName: z.string().trim().max(120).optional(),
-  joinUrl: z.string().trim().url("Enter a valid URL.").max(500).optional().or(z.literal("")),
-  recordingUrl: z.string().trim().url("Enter a valid URL.").max(500).optional().or(z.literal("")),
+  joinUrl: z
+    .string()
+    .trim()
+    .url("Enter a valid URL.")
+    .max(500)
+    .optional()
+    .or(z.literal("")),
+  recordingUrl: z
+    .string()
+    .trim()
+    .url("Enter a valid URL.")
+    .max(500)
+    .optional()
+    .or(z.literal("")),
   capacity: z
     .string()
     .trim()
@@ -56,7 +71,10 @@ const sessionSchema = z.object({
   courseId: z.uuid().optional(),
 });
 
-export async function upsertSession(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function upsertSession(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   await requireAdmin();
 
   const parsed = sessionSchema.safeParse({
@@ -109,7 +127,10 @@ export async function upsertSession(_prev: ActionResult, formData: FormData): Pr
   };
 
   if (parsed.data.id) {
-    const { error } = await adminClient.from("sessions").update(row).eq("id", parsed.data.id);
+    const { error } = await adminClient
+      .from("sessions")
+      .update(row)
+      .eq("id", parsed.data.id);
     if (error) {
       console.error("upsertSession update failed", error);
       return {
@@ -136,7 +157,10 @@ export async function upsertSession(_prev: ActionResult, formData: FormData): Pr
     console.error("upsertSession insert failed", error);
     return {
       status: "error",
-      message: error?.code === "23505" ? "That slug is already in use." : "Could not create this session.",
+      message:
+        error?.code === "23505"
+          ? "That slug is already in use."
+          : "Could not create this session.",
     };
   }
 
@@ -159,15 +183,24 @@ export async function setSessionStatus(
   await requireAdmin();
 
   if (!allowedTransitions[currentStatus].includes(nextStatus)) {
-    return { status: "error", message: `Cannot move a session from ${currentStatus} to ${nextStatus}.` };
+    return {
+      status: "error",
+      message: `Cannot move a session from ${currentStatus} to ${nextStatus}.`,
+    };
   }
 
   const adminClient = createAdminClient();
-  const { error } = await adminClient.from("sessions").update({ status: nextStatus }).eq("id", sessionId);
+  const { error } = await adminClient
+    .from("sessions")
+    .update({ status: nextStatus })
+    .eq("id", sessionId);
 
   if (error) {
     console.error("setSessionStatus failed", error);
-    return { status: "error", message: `Could not update the session status: ${error.message}` };
+    return {
+      status: "error",
+      message: `Could not update the session status: ${error.message}`,
+    };
   }
 
   revalidatePath(`/admin/sessions/${sessionId}`);

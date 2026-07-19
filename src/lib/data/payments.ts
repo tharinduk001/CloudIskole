@@ -40,7 +40,9 @@ export async function getOrderForCheckout(orderId: string): Promise<OrderWithCou
 }
 
 /** The bank transfer slip submitted for an order, if any. */
-export async function getBankTransferForOrder(orderId: string): Promise<BankTransferRow | null> {
+export async function getBankTransferForOrder(
+  orderId: string,
+): Promise<BankTransferRow | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("bank_transfers")

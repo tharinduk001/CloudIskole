@@ -38,17 +38,27 @@ export function OptionForm({
       <Field label="Option text" className="min-w-40 flex-1">
         {(props) => <Input {...props} name="body" required defaultValue={option?.body} />}
       </Field>
-      <CheckboxField name="isCorrect" label="Correct" defaultChecked={option?.is_correct ?? false} />
+      <CheckboxField
+        name="isCorrect"
+        label="Correct"
+        defaultChecked={option?.is_correct ?? false}
+      />
       <Button type="submit" size="sm" disabled={pending}>
         {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
         Save
       </Button>
       {onDone ? (
-        <button type="button" onClick={onDone} className="text-ink-subtle text-xs hover:underline">
+        <button
+          type="button"
+          onClick={onDone}
+          className="text-ink-subtle text-xs hover:underline"
+        >
           Cancel
         </button>
       ) : null}
-      {state.status === "error" ? <span className="text-danger text-xs">{state.message}</span> : null}
+      {state.status === "error" ? (
+        <span className="text-danger text-xs">{state.message}</span>
+      ) : null}
     </form>
   );
 }

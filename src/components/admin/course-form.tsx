@@ -18,7 +18,10 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
       {course ? <input type="hidden" name="id" value={course.id} /> : null}
 
       {state.status === "error" && !state.fieldErrors ? (
-        <p role="alert" className="border-danger/20 bg-danger-soft text-danger rounded-xl border px-4 py-3 text-sm">
+        <p
+          role="alert"
+          className="border-danger/20 bg-danger-soft text-danger rounded-xl border px-4 py-3 text-sm"
+        >
           {state.message}
         </p>
       ) : null}
@@ -30,20 +33,36 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Title" required error={fieldErrors?.title}>
-          {(props) => <Input {...props} name="title" required defaultValue={course?.title} />}
+          {(props) => (
+            <Input {...props} name="title" required defaultValue={course?.title} />
+          )}
         </Field>
-        <Field label="Slug" required error={fieldErrors?.slug} hint="Used in the URL, e.g. cloud-foundations">
-          {(props) => <Input {...props} name="slug" required defaultValue={course?.slug} />}
+        <Field
+          label="Slug"
+          required
+          error={fieldErrors?.slug}
+          hint="Used in the URL, e.g. cloud-foundations"
+        >
+          {(props) => (
+            <Input {...props} name="slug" required defaultValue={course?.slug} />
+          )}
         </Field>
       </div>
 
       <Field label="Subtitle" error={fieldErrors?.subtitle}>
-        {(props) => <Input {...props} name="subtitle" defaultValue={course?.subtitle ?? ""} />}
+        {(props) => (
+          <Input {...props} name="subtitle" defaultValue={course?.subtitle ?? ""} />
+        )}
       </Field>
 
       <Field label="Description" error={fieldErrors?.description}>
         {(props) => (
-          <Textarea {...props} name="description" rows={5} defaultValue={course?.description ?? ""} />
+          <Textarea
+            {...props}
+            name="description"
+            rows={5}
+            defaultValue={course?.description ?? ""}
+          />
         )}
       </Field>
 
@@ -58,17 +77,28 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
           )}
         </Field>
         <Field label="Category">
-          {(props) => <Input {...props} name="category" defaultValue={course?.category ?? ""} />}
+          {(props) => (
+            <Input {...props} name="category" defaultValue={course?.category ?? ""} />
+          )}
         </Field>
         <Field label="Duration (minutes)">
           {(props) => (
-            <Input {...props} name="durationMinutes" type="number" defaultValue={course?.duration_minutes ?? ""} />
+            <Input
+              {...props}
+              name="durationMinutes"
+              type="number"
+              defaultValue={course?.duration_minutes ?? ""}
+            />
           )}
         </Field>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field label="Price (Rs)" hint="Ignored when marked free" error={fieldErrors?.priceRupees}>
+        <Field
+          label="Price (Rs)"
+          hint="Ignored when marked free"
+          error={fieldErrors?.priceRupees}
+        >
           {(props) => (
             <Input
               {...props}
@@ -80,7 +110,14 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
           )}
         </Field>
         <Field label="Sort order" hint="Lower shows first in the catalogue">
-          {(props) => <Input {...props} name="sortOrder" type="number" defaultValue={course?.sort_order ?? 0} />}
+          {(props) => (
+            <Input
+              {...props}
+              name="sortOrder"
+              type="number"
+              defaultValue={course?.sort_order ?? 0}
+            />
+          )}
         </Field>
       </div>
 

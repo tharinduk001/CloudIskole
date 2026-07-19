@@ -19,7 +19,10 @@ const startSchema = z.object({ quizId: z.uuid(), returnTo: z.string().trim().min
  * inside `start_quiz_attempt()` (0005_quizzes.sql). This is a thin front
  * door: a request that skipped this form would hit the same checks.
  */
-export async function startQuizAttempt(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function startQuizAttempt(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   const parsed = startSchema.safeParse({
     quizId: formData.get("quizId"),
     returnTo: formData.get("returnTo"),
@@ -66,7 +69,10 @@ const submitSchema = z.object({
  * alone can read, and returns the result including explanations exactly
  * once the attempt is closed.
  */
-export async function submitQuizAttempt(attemptId: string, answers: Record<string, string>) {
+export async function submitQuizAttempt(
+  attemptId: string,
+  answers: Record<string, string>,
+) {
   const parsed = submitSchema.safeParse({ attemptId, answers: JSON.stringify(answers) });
   if (!parsed.success) {
     return { status: "error" as const, message: "Something went wrong. Please retry." };
@@ -80,7 +86,10 @@ export async function submitQuizAttempt(attemptId: string, answers: Record<strin
   if (user) {
     const limited = await rateLimit("quiz.submit", user.id, 30, 3600);
     if (!limited.allowed) {
-      return { status: "error" as const, message: "Too many submissions. Please wait a while and try again." };
+      return {
+        status: "error" as const,
+        message: "Too many submissions. Please wait a while and try again.",
+      };
     }
   }
 

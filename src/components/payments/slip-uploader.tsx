@@ -11,7 +11,12 @@ import { submitPaymentSlip } from "@/lib/payments/actions";
 import { createClient } from "@/lib/supabase/client";
 
 const MAX_BYTES = 5 * 1024 * 1024;
-const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "application/pdf"]);
+const ALLOWED_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/pdf",
+]);
 
 /**
  * Uploads a deposit slip straight from the browser to the private
@@ -100,7 +105,8 @@ export function SlipUploader({
         </p>
       ) : (
         <p className="text-ink-muted mt-1 text-xs leading-relaxed">
-          A photo or PDF of your bank transfer receipt, showing the amount and reference code.
+          A photo or PDF of your bank transfer receipt, showing the amount and reference
+          code.
         </p>
       )}
 
@@ -125,15 +131,23 @@ export function SlipUploader({
             {(props) => <Input {...props} name="depositorName" />}
           </Field>
           <Field label="Amount deposited (Rs)" hint="Optional">
-            {(props) => <Input {...props} name="amountDeclared" type="number" step="0.01" />}
+            {(props) => (
+              <Input {...props} name="amountDeclared" type="number" step="0.01" />
+            )}
           </Field>
         </div>
         <Field label="Deposit date" hint="Optional">
-          {(props) => <Input {...props} name="depositedAt" type="date" className="max-w-48" />}
+          {(props) => (
+            <Input {...props} name="depositedAt" type="date" className="max-w-48" />
+          )}
         </Field>
 
         <Button type="submit" disabled={uploading} className="w-full sm:w-auto">
-          {uploading ? <Loader2 className="animate-spin" aria-hidden="true" /> : <Upload aria-hidden="true" />}
+          {uploading ? (
+            <Loader2 className="animate-spin" aria-hidden="true" />
+          ) : (
+            <Upload aria-hidden="true" />
+          )}
           Submit for review
         </Button>
 

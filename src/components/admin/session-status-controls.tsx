@@ -9,7 +9,12 @@ import type { Database } from "@/lib/supabase/database.types";
 
 type SessionStatus = Database["public"]["Enums"]["session_status"];
 
-const nextSteps: Partial<Record<SessionStatus, { to: SessionStatus; label: string; variant: "primary" | "danger" }[]>> = {
+const nextSteps: Partial<
+  Record<
+    SessionStatus,
+    { to: SessionStatus; label: string; variant: "primary" | "danger" }[]
+  >
+> = {
   upcoming: [
     { to: "live", label: "Start session", variant: "primary" },
     { to: "cancelled", label: "Cancel", variant: "danger" },
@@ -20,7 +25,13 @@ const nextSteps: Partial<Record<SessionStatus, { to: SessionStatus; label: strin
   ],
 };
 
-export function SessionStatusControls({ sessionId, status }: { sessionId: string; status: SessionStatus }) {
+export function SessionStatusControls({
+  sessionId,
+  status,
+}: {
+  sessionId: string;
+  status: SessionStatus;
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +57,14 @@ export function SessionStatusControls({ sessionId, status }: { sessionId: string
     <div className="flex flex-col items-end gap-2">
       <div className="flex gap-2">
         {steps.map((step) => (
-          <Button key={step.to} type="button" size="sm" variant={step.variant} disabled={pending} onClick={() => go(step.to)}>
+          <Button
+            key={step.to}
+            type="button"
+            size="sm"
+            variant={step.variant}
+            disabled={pending}
+            onClick={() => go(step.to)}
+          >
             {step.label}
           </Button>
         ))}

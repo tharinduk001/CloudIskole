@@ -1,4 +1,12 @@
-import { ArrowRight, Award, BookOpen, CalendarDays, Flame, Radio, Trophy } from "lucide-react";
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  CalendarDays,
+  Flame,
+  Radio,
+  Trophy,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -66,12 +74,14 @@ export default async function DashboardPage() {
               <Trophy className="size-5" aria-hidden="true" />
             </span>
             <div>
-              <p className="font-display text-2xl font-semibold">{gamification.totalXp}</p>
+              <p className="font-display text-2xl font-semibold">
+                {gamification.totalXp}
+              </p>
               <p className="text-ink-muted text-xs">Total XP</p>
             </div>
           </Card>
           <Card className="flex items-center gap-3 p-5">
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gold-50 text-gold-700">
+            <span className="bg-gold-50 text-gold-700 grid size-11 shrink-0 place-items-center rounded-xl">
               <Flame className="size-5" aria-hidden="true" />
             </span>
             <div>
@@ -85,7 +95,9 @@ export default async function DashboardPage() {
                 <Award className="size-5" aria-hidden="true" />
               </span>
               <div>
-                <p className="font-display text-2xl font-semibold">{gamification.badges.length}</p>
+                <p className="font-display text-2xl font-semibold">
+                  {gamification.badges.length}
+                </p>
                 <p className="text-ink-muted text-xs">Badges earned</p>
               </div>
             </Card>
@@ -172,7 +184,9 @@ export default async function DashboardPage() {
                         Live now
                       </Badge>
                     ) : null}
-                    <h3 className="font-display mt-3 line-clamp-2 text-base font-semibold">{session.title}</h3>
+                    <h3 className="font-display mt-3 line-clamp-2 text-base font-semibold">
+                      {session.title}
+                    </h3>
                     <p className="text-ink-subtle mt-auto pt-4 text-xs">
                       {sessionDateFormatter.format(new Date(session.starts_at))}
                     </p>

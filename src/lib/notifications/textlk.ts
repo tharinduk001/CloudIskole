@@ -47,6 +47,10 @@ export async function sendSms(to: string, message: string): Promise<SendResult> 
 
     return { ok: true, skipped: false };
   } catch (err) {
-    return { ok: false, skipped: false, error: err instanceof Error ? err.message : String(err) };
+    return {
+      ok: false,
+      skipped: false,
+      error: err instanceof Error ? err.message : String(err),
+    };
   }
 }

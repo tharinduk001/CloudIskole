@@ -3,7 +3,12 @@ import type { Metadata } from "next";
 import { QuizResultView } from "@/components/quizzes/quiz-result-view";
 import { QuizRunner } from "@/components/quizzes/quiz-runner";
 import { Container, Section } from "@/components/ui/layout";
-import { getAttempt, getAttemptResult, getQuizById, getQuizPaper } from "@/lib/data/quizzes";
+import {
+  getAttempt,
+  getAttemptResult,
+  getQuizById,
+  getQuizPaper,
+} from "@/lib/data/quizzes";
 
 export const metadata: Metadata = { title: "Quiz attempt" };
 

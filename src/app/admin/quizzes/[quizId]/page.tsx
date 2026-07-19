@@ -25,17 +25,28 @@ export default async function AdminQuizDetailPage({
     <div className="max-w-3xl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-2xl font-semibold">{quiz.title}</h1>
-        <PublishControls status={quiz.status} onChange={setQuizStatus.bind(null, quiz.id)} />
+        <PublishControls
+          status={quiz.status}
+          onChange={setQuizStatus.bind(null, quiz.id)}
+        />
       </div>
 
       <Card className="mt-6 p-6">
-        <QuizForm quiz={quiz} courses={courses.map((c) => ({ id: c.id, title: c.title }))} />
+        <QuizForm
+          quiz={quiz}
+          courses={courses.map((c) => ({ id: c.id, title: c.title }))}
+        />
       </Card>
 
       <h2 className="font-display mt-10 text-lg font-semibold">Questions</h2>
       <div className="mt-4 flex flex-col gap-5">
         {questions.map((question, i) => (
-          <QuestionEditor key={question.id} quizId={quiz.id} question={question} index={i} />
+          <QuestionEditor
+            key={question.id}
+            quizId={quiz.id}
+            question={question}
+            index={i}
+          />
         ))}
         <QuestionForm quizId={quiz.id} />
       </div>

@@ -260,15 +260,23 @@ export default async function CourseDetailPage({
                     {quizzesWithAttempts.map(({ quiz, attempts }) => {
                       const submitted = attempts.filter((a) => a.submitted_at);
                       const best = submitted.reduce<number | null>(
-                        (max, a) => (a.score_pct != null && (max === null || a.score_pct > max) ? a.score_pct : max),
+                        (max, a) =>
+                          a.score_pct != null && (max === null || a.score_pct > max)
+                            ? a.score_pct
+                            : max,
                         null,
                       );
                       const anyPassed = submitted.some((a) => a.passed);
-                      const attemptsLeft = quiz.max_attempts ? quiz.max_attempts - attempts.length : null;
+                      const attemptsLeft = quiz.max_attempts
+                        ? quiz.max_attempts - attempts.length
+                        : null;
                       const outOfAttempts = attemptsLeft !== null && attemptsLeft <= 0;
 
                       return (
-                        <Card key={quiz.id} className="flex items-center justify-between gap-4 p-4">
+                        <Card
+                          key={quiz.id}
+                          className="flex items-center justify-between gap-4 p-4"
+                        >
                           <div>
                             <p className="text-ink text-sm font-medium">{quiz.title}</p>
                             {best !== null ? (
@@ -287,7 +295,9 @@ export default async function CourseDetailPage({
                             )}
                           </div>
                           {outOfAttempts ? (
-                            <span className="text-ink-subtle text-xs">No attempts left</span>
+                            <span className="text-ink-subtle text-xs">
+                              No attempts left
+                            </span>
                           ) : (
                             <StartQuizButton
                               quizId={quiz.id}

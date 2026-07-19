@@ -39,7 +39,10 @@ export function SessionForm({
       {session ? <input type="hidden" name="id" value={session.id} /> : null}
 
       {state.status === "error" && !state.fieldErrors ? (
-        <p role="alert" className="border-danger/20 bg-danger-soft text-danger rounded-xl border px-4 py-3 text-sm">
+        <p
+          role="alert"
+          className="border-danger/20 bg-danger-soft text-danger rounded-xl border px-4 py-3 text-sm"
+        >
           {state.message}
         </p>
       ) : null}
@@ -51,19 +54,40 @@ export function SessionForm({
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Title" required error={fieldErrors?.title}>
-          {(props) => <Input {...props} name="title" required defaultValue={session?.title} />}
+          {(props) => (
+            <Input {...props} name="title" required defaultValue={session?.title} />
+          )}
         </Field>
-        <Field label="Slug" required error={fieldErrors?.slug} hint="Used in the URL, e.g. intro-to-docker">
-          {(props) => <Input {...props} name="slug" required defaultValue={session?.slug} />}
+        <Field
+          label="Slug"
+          required
+          error={fieldErrors?.slug}
+          hint="Used in the URL, e.g. intro-to-docker"
+        >
+          {(props) => (
+            <Input {...props} name="slug" required defaultValue={session?.slug} />
+          )}
         </Field>
       </div>
 
       <Field label="Description" error={fieldErrors?.description}>
-        {(props) => <Textarea {...props} name="description" rows={4} defaultValue={session?.description ?? ""} />}
+        {(props) => (
+          <Textarea
+            {...props}
+            name="description"
+            rows={4}
+            defaultValue={session?.description ?? ""}
+          />
+        )}
       </Field>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field label="Starts at" required error={fieldErrors?.startsAt} hint="Asia/Colombo time">
+        <Field
+          label="Starts at"
+          required
+          error={fieldErrors?.startsAt}
+          hint="Asia/Colombo time"
+        >
           {(props) => (
             <Input
               {...props}
@@ -76,17 +100,31 @@ export function SessionForm({
         </Field>
         <Field label="Duration (minutes)">
           {(props) => (
-            <Input {...props} name="durationMinutes" type="number" defaultValue={session?.duration_minutes ?? 60} />
+            <Input
+              {...props}
+              name="durationMinutes"
+              type="number"
+              defaultValue={session?.duration_minutes ?? 60}
+            />
           )}
         </Field>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Host name">
-          {(props) => <Input {...props} name="hostName" defaultValue={session?.host_name ?? ""} />}
+          {(props) => (
+            <Input {...props} name="hostName" defaultValue={session?.host_name ?? ""} />
+          )}
         </Field>
         <Field label="Capacity" hint="Leave blank for unlimited">
-          {(props) => <Input {...props} name="capacity" type="number" defaultValue={session?.capacity ?? ""} />}
+          {(props) => (
+            <Input
+              {...props}
+              name="capacity"
+              type="number"
+              defaultValue={session?.capacity ?? ""}
+            />
+          )}
         </Field>
       </div>
 
@@ -95,14 +133,35 @@ export function SessionForm({
         error={fieldErrors?.joinUrl}
         hint="Zoom/Meet link — only shown to registered students once the session is live or starting soon"
       >
-        {(props) => <Input {...props} name="joinUrl" type="url" defaultValue={session?.join_url ?? ""} />}
+        {(props) => (
+          <Input
+            {...props}
+            name="joinUrl"
+            type="url"
+            defaultValue={session?.join_url ?? ""}
+          />
+        )}
       </Field>
 
-      <Field label="Recording URL" error={fieldErrors?.recordingUrl} hint="Add once the session is completed">
-        {(props) => <Input {...props} name="recordingUrl" type="url" defaultValue={session?.recording_url ?? ""} />}
+      <Field
+        label="Recording URL"
+        error={fieldErrors?.recordingUrl}
+        hint="Add once the session is completed"
+      >
+        {(props) => (
+          <Input
+            {...props}
+            name="recordingUrl"
+            type="url"
+            defaultValue={session?.recording_url ?? ""}
+          />
+        )}
       </Field>
 
-      <Field label="Associated course" hint="Optional — links this session from that course's page">
+      <Field
+        label="Associated course"
+        hint="Optional — links this session from that course's page"
+      >
         {(props) => (
           <Select {...props} name="courseId" defaultValue={session?.course_id ?? ""}>
             <option value="">None</option>
@@ -115,7 +174,11 @@ export function SessionForm({
         )}
       </Field>
 
-      <CheckboxField name="isFree" label="This session is free" defaultChecked={session?.is_free ?? true} />
+      <CheckboxField
+        name="isFree"
+        label="This session is free"
+        defaultChecked={session?.is_free ?? true}
+      />
 
       <Button type="submit" disabled={pending} className="self-start">
         {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}

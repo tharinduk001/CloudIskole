@@ -167,7 +167,8 @@ export async function getQuizForAdmin(quizId: string) {
     .eq("quiz_id", quizId)
     .order("sort_order", { ascending: true });
 
-  if (questionsError) throw new Error(`Failed to load questions: ${questionsError.message}`);
+  if (questionsError)
+    throw new Error(`Failed to load questions: ${questionsError.message}`);
 
   const sortedQuestions = (questions as unknown as AdminQuestion[]).map((q) => ({
     ...q,
@@ -187,7 +188,10 @@ export async function getAdminOverview() {
         .from("orders")
         .select("*", { count: "exact", head: true })
         .in("status", ["under_review", "pending"]),
-      supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "student"),
+      supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("role", "student"),
       supabase.from("courses").select("*", { count: "exact", head: true }),
     ]);
 
@@ -210,7 +214,10 @@ export type SessionRow = Database["public"]["Tables"]["sessions"]["Row"];
  */
 export async function listSessionsAdmin(): Promise<SessionRow[]> {
   const admin = createAdminClient();
-  const { data, error } = await admin.from("sessions").select("*").order("starts_at", { ascending: false });
+  const { data, error } = await admin
+    .from("sessions")
+    .select("*")
+    .order("starts_at", { ascending: false });
 
   if (error) throw new Error(`Failed to load sessions: ${error.message}`);
   return data;
@@ -218,7 +225,11 @@ export async function listSessionsAdmin(): Promise<SessionRow[]> {
 
 export async function getSessionForAdmin(sessionId: string): Promise<SessionRow> {
   const admin = createAdminClient();
-  const { data, error } = await admin.from("sessions").select("*").eq("id", sessionId).maybeSingle();
+  const { data, error } = await admin
+    .from("sessions")
+    .select("*")
+    .eq("id", sessionId)
+    .maybeSingle();
 
   if (error || !data) notFound();
   return data;
@@ -228,7 +239,10 @@ export type BadgeRow = Database["public"]["Tables"]["badges"]["Row"];
 
 export async function listBadgesAdmin(): Promise<BadgeRow[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("badges").select("*").order("created_at", { ascending: false });
+  const { data, error } = await supabase
+    .from("badges")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) throw new Error(`Failed to load badges: ${error.message}`);
   return data;
@@ -244,19 +258,24 @@ export async function listCertificatesAdmin(): Promise<CertificateAdminRow[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("certificates")
-    .select("*, student:profiles!certificates_user_id_fkey(full_name, email), course:courses(title)")
+    .select(
+      "*, student:profiles!certificates_user_id_fkey(full_name, email), course:courses(title)",
+    )
     .order("issued_at", { ascending: false });
 
   if (error) throw new Error(`Failed to load certificates: ${error.message}`);
   return data as unknown as CertificateAdminRow[];
 }
 
-export type SessionRegistrationAdminRow = Database["public"]["Tables"]["session_registrations"]["Row"] & {
-  student: { full_name: string; email: string };
-};
+export type SessionRegistrationAdminRow =
+  Database["public"]["Tables"]["session_registrations"]["Row"] & {
+    student: { full_name: string; email: string };
+  };
 
 /** Registrations for one session, via the plain client — RLS's admin policy is the real gate. */
-export async function listRegistrationsForSession(sessionId: string): Promise<SessionRegistrationAdminRow[]> {
+export async function listRegistrationsForSession(
+  sessionId: string,
+): Promise<SessionRegistrationAdminRow[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("session_registrations")

@@ -51,7 +51,10 @@ export async function sendEmailOtp(
   const ip = await getClientIp();
   const limited = await rateLimit("auth.send-otp", `${ip}:${parsed.data.email}`, 5, 600);
   if (!limited.allowed) {
-    return { status: "error", message: "Too many attempts. Please wait a minute and try again." };
+    return {
+      status: "error",
+      message: "Too many attempts. Please wait a minute and try again.",
+    };
   }
 
   const supabase = await createClient();
@@ -99,9 +102,17 @@ export async function verifyEmailOtp(
   }
 
   const ip = await getClientIp();
-  const limited = await rateLimit("auth.verify-otp", `${ip}:${parsed.data.email}`, 10, 600);
+  const limited = await rateLimit(
+    "auth.verify-otp",
+    `${ip}:${parsed.data.email}`,
+    10,
+    600,
+  );
   if (!limited.allowed) {
-    return { status: "error", message: "Too many attempts. Please wait a minute and try again." };
+    return {
+      status: "error",
+      message: "Too many attempts. Please wait a minute and try again.",
+    };
   }
 
   const supabase = await createClient();

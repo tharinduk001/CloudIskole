@@ -39,7 +39,11 @@ export function ConfirmDeleteButton({
         }}
         className="text-ink-subtle hover:text-danger disabled:opacity-50"
       >
-        {pending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Trash2 className="size-4" aria-hidden="true" />}
+        {pending ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <Trash2 className="size-4" aria-hidden="true" />
+        )}
       </button>
       {error ? <span className="text-danger text-xs">{error}</span> : null}
     </div>

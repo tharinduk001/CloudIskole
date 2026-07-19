@@ -1,0 +1,6 @@
+# Normalize line endings to LF in the repository regardless of the
+# committing OS's checkout settings (core.autocrlf). Without this, files
+# committed from Windows carry CRLF, which `prettier --check` in CI (running
+# on Linux) flags as a formatting violation even though nothing about the
+# code actually changed.
+* text=auto eol=lf

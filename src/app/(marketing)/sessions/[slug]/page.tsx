@@ -39,7 +39,9 @@ export default async function SessionDetailPage({
   const joinUrl = profile ? await getJoinUrl(session.id) : null;
 
   const seatsLeft =
-    session.capacity != null ? Math.max(session.capacity - (session.registered_count ?? 0), 0) : null;
+    session.capacity != null
+      ? Math.max(session.capacity - (session.registered_count ?? 0), 0)
+      : null;
   const isFull = seatsLeft !== null && seatsLeft <= 0;
 
   return (
@@ -60,7 +62,9 @@ export default async function SessionDetailPage({
 
         <h1 className="font-display mt-3 text-3xl font-semibold">{session.title}</h1>
         {session.description ? (
-          <p className="text-ink-muted mt-3 text-base leading-relaxed">{session.description}</p>
+          <p className="text-ink-muted mt-3 text-base leading-relaxed">
+            {session.description}
+          </p>
         ) : null}
 
         <div className="text-ink-subtle mt-5 flex flex-wrap items-center gap-5 text-sm">
@@ -89,13 +93,15 @@ export default async function SessionDetailPage({
                 href={session.recording_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-teal-600 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-teal-600 hover:underline"
               >
                 Watch the recording
                 <ExternalLink className="size-3.5" aria-hidden="true" />
               </a>
             ) : (
-              <p className="text-ink-muted text-sm">No recording has been posted for this session.</p>
+              <p className="text-ink-muted text-sm">
+                No recording has been posted for this session.
+              </p>
             )
           ) : (
             <RegistrationControls

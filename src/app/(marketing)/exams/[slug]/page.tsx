@@ -37,7 +37,9 @@ export default async function ExamDetailPage({
       <Container size="narrow" className="max-w-2xl">
         <h1 className="font-display text-3xl font-semibold">{quiz.title}</h1>
         {quiz.description ? (
-          <p className="text-ink-muted mt-3 text-base leading-relaxed">{quiz.description}</p>
+          <p className="text-ink-muted mt-3 text-base leading-relaxed">
+            {quiz.description}
+          </p>
         ) : null}
 
         <div className="text-ink-subtle mt-5 flex flex-wrap items-center gap-5 text-sm">
@@ -63,7 +65,7 @@ export default async function ExamDetailPage({
           {!profile ? (
             <a
               href={`/sign-in?next=${encodeURIComponent(`/exams/${quiz.slug}`)}`}
-              className="text-teal-600 text-sm font-medium hover:underline"
+              className="text-sm font-medium text-teal-600 hover:underline"
             >
               Sign in to take this exam
             </a>
@@ -85,10 +87,17 @@ export default async function ExamDetailPage({
             <h2 className="text-ink text-sm font-semibold">Your attempts</h2>
             <div className="mt-3 flex flex-col gap-2">
               {submitted.map((attempt) => (
-                <Card key={attempt.id} className="flex items-center justify-between px-4 py-3">
-                  <span className="text-ink-muted text-sm">Attempt {attempt.attempt_no}</span>
+                <Card
+                  key={attempt.id}
+                  className="flex items-center justify-between px-4 py-3"
+                >
+                  <span className="text-ink-muted text-sm">
+                    Attempt {attempt.attempt_no}
+                  </span>
                   <div className="flex items-center gap-3">
-                    <span className="text-ink text-sm font-medium">{attempt.score_pct}%</span>
+                    <span className="text-ink text-sm font-medium">
+                      {attempt.score_pct}%
+                    </span>
                     <Badge variant={attempt.passed ? "success" : "danger"} size="sm">
                       {attempt.passed ? (
                         <>

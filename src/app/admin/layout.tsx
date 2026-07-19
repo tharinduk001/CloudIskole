@@ -57,7 +57,10 @@ export default async function AdminLayout({
                 ))}
               </nav>
             </div>
-            <Link href="/dashboard" className="text-ink-subtle text-xs font-medium hover:underline">
+            <Link
+              href="/dashboard"
+              className="text-ink-subtle text-xs font-medium hover:underline"
+            >
               Back to student dashboard
             </Link>
           </div>

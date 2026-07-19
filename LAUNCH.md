@@ -7,16 +7,16 @@ and one deploy.
 
 ## 1. Accounts to create
 
-| Service | For | Cost |
-|---|---|---|
-| [Vercel](https://vercel.com) | Hosting | Free (Hobby) until you take real payments, then $20/mo Pro — Hobby's terms exclude commercial use |
-| [Supabase](https://supabase.com) | Postgres, Auth, Storage | Free until ~500MB DB / 50k MAU, then $25/mo Pro |
-| [Google Cloud Console](https://console.cloud.google.com) | OAuth client for "Continue with Google" | Free |
-| [Resend](https://resend.com) | Transactional email (OTP, notifications) | Free (3,000/mo) |
-| [text.lk](https://text.lk) | SMS (phone OTP, reminders) | Rs 0.79/SMS — top up ~Rs 1,000 |
-| [Upstash](https://upstash.com) | Rate limiting (Redis) | Free |
-| [Sentry](https://sentry.io) | Error tracking | Free (5k events/mo) |
-| A domain registrar | `cloudiskole.lk` or similar | ~$12–20/yr |
+| Service                                                  | For                                      | Cost                                                                                              |
+| -------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| [Vercel](https://vercel.com)                             | Hosting                                  | Free (Hobby) until you take real payments, then $20/mo Pro — Hobby's terms exclude commercial use |
+| [Supabase](https://supabase.com)                         | Postgres, Auth, Storage                  | Free until ~500MB DB / 50k MAU, then $25/mo Pro                                                   |
+| [Google Cloud Console](https://console.cloud.google.com) | OAuth client for "Continue with Google"  | Free                                                                                              |
+| [Resend](https://resend.com)                             | Transactional email (OTP, notifications) | Free (3,000/mo)                                                                                   |
+| [text.lk](https://text.lk)                               | SMS (phone OTP, reminders)               | Rs 0.79/SMS — top up ~Rs 1,000                                                                    |
+| [Upstash](https://upstash.com)                           | Rate limiting (Redis)                    | Free                                                                                              |
+| [Sentry](https://sentry.io)                              | Error tracking                           | Free (5k events/mo)                                                                               |
+| A domain registrar                                       | `cloudiskole.lk` or similar              | ~$12–20/yr                                                                                        |
 
 You already have the Vercel + Supabase Hobby/free tiers question answered:
 free tiers work fine right up until this is a real commercial product taking
@@ -41,13 +41,13 @@ payments, at which point Vercel's ToS requires Pro.
    - `supabase/templates/magic_link.html` → Authentication → Emails → Magic
      Link (every sign-in after the first).
    - `supabase/templates/confirmation.html` → Authentication → Emails →
-     Confirm signup (the *first* sign-in from a new address, since it also
+     Confirm signup (the _first_ sign-in from a new address, since it also
      creates the account — a separate template from Magic Link, easy to miss).
-4b. **Set Email OTP length to 6** under Authentication → Providers → Email (or
-   Authentication → Settings). `supabase/config.toml`'s `otp_length = 6` only
-   governs the local CLI stack — a hosted project keeps its own platform
-   default until you set this explicitly, which won't match the 6-digit input
-   on the sign-in form.
+     4b. **Set Email OTP length to 6** under Authentication → Providers → Email (or
+     Authentication → Settings). `supabase/config.toml`'s `otp_length = 6` only
+     governs the local CLI stack — a hosted project keeps its own platform
+     default until you set this explicitly, which won't match the 6-digit input
+     on the sign-in form.
 5. Authentication → URL Configuration: set the Site URL to your production
    domain and add it (plus any Vercel preview domain pattern) to the redirect
    allow-list. This is the "Supabase Auth redirect allowlist restricted to
@@ -74,18 +74,18 @@ payments, at which point Vercel's ToS requires Pro.
 Set these in Vercel → Project → Settings → Environment Variables. `.env.example`
 documents every one with what it's for:
 
-| Variable | Where it comes from |
-|---|---|
-| `NEXT_PUBLIC_SITE_URL` | Your production domain, no trailing slash |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project settings |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase project settings |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase project settings — **secret** |
-| `RESEND_API_KEY`, `RESEND_FROM_EMAIL` | Resend dashboard, after domain verification |
-| `TEXTLK_API_TOKEN`, `TEXTLK_SENDER_ID` | text.lk dashboard |
+| Variable                                             | Where it comes from                                                                                                         |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                               | Your production domain, no trailing slash                                                                                   |
+| `NEXT_PUBLIC_SUPABASE_URL`                           | Supabase project settings                                                                                                   |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY`                      | Supabase project settings                                                                                                   |
+| `SUPABASE_SERVICE_ROLE_KEY`                          | Supabase project settings — **secret**                                                                                      |
+| `RESEND_API_KEY`, `RESEND_FROM_EMAIL`                | Resend dashboard, after domain verification                                                                                 |
+| `TEXTLK_API_TOKEN`, `TEXTLK_SENDER_ID`               | text.lk dashboard                                                                                                           |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis database — enables the rate limiting added in Phase 7; without these the app still works, it's just unlimited |
-| `CRON_SECRET` | Generate: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
-| `NEXT_PUBLIC_SENTRY_DSN` | Sentry project settings — enables error tracking added in Phase 7; without it the app runs identically, just unmonitored |
-| `SENTRY_AUTH_TOKEN` | Only needed if you later wire `withSentryConfig` for source-map upload (not done yet — see §8) |
+| `CRON_SECRET`                                        | Generate: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`                                        |
+| `NEXT_PUBLIC_SENTRY_DSN`                             | Sentry project settings — enables error tracking added in Phase 7; without it the app runs identically, just unmonitored    |
+| `SENTRY_AUTH_TOKEN`                                  | Only needed if you later wire `withSentryConfig` for source-map upload (not done yet — see §8)                              |
 
 Resend requires verifying your sending domain (adds a few DNS records) before
 `RESEND_FROM_EMAIL` will actually deliver — do this before relying on

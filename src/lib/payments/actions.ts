@@ -21,7 +21,10 @@ const startCheckoutSchema = z.object({
  * This action is a thin, typed front door onto that function; a hand-crafted
  * request that skipped this form entirely would still hit the same checks.
  */
-export async function startCheckout(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+export async function startCheckout(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   const parsed = startCheckoutSchema.safeParse({ courseId: formData.get("courseId") });
   if (!parsed.success) {
     return { status: "error", message: "That course could not be found." };

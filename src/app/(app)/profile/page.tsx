@@ -58,8 +58,10 @@ export default async function ProfilePage() {
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {gamification.badges.map(({ badge, awarded_at }) => (
                 <Card key={badge.id} className="flex items-center gap-4 p-5">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-gold-50 text-2xl">
-                    {badge.icon ?? <Award className="size-5 text-gold-700" aria-hidden="true" />}
+                  <span className="bg-gold-50 grid size-12 shrink-0 place-items-center rounded-xl text-2xl">
+                    {badge.icon ?? (
+                      <Award className="text-gold-700 size-5" aria-hidden="true" />
+                    )}
                   </span>
                   <div>
                     <p className="text-ink text-sm font-semibold">{badge.name}</p>
@@ -91,9 +93,13 @@ export default async function ProfilePage() {
                       <FileBadge2 className="size-5" aria-hidden="true" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-ink truncate text-sm font-semibold">{cert.course.title}</p>
+                      <p className="text-ink truncate text-sm font-semibold">
+                        {cert.course.title}
+                      </p>
                       <p className="text-ink-subtle text-xs">
-                        {cert.revoked_at ? "Revoked" : `Issued ${dateFormatter.format(new Date(cert.issued_at))}`}
+                        {cert.revoked_at
+                          ? "Revoked"
+                          : `Issued ${dateFormatter.format(new Date(cert.issued_at))}`}
                         {" · "}
                         {cert.code}
                       </p>
