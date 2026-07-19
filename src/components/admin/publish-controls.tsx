@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
-import { setCourseStatus } from "@/lib/admin/courses-actions";
+import type { ActionResult } from "@/lib/actions/result";
 import type { Database } from "@/lib/supabase/database.types";
 
 type Status = Database["public"]["Enums"]["content_status"];
@@ -15,7 +15,13 @@ const options: { value: Status; label: string }[] = [
   { value: "archived", label: "Archive" },
 ];
 
-export function PublishControls({ courseId, status }: { courseId: string; status: Status }) {
+export function PublishControls({
+  status,
+  onChange,
+}: {
+  status: Status;
+  onChange: (next: Status) => Promise<ActionResult>;
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +29,7 @@ export function PublishControls({ courseId, status }: { courseId: string; status
   function change(next: Status) {
     setError(null);
     startTransition(async () => {
-      const result = await setCourseStatus(courseId, next);
+      const result = await onChange(next);
       if (result.status === "error") {
         setError(result.message);
         return;

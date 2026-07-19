@@ -5,6 +5,7 @@ import { ModuleEditor } from "@/components/admin/module-editor";
 import { ModuleForm } from "@/components/admin/module-form";
 import { PublishControls } from "@/components/admin/publish-controls";
 import { Card } from "@/components/ui/card";
+import { setCourseStatus } from "@/lib/admin/courses-actions";
 import { getCourseForAdmin } from "@/lib/data/admin";
 
 export const metadata: Metadata = { title: "Edit course" };
@@ -21,7 +22,7 @@ export default async function AdminCourseDetailPage({
     <div className="max-w-3xl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-2xl font-semibold">{course.title}</h1>
-        <PublishControls courseId={course.id} status={course.status} />
+        <PublishControls status={course.status} onChange={setCourseStatus.bind(null, course.id)} />
       </div>
 
       <Card className="mt-6 p-6">

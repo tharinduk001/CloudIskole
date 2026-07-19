@@ -867,6 +867,179 @@ reset role;
 rollback to savepoint s13;
 
 -- ===========================================================================
+-- 14 · Quiz attempt flow — get_quiz_paper / start_quiz_attempt / submit_quiz_attempt
+--
+-- The fixture quiz (devops-quiz) has a known answer key: "docker ps" is
+-- correct, "docker rm" is not. Every assertion below either proves that key
+-- stays hidden until the right moment, or proves grading matches it exactly.
+-- ===========================================================================
+
+savepoint s14;
+
+insert into public.enrollments (user_id, course_id, status)
+values (:'bob', 'aaaaaaaa-0000-4000-8000-000000000002', 'active');
+
+select tests.act_as_anon();
+select tests.must_fail(
+  $f$select public.get_quiz_paper('dddddddd-0000-4000-8000-000000000001')$f$,
+  'anon cannot fetch a quiz paper'
+);
+reset role;
+
+-- Alice is not enrolled in the course this quiz belongs to.
+select tests.act_as(:'alice');
+select tests.must_fail(
+  $f$select public.get_quiz_paper('dddddddd-0000-4000-8000-000000000001')$f$,
+  'an unenrolled student cannot fetch the paper (blocked before the key could ever leak)'
+);
+reset role;
+
+select tests.act_as(:'bob');
+
+select public.get_quiz_paper('dddddddd-0000-4000-8000-000000000001') as paper \gset
+
+select tests.ok(
+  :'paper' !~* 'is_correct' and :'paper' !~* 'explanation' and :'paper' !~* 'docker ps shows',
+  'the served paper contains no is_correct flag, no explanation, and not even the explanation text'
+);
+select tests.ok(
+  :'paper' ~ 'docker ps' and :'paper' ~ 'docker rm',
+  'both options are still shown to the student — the paper just does not say which is right'
+);
+
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as attempt1 \gset
+
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as attempt1_again \gset
+select tests.ok(
+  :'attempt1' = :'attempt1_again',
+  'starting again before submitting resumes the SAME open attempt, not a new one'
+);
+reset role;
+
+-- Alice cannot submit into Bob's attempt, even with a guessed id.
+select tests.act_as(:'alice');
+select tests.must_fail(
+  format($f$select public.submit_quiz_attempt('%s', '{}'::jsonb)$f$, :'attempt1'),
+  'Alice cannot submit an attempt that belongs to Bob'
+);
+reset role;
+
+select tests.act_as(:'bob');
+
+select public.submit_quiz_attempt(
+  :'attempt1',
+  jsonb_build_object('eeeeeeee-0000-4000-8000-000000000001', 'ffffffff-0000-4000-8000-000000000001')
+) as result1 \gset
+
+select tests.ok(
+  (:'result1'::jsonb ->> 'score_pct')::numeric = 100
+    and (:'result1'::jsonb ->> 'passed')::boolean = true,
+  'answering correctly grades to 100% and passed'
+);
+select tests.ok(
+  (select score_pct from public.quiz_attempts where id = :'attempt1') = 100
+    and (select passed from public.quiz_attempts where id = :'attempt1') = true,
+  'the graded result is persisted on quiz_attempts, not just returned once'
+);
+select tests.ok(
+  (:'result1'::jsonb -> 'questions' -> 0 ->> 'correct_option_id') = 'ffffffff-0000-4000-8000-000000000001',
+  'the answer key IS revealed in the post-submission result — but only now'
+);
+
+select tests.must_fail(
+  format($f$select public.submit_quiz_attempt('%s', '{}'::jsonb)$f$, :'attempt1'),
+  'the same attempt cannot be submitted twice'
+);
+
+-- A fresh start after submission opens attempt #2, not a resume.
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as attempt2 \gset
+select tests.ok(
+  :'attempt1' <> :'attempt2'
+    and (select attempt_no from public.quiz_attempts where id = :'attempt2') = 2,
+  'once an attempt is submitted, starting again opens a NEW attempt (#2), not a resume'
+);
+
+select public.submit_quiz_attempt(
+  :'attempt2',
+  jsonb_build_object('eeeeeeee-0000-4000-8000-000000000001', 'ffffffff-0000-4000-8000-000000000002')
+) as result2 \gset
+
+select tests.ok(
+  (:'result2'::jsonb ->> 'score_pct')::numeric = 0
+    and (:'result2'::jsonb ->> 'passed')::boolean = false,
+  'answering wrong grades to 0% and not passed'
+);
+
+select tests.ok(
+  (select count(*) from public.quiz_attempt_answers where attempt_id = :'attempt1') = 1,
+  'Bob can read his own graded answers after submission'
+);
+reset role;
+
+select tests.act_as(:'alice');
+select tests.ok(
+  (select count(*) from public.quiz_attempt_answers where attempt_id = :'attempt1') = 0,
+  'Alice cannot read Bob''s graded answers'
+);
+reset role;
+
+-- --- get_attempt_result — reviewing a graded attempt later -----------------
+
+select tests.act_as(:'bob');
+select public.get_attempt_result(:'attempt1') as review1 \gset
+select tests.ok(
+  (:'review1'::jsonb ->> 'score_pct')::numeric = 100
+    and (:'review1'::jsonb -> 'questions' -> 0 ->> 'explanation') is not null,
+  'Bob can re-review his own graded attempt later, explanation included'
+);
+reset role;
+
+select tests.act_as(:'alice');
+select tests.must_fail(
+  format($f$select public.get_attempt_result('%s')$f$, :'attempt1'),
+  'Alice cannot review Bob''s attempt'
+);
+reset role;
+
+select tests.act_as(:'admin');
+select public.get_attempt_result(:'attempt1') as admin_review \gset
+select tests.ok(
+  (:'admin_review'::jsonb ->> 'score_pct')::numeric = 100,
+  'an admin can review any attempt'
+);
+reset role;
+
+select tests.act_as(:'bob');
+select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001') as attempt3 \gset
+select tests.must_fail(
+  format($f$select public.get_attempt_result('%s')$f$, :'attempt3'),
+  'an attempt still in progress cannot be reviewed — nothing has been graded yet'
+);
+-- Close it out so the max_attempts assertion below (which counts attempts,
+-- not just submitted ones) has no open attempt left to silently resume.
+select public.submit_quiz_attempt(:'attempt3', '{}'::jsonb);
+reset role;
+
+-- --- max_attempts is enforced --------------------------------------------
+
+insert into public.quiz_questions (id, quiz_id, body, explanation)
+values ('eeeeeeee-0000-4000-8000-000000000002', 'dddddddd-0000-4000-8000-000000000001',
+        'One-shot bonus question', null);
+insert into public.quiz_options (id, question_id, body, is_correct)
+values ('ffffffff-0000-4000-8000-000000000003', 'eeeeeeee-0000-4000-8000-000000000002', 'Yes', true);
+
+update public.quizzes set max_attempts = 2 where id = 'dddddddd-0000-4000-8000-000000000001';
+
+select tests.act_as(:'bob');
+select tests.must_fail(
+  $f$select public.start_quiz_attempt('dddddddd-0000-4000-8000-000000000001')$f$,
+  'max_attempts (2, already used) blocks a third attempt'
+);
+reset role;
+
+rollback to savepoint s14;
+
+-- ===========================================================================
 -- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and

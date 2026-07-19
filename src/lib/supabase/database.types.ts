@@ -1656,6 +1656,7 @@ export type Database = {
         }
       }
       current_streak: { Args: { p_user_id: string }; Returns: number }
+      get_attempt_result: { Args: { p_attempt_id: string }; Returns: Json }
       get_course_outline_public: {
         Args: { p_course_id: string }
         Returns: {

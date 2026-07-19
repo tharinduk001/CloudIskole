@@ -7,6 +7,7 @@ import {
   StartCheckoutButton,
 } from "@/components/courses/enroll-button";
 import { Liyawel } from "@/components/brand/liyawel";
+import { StartQuizButton } from "@/components/quizzes/start-quiz-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -19,6 +20,7 @@ import {
   getLessonProgressMap,
 } from "@/lib/data/courses";
 import { formatDuration, formatLevel, formatLkr } from "@/lib/format";
+import { listMyAttempts, listQuizzesForCourse } from "@/lib/data/quizzes";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -60,6 +62,14 @@ export default async function CourseDetailPage({
 
   const totalSeconds = lessons.reduce((sum, l) => sum + (l.duration_seconds ?? 0), 0);
   const totalDuration = formatDuration(totalSeconds);
+
+  const courseQuizzes = isEnrolled ? await listQuizzesForCourse(course.id) : [];
+  const quizzesWithAttempts = await Promise.all(
+    courseQuizzes.map(async (quiz) => ({
+      quiz,
+      attempts: await listMyAttempts(quiz.id),
+    })),
+  );
 
   return (
     <>
@@ -242,6 +252,56 @@ export default async function CourseDetailPage({
                   </p>
                 ) : null}
               </div>
+
+              {quizzesWithAttempts.length > 0 ? (
+                <div className="mt-8">
+                  <h2 className="font-display text-xl font-semibold">Course quizzes</h2>
+                  <div className="mt-4 flex flex-col gap-3">
+                    {quizzesWithAttempts.map(({ quiz, attempts }) => {
+                      const submitted = attempts.filter((a) => a.submitted_at);
+                      const best = submitted.reduce<number | null>(
+                        (max, a) => (a.score_pct != null && (max === null || a.score_pct > max) ? a.score_pct : max),
+                        null,
+                      );
+                      const anyPassed = submitted.some((a) => a.passed);
+                      const attemptsLeft = quiz.max_attempts ? quiz.max_attempts - attempts.length : null;
+                      const outOfAttempts = attemptsLeft !== null && attemptsLeft <= 0;
+
+                      return (
+                        <Card key={quiz.id} className="flex items-center justify-between gap-4 p-4">
+                          <div>
+                            <p className="text-ink text-sm font-medium">{quiz.title}</p>
+                            {best !== null ? (
+                              <p className="text-ink-muted mt-0.5 text-xs">
+                                Best score {best}%
+                                {anyPassed ? (
+                                  <Badge variant="success" size="sm" className="ml-2">
+                                    Passed
+                                  </Badge>
+                                ) : null}
+                              </p>
+                            ) : (
+                              <p className="text-ink-subtle mt-0.5 text-xs">
+                                Pass at {quiz.pass_mark_pct}%
+                              </p>
+                            )}
+                          </div>
+                          {outOfAttempts ? (
+                            <span className="text-ink-subtle text-xs">No attempts left</span>
+                          ) : (
+                            <StartQuizButton
+                              quizId={quiz.id}
+                              returnTo={`/courses/${course.slug}`}
+                              label={submitted.length > 0 ? "Retake" : "Start quiz"}
+                              size="sm"
+                            />
+                          )}
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </Container>

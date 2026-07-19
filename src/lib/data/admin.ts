@@ -133,6 +133,49 @@ export async function getCourseForAdmin(courseId: string) {
   return { course, modules: sortedModules };
 }
 
+/** Every quiz regardless of status — the admin quiz list. */
+export async function listQuizzesAdmin() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("quizzes")
+    .select("*, course:courses(title)")
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(`Failed to load quizzes: ${error.message}`);
+  return data;
+}
+
+export type AdminQuestion = Database["public"]["Tables"]["quiz_questions"]["Row"] & {
+  quiz_options: Database["public"]["Tables"]["quiz_options"]["Row"][];
+};
+
+export async function getQuizForAdmin(quizId: string) {
+  const supabase = await createClient();
+
+  const { data: quiz, error: quizError } = await supabase
+    .from("quizzes")
+    .select("*")
+    .eq("id", quizId)
+    .maybeSingle();
+
+  if (quizError || !quiz) notFound();
+
+  const { data: questions, error: questionsError } = await supabase
+    .from("quiz_questions")
+    .select("*, quiz_options(*)")
+    .eq("quiz_id", quizId)
+    .order("sort_order", { ascending: true });
+
+  if (questionsError) throw new Error(`Failed to load questions: ${questionsError.message}`);
+
+  const sortedQuestions = (questions as unknown as AdminQuestion[]).map((q) => ({
+    ...q,
+    quiz_options: [...q.quiz_options].sort((a, b) => a.sort_order - b.sort_order),
+  }));
+
+  return { quiz, questions: sortedQuestions };
+}
+
 /** Dashboard headline numbers for the admin overview page. */
 export async function getAdminOverview() {
   const supabase = await createClient();
