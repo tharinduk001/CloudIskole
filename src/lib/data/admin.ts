@@ -2,6 +2,7 @@ import "server-only";
 
 import { notFound } from "next/navigation";
 
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
@@ -195,4 +196,47 @@ export async function getAdminOverview() {
     totalStudents: totalStudents ?? 0,
     totalCourses: totalCourses ?? 0,
   };
+}
+
+export type SessionRow = Database["public"]["Tables"]["sessions"]["Row"];
+
+/**
+ * Full session rows, including `join_url` — via the service-role client,
+ * since `authenticated` (the DB role admins share with students) has no
+ * SELECT grant on that one column (0015_sessions_access.sql). Everything
+ * else here is exactly what `listOrdersForReview` etc. do: a read, not a
+ * privileged mutation, it's just that this particular table has a column
+ * plain RLS cannot gate per-reader.
+ */
+export async function listSessionsAdmin(): Promise<SessionRow[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin.from("sessions").select("*").order("starts_at", { ascending: false });
+
+  if (error) throw new Error(`Failed to load sessions: ${error.message}`);
+  return data;
+}
+
+export async function getSessionForAdmin(sessionId: string): Promise<SessionRow> {
+  const admin = createAdminClient();
+  const { data, error } = await admin.from("sessions").select("*").eq("id", sessionId).maybeSingle();
+
+  if (error || !data) notFound();
+  return data;
+}
+
+export type SessionRegistrationAdminRow = Database["public"]["Tables"]["session_registrations"]["Row"] & {
+  student: { full_name: string; email: string };
+};
+
+/** Registrations for one session, via the plain client — RLS's admin policy is the real gate. */
+export async function listRegistrationsForSession(sessionId: string): Promise<SessionRegistrationAdminRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("session_registrations")
+    .select("*, student:profiles!session_registrations_user_id_fkey(full_name, email)")
+    .eq("session_id", sessionId)
+    .order("registered_at", { ascending: true });
+
+  if (error) throw new Error(`Failed to load registrations: ${error.message}`);
+  return data as unknown as SessionRegistrationAdminRow[];
 }

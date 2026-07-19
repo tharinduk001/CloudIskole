@@ -1240,6 +1240,8 @@ export type Database = {
           attended_marked_at: string | null
           id: string
           registered_at: string
+          reminder_1h_sent_at: string | null
+          reminder_24h_sent_at: string | null
           session_id: string
           user_id: string
         }
@@ -1248,6 +1250,8 @@ export type Database = {
           attended_marked_at?: string | null
           id?: string
           registered_at?: string
+          reminder_1h_sent_at?: string | null
+          reminder_24h_sent_at?: string | null
           session_id: string
           user_id: string
         }
@@ -1256,6 +1260,8 @@ export type Database = {
           attended_marked_at?: string | null
           id?: string
           registered_at?: string
+          reminder_1h_sent_at?: string | null
+          reminder_24h_sent_at?: string | null
           session_id?: string
           user_id?: string
         }
@@ -1541,6 +1547,7 @@ export type Database = {
           id: string | null
           is_free: boolean | null
           recording_url: string | null
+          registered_count: number | null
           slug: string | null
           starts_at: string | null
           status: Database["public"]["Enums"]["session_status"] | null
@@ -1557,6 +1564,7 @@ export type Database = {
           id?: string | null
           is_free?: boolean | null
           recording_url?: string | null
+          registered_count?: never
           slug?: string | null
           starts_at?: string | null
           status?: Database["public"]["Enums"]["session_status"] | null
@@ -1573,6 +1581,7 @@ export type Database = {
           id?: string | null
           is_free?: boolean | null
           recording_url?: string | null
+          registered_count?: never
           slug?: string | null
           starts_at?: string | null
           status?: Database["public"]["Enums"]["session_status"] | null
@@ -1656,6 +1665,7 @@ export type Database = {
         }
       }
       current_streak: { Args: { p_user_id: string }; Returns: number }
+      enqueue_session_reminders: { Args: never; Returns: number }
       get_attempt_result: { Args: { p_attempt_id: string }; Returns: Json }
       get_course_outline_public: {
         Args: { p_course_id: string }
@@ -1673,6 +1683,7 @@ export type Database = {
         }[]
       }
       get_quiz_paper: { Args: { p_quiz_id: string }; Returns: Json }
+      get_session_join_url: { Args: { p_session_id: string }; Returns: string }
       grant_enrollment: {
         Args: { p_actor_id?: string; p_note?: string; p_order_id: string }
         Returns: string
@@ -1689,6 +1700,7 @@ export type Database = {
         Returns: undefined
       }
       request_phone_otp: { Args: { p_phone: string }; Returns: string }
+      session_seats_taken: { Args: { p_session_id: string }; Returns: number }
       start_quiz_attempt: { Args: { p_quiz_id: string }; Returns: string }
       submit_bank_transfer_slip: {
         Args: {

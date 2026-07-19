@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, CalendarDays, Trophy } from "lucide-react";
+import { ArrowRight, BookOpen, CalendarDays, Radio, Trophy } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -8,7 +8,17 @@ import { Card } from "@/components/ui/card";
 import { Container, Section } from "@/components/ui/layout";
 import { requireProfile } from "@/lib/data/auth";
 import { getNextLesson, listMyEnrollments } from "@/lib/data/courses";
+import { listMyRegistrations } from "@/lib/data/sessions";
 import { formatLevel } from "@/lib/format";
+
+const sessionDateFormatter = new Intl.DateTimeFormat("en-LK", {
+  timeZone: "Asia/Colombo",
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  hour: "numeric",
+  minute: "2-digit",
+});
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -30,6 +40,12 @@ export default async function DashboardPage() {
     })),
   );
   const nextLessonByCourse = new Map(nextLessons.map((n) => [n.courseId, n.lesson]));
+
+  const myRegistrations = await listMyRegistrations();
+  const upcomingSessions = myRegistrations
+    .filter((r) => r.session.status === "upcoming" || r.session.status === "live")
+    .sort((a, b) => a.session.starts_at.localeCompare(b.session.starts_at))
+    .slice(0, 3);
 
   return (
     <Section className="py-12">
@@ -96,7 +112,43 @@ export default async function DashboardPage() {
               })}
             </div>
           </div>
-        ) : (
+        ) : null}
+
+        {upcomingSessions.length > 0 ? (
+          <div className="mt-10">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold">My sessions</h2>
+              <Link
+                href="/sessions"
+                className="inline-flex items-center gap-1 text-sm font-medium text-teal-600 hover:underline"
+              >
+                See all
+                <ArrowRight className="size-3.5" aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {upcomingSessions.map(({ session }) => (
+                <Link key={session.id} href={`/sessions/${session.slug}`}>
+                  <Card interactive className="flex h-full flex-col p-6">
+                    {session.status === "live" ? (
+                      <Badge variant="danger" size="sm">
+                        <Radio aria-hidden="true" />
+                        Live now
+                      </Badge>
+                    ) : null}
+                    <h3 className="font-display mt-3 line-clamp-2 text-base font-semibold">{session.title}</h3>
+                    <p className="text-ink-subtle mt-auto pt-4 text-xs">
+                      {sessionDateFormatter.format(new Date(session.starts_at))}
+                    </p>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {enrollments.length === 0 && upcomingSessions.length === 0 ? (
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <Card className="p-6">
               <span className="grid size-11 place-items-center rounded-xl bg-teal-50 text-teal-600">
@@ -141,7 +193,7 @@ export default async function DashboardPage() {
               </p>
             </Card>
           </div>
-        )}
+        ) : null}
       </Container>
     </Section>
   );

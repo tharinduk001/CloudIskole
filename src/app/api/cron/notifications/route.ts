@@ -32,6 +32,12 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = createAdminClient();
+
+  const { error: reminderError } = await admin.rpc("enqueue_session_reminders");
+  if (reminderError) {
+    console.error("enqueue_session_reminders failed", reminderError);
+  }
+
   const { data: batch, error: claimError } = await admin.rpc("claim_notifications", {
     p_limit: 25,
   });

@@ -1,4 +1,4 @@
-import { BookOpen, LayoutDashboard, ListChecks, ReceiptText, ScrollText } from "lucide-react";
+import { BookOpen, CalendarDays, LayoutDashboard, ListChecks, ReceiptText, ScrollText } from "lucide-react";
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
@@ -10,6 +10,7 @@ const navItems = [
   { href: "/admin/orders", label: "Orders", icon: ReceiptText },
   { href: "/admin/courses", label: "Courses", icon: BookOpen },
   { href: "/admin/quizzes", label: "Quizzes", icon: ListChecks },
+  { href: "/admin/sessions", label: "Sessions", icon: CalendarDays },
   { href: "/admin/audit", label: "Audit & payments", icon: ScrollText },
 ];
 

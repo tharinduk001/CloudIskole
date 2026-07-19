@@ -1040,6 +1040,190 @@ reset role;
 rollback to savepoint s14;
 
 -- ===========================================================================
+-- 15 · Sessions — join_url secrecy, capacity, registration, reminders
+-- ===========================================================================
+
+savepoint s15;
+
+-- Session 1 is seeded as 'upcoming' so the capacity trigger (which only
+-- accepts registrations while a session is upcoming) allows bob's fixture
+-- registration below; it is flipped to 'live' immediately afterward.
+insert into public.sessions (id, slug, title, starts_at, duration_minutes, join_url, capacity, status)
+values
+  ('55555555-0000-4000-8000-000000000001', 'live-now', 'Live right now',
+   now() - interval '10 minutes', 60, 'https://meet.example/live', null, 'upcoming'),
+  ('55555555-0000-4000-8000-000000000002', 'starting-soon', 'Starting in ten minutes',
+   now() + interval '10 minutes', 60, 'https://meet.example/soon', null, 'upcoming'),
+  ('55555555-0000-4000-8000-000000000003', 'starting-later', 'Starting in two hours',
+   now() + interval '2 hours', 60, 'https://meet.example/later', 1, 'upcoming'),
+  ('55555555-0000-4000-8000-000000000004', 'cancelled-one', 'A cancelled session',
+   now() + interval '3 hours', 60, 'https://meet.example/cancelled', null, 'cancelled');
+
+insert into public.session_registrations (id, session_id, user_id)
+values
+  ('66666666-0000-4000-8000-000000000001', '55555555-0000-4000-8000-000000000001', :'bob'),
+  ('66666666-0000-4000-8000-000000000002', '55555555-0000-4000-8000-000000000002', :'alice');
+
+update public.sessions set status = 'live' where id = '55555555-0000-4000-8000-000000000001';
+
+-- --- join_url is the only column withheld from the base table -----------
+
+select tests.act_as_anon();
+select tests.ok(
+  (select id from public.sessions limit 1) is not null,
+  'anon can still select ordinary columns off the sessions base table (registration RLS depends on this)'
+);
+select tests.must_fail(
+  $f$select join_url from public.sessions limit 1$f$,
+  'but not join_url — permission denied at the column-grant layer, not RLS'
+);
+reset role;
+
+select tests.act_as(:'bob');
+select tests.must_fail(
+  $f$select join_url from public.sessions where id = '55555555-0000-4000-8000-000000000001'$f$,
+  'an authenticated student cannot select join_url off the base table either — '
+  'the whole point of the 0015 hardening'
+);
+reset role;
+
+-- --- sessions_public: no join_url column, but an accurate registered_count -
+
+select tests.act_as_anon();
+select tests.ok(
+  (select registered_count from public.sessions_public
+   where id = '55555555-0000-4000-8000-000000000002') = 1,
+  'sessions_public reports the true registered_count, not the caller''s own-row RLS count'
+);
+select tests.ok(
+  not exists (select 1 from public.sessions_public where id = '55555555-0000-4000-8000-000000000004'),
+  'a cancelled session does not appear in the public listing'
+);
+reset role;
+
+-- --- get_session_join_url: registration + time-window gating -------------
+
+select tests.act_as(:'bob');
+select tests.ok(
+  public.get_session_join_url('55555555-0000-4000-8000-000000000001') = 'https://meet.example/live',
+  'a registered student gets the join_url once the session is live'
+);
+reset role;
+
+select tests.act_as(:'alice');
+select tests.ok(
+  public.get_session_join_url('55555555-0000-4000-8000-000000000002') = 'https://meet.example/soon',
+  'a registered student gets the join_url within 15 minutes of the start time'
+);
+select tests.must_fail(
+  $f$select public.get_session_join_url('55555555-0000-4000-8000-000000000001')$f$,
+  'a student not registered for a session cannot get its join_url, even once it is live'
+);
+reset role;
+
+select tests.act_as(:'admin');
+select tests.ok(
+  public.get_session_join_url('55555555-0000-4000-8000-000000000001') = 'https://meet.example/live',
+  'an admin can always read a session''s join_url'
+);
+reset role;
+
+-- Register alice into the two-hour-out session, then check the "too early" case.
+select tests.act_as(:'alice');
+insert into public.session_registrations (session_id, user_id)
+values ('55555555-0000-4000-8000-000000000003', :'alice');
+select tests.ok(
+  public.get_session_join_url('55555555-0000-4000-8000-000000000003') is null,
+  'a registered student gets null (not an error) more than 15 minutes before start'
+);
+reset role;
+
+-- --- registration confirmation notice fires from the trigger --------------
+
+select tests.act_as(:'admin');
+select tests.ok(
+  exists (
+    select 1 from public.notifications
+    where dedupe_key = 'session-register-66666666-0000-4000-8000-000000000002'
+      and template = 'session_registration_confirmed'
+  ),
+  'registering enqueues a confirmation notification via the AFTER INSERT trigger'
+);
+reset role;
+
+-- --- capacity is enforced (session 3 has capacity 1, alice already holds it)
+
+select tests.act_as(:'bob');
+select tests.must_fail(
+  $f$insert into public.session_registrations (session_id, user_id)
+     values ('55555555-0000-4000-8000-000000000003', '22222222-2222-4222-8222-222222222222')$f$,
+  'a full session (capacity 1, already taken) rejects a second registration'
+);
+reset role;
+
+-- --- registration is only open while the session is upcoming --------------
+
+select tests.act_as(:'bob');
+select tests.must_fail(
+  $f$insert into public.session_registrations (session_id, user_id)
+     values ('55555555-0000-4000-8000-000000000001', '22222222-2222-4222-8222-222222222222')$f$,
+  'cannot register for a session that is already live'
+);
+reset role;
+
+-- --- cancelling frees the seat for someone else ----------------------------
+
+select tests.act_as(:'alice');
+delete from public.session_registrations
+  where session_id = '55555555-0000-4000-8000-000000000003' and user_id = :'alice';
+reset role;
+
+select tests.act_as(:'bob');
+insert into public.session_registrations (session_id, user_id)
+values ('55555555-0000-4000-8000-000000000003', :'bob');
+select tests.ok(true, 'after alice cancels, bob can take the now-free seat');
+reset role;
+
+-- --- attendance is staff-only, even for the registration's own owner ------
+
+-- No UPDATE policy exists for a student on this table at all, so this isn't
+-- a case that raises — RLS just matches zero rows (see grants.sql's note on
+-- why that "silent no-op" shape is accepted for policies, not grants).
+select tests.act_as(:'bob');
+update public.session_registrations set attended = true
+  where session_id = '55555555-0000-4000-8000-000000000003' and user_id = '22222222-2222-4222-8222-222222222222';
+reset role;
+
+select tests.act_as(:'admin');
+select tests.ok(
+  (select attended from public.session_registrations
+   where session_id = '55555555-0000-4000-8000-000000000003' and user_id = '22222222-2222-4222-8222-222222222222') = false,
+  'a student cannot mark their own attendance — the update above silently matched zero rows'
+);
+reset role;
+
+select tests.act_as(:'admin');
+update public.session_registrations set attended = true
+  where session_id = '55555555-0000-4000-8000-000000000003' and user_id = :'bob';
+select tests.ok(
+  (select attended_marked_at from public.session_registrations
+   where session_id = '55555555-0000-4000-8000-000000000003' and user_id = :'bob') is not null,
+  'an admin marking attendance stamps attended_marked_at'
+);
+reset role;
+
+-- --- the reminder worker is service_role-only ------------------------------
+
+select tests.act_as(:'admin');
+select tests.must_fail(
+  $f$select public.enqueue_session_reminders()$f$,
+  'even an admin cannot call enqueue_session_reminders() directly — service_role only'
+);
+reset role;
+
+rollback to savepoint s15;
+
+-- ===========================================================================
 -- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and
