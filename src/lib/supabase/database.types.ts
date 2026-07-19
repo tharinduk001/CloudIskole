@@ -866,6 +866,61 @@ export type Database = {
           },
         ]
       }
+      phone_otp_codes: {
+        Row: {
+          attempts: number
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: number
+          phone: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: never
+          phone: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: never
+          phone?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phone_otp_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_all_time"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "phone_otp_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_monthly"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "phone_otp_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           al_year: number | null
@@ -1575,6 +1630,31 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      create_order: {
+        Args: { p_course_id: string }
+        Returns: {
+          amount_cents: number
+          course_id: string
+          created_at: string
+          currency: string
+          expires_at: string | null
+          id: string
+          idempotency_key: string
+          paid_at: string | null
+          provider: Database["public"]["Enums"]["payment_provider"]
+          provider_txn_id: string | null
+          reference_code: string
+          status: Database["public"]["Enums"]["order_status"]
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       current_streak: { Args: { p_user_id: string }; Returns: number }
       get_course_outline_public: {
         Args: { p_course_id: string }
@@ -1607,11 +1687,23 @@ export type Database = {
         Args: { p_actor_id: string; p_order_id: string; p_reason: string }
         Returns: undefined
       }
+      request_phone_otp: { Args: { p_phone: string }; Returns: string }
       start_quiz_attempt: { Args: { p_quiz_id: string }; Returns: string }
+      submit_bank_transfer_slip: {
+        Args: {
+          p_amount_declared_cents?: number
+          p_deposited_at?: string
+          p_depositor_name?: string
+          p_order_id: string
+          p_slip_path: string
+        }
+        Returns: undefined
+      }
       submit_quiz_attempt: {
         Args: { p_answers: Json; p_attempt_id: string }
         Returns: Json
       }
+      verify_phone_otp: { Args: { p_code: string }; Returns: boolean }
     }
     Enums: {
       content_status: "draft" | "published" | "archived"

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import {
   EnrollFreeButton,
-  PaidEnrollComingSoon,
+  StartCheckoutButton,
 } from "@/components/courses/enroll-button";
 import { Liyawel } from "@/components/brand/liyawel";
 import { Badge } from "@/components/ui/badge";
@@ -145,7 +145,7 @@ export default async function CourseDetailPage({
                   firstLessonHref={lessonHref(course.slug, firstLesson)}
                 />
               ) : (
-                <PaidEnrollComingSoon />
+                <StartCheckoutButton courseId={course.id} />
               )}
             </Card>
           </div>

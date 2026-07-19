@@ -648,6 +648,225 @@ select tests.ok(
 rollback to savepoint s10;
 
 -- ===========================================================================
+-- 12 · create_order and submit_bank_transfer_slip
+-- ===========================================================================
+
+savepoint s12;
+
+select tests.act_as_anon();
+select tests.must_fail(
+  format($f$select public.create_order('%s')$f$,
+         'aaaaaaaa-0000-4000-8000-000000000002'),
+  'anon cannot open an order'
+);
+reset role;
+
+select tests.act_as(:'alice');
+
+select tests.must_fail(
+  format($f$select public.create_order('%s')$f$,
+         'aaaaaaaa-0000-4000-8000-000000000001'),
+  'cannot open an order for a FREE course'
+);
+
+select tests.must_fail(
+  format($f$select public.create_order('%s')$f$,
+         'aaaaaaaa-0000-4000-8000-000000000003'),
+  'cannot open an order for a DRAFT course (even though it is free-flagged)'
+);
+
+select (o).id as order_id, (o).reference_code as ref, (o).amount_cents as amt, (o).status as st
+from public.create_order('aaaaaaaa-0000-4000-8000-000000000002') as o \gset
+
+select tests.ok(
+  :amt = 2500000 and :'st' = 'pending' and :'ref' ~ '^CI-[A-Z0-9]{7}$',
+  'create_order opens a pending order at the listed price with a well-formed reference code'
+);
+
+select tests.ok(
+  (select count(*) from public.payment_events
+   where order_id = :'order_id' and type = 'order_created') = 1,
+  'create_order logs an order_created payment event'
+);
+
+-- Idempotency: revisiting checkout must not mint a second reference code.
+select (o).id as order_id2
+from public.create_order('aaaaaaaa-0000-4000-8000-000000000002') as o \gset
+
+select tests.ok(
+  :'order_id' = :'order_id2',
+  'calling create_order again for the same open order returns the SAME order, not a new one'
+);
+
+select tests.ok(
+  (select count(*) from public.orders
+   where user_id = :'alice' and course_id = 'aaaaaaaa-0000-4000-8000-000000000002') = 1,
+  'exactly one order exists — no duplicate reference codes from double-submission'
+);
+
+-- Already-enrolled students cannot open a second order for the same course.
+reset role;
+insert into public.enrollments (user_id, course_id, status)
+values (:'bob', 'aaaaaaaa-0000-4000-8000-000000000002', 'active');
+select tests.act_as(:'bob');
+select tests.must_fail(
+  format($f$select public.create_order('%s')$f$,
+         'aaaaaaaa-0000-4000-8000-000000000002'),
+  'a student already enrolled in the course cannot open another order for it'
+);
+reset role;
+
+-- --- submit_bank_transfer_slip ---------------------------------------------
+
+select tests.act_as(:'bob');
+select tests.must_fail(
+  format($f$select public.submit_bank_transfer_slip('%s', 'payment-slips/%s/fake.jpg')$f$,
+         :'order_id', :'bob'),
+  'Bob cannot submit a slip against Alice''s order'
+);
+reset role;
+
+select tests.act_as(:'alice');
+select public.submit_bank_transfer_slip(
+  :'order_id', format('payment-slips/%s/slip1.jpg', :'alice'), 'Alice Perera', current_date, 2500000
+);
+
+select tests.ok(
+  (select status from public.orders where id = :'order_id') = 'under_review',
+  'submitting a slip moves the order to under_review'
+);
+select tests.ok(
+  (select count(*) from public.bank_transfers where order_id = :'order_id') = 1,
+  'exactly one bank_transfers row exists for the order'
+);
+select tests.ok(
+  (select count(*) from public.payment_events
+   where order_id = :'order_id' and type = 'slip_submitted') = 1,
+  'submitting a slip logs a slip_submitted payment event'
+);
+reset role;
+
+-- Reject, then prove resubmission works and clears the previous verdict.
+select public.reject_order(:'order_id', :'admin', 'blurry slip');
+
+select tests.act_as(:'alice');
+select public.submit_bank_transfer_slip(
+  :'order_id', format('payment-slips/%s/slip2.jpg', :'alice')
+);
+
+select tests.ok(
+  (select status from public.orders where id = :'order_id') = 'under_review',
+  'resubmission after rejection moves the order back to under_review'
+);
+select tests.ok(
+  (select slip_path from public.bank_transfers where order_id = :'order_id')
+    = format('payment-slips/%s/slip2.jpg', :'alice'),
+  'resubmission overwrites the slip path on the SAME bank_transfers row (upsert, not a new row)'
+);
+select tests.ok(
+  (select reviewed_by from public.bank_transfers where order_id = :'order_id') is null,
+  'resubmission clears the previous rejection verdict'
+);
+reset role;
+
+-- A rejected order cannot be marked paid without going through review again
+-- via a fresh slip — direct status writes remain blocked throughout.
+select tests.act_as(:'alice');
+select tests.must_fail(
+  format($f$update public.orders set status = 'paid' where id = '%s'$f$, :'order_id'),
+  'a student can never move their own order straight to paid'
+);
+reset role;
+
+rollback to savepoint s12;
+
+-- ===========================================================================
+-- 13 · Phone OTP verification
+-- ===========================================================================
+
+savepoint s13;
+
+select tests.act_as_anon();
+select tests.must_fail(
+  $f$select public.request_phone_otp('+94771234567')$f$,
+  'anon cannot request a phone OTP'
+);
+reset role;
+
+select tests.act_as(:'alice');
+
+select tests.must_fail(
+  $f$select public.request_phone_otp('0771234567')$f$,
+  'a phone number not in +94XXXXXXXXX format is rejected'
+);
+
+select public.request_phone_otp('+94771234567') as alice_code \gset
+
+select tests.ok(
+  :'alice_code' ~ '^[0-9]{6}$',
+  'request_phone_otp returns a 6-digit code'
+);
+select tests.ok(
+  (select phone from public.profiles where id = :'alice') = '+94771234567',
+  'the phone number is recorded on the profile immediately (unverified)'
+);
+select tests.ok(
+  (select phone_verified_at from public.profiles where id = :'alice') is null,
+  'phone_verified_at stays null until the code is actually verified'
+);
+
+select tests.must_fail(
+  $f$select public.request_phone_otp('+94771234567')$f$,
+  'a second code cannot be requested within the 60 second cooldown'
+);
+
+-- Bob has never requested a code, so verifying finds no row of his — proves
+-- one student can never consume another student's OTP session.
+select tests.act_as(:'bob');
+select tests.ok(
+  public.verify_phone_otp(:'alice_code') = false,
+  'Bob cannot verify using Alice''s code — he has no pending OTP of his own'
+);
+select tests.ok(
+  (select phone_verified_at from public.profiles where id = :'bob') is null,
+  'Bob''s profile is untouched'
+);
+reset role;
+
+select tests.act_as(:'alice');
+
+select tests.ok(
+  public.verify_phone_otp('000000') = false,
+  'the wrong code is rejected'
+);
+select tests.ok(
+  (select phone_verified_at from public.profiles where id = :'alice') is null,
+  'a wrong attempt does not verify the phone'
+);
+
+select tests.ok(
+  public.verify_phone_otp(:'alice_code') = true,
+  'the correct code verifies successfully'
+);
+select tests.ok(
+  (select phone_verified_at from public.profiles where id = :'alice') is not null,
+  'phone_verified_at is now set'
+);
+
+select tests.ok(
+  public.verify_phone_otp(:'alice_code') = false,
+  'a consumed code cannot be replayed'
+);
+
+select tests.must_fail(
+  format($f$update public.profiles set phone_verified_at = now() where id = '%s'$f$, :'alice'),
+  'phone_verified_at remains unwritable by direct update, even to the owning student'
+);
+reset role;
+
+rollback to savepoint s13;
+
+-- ===========================================================================
 -- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and

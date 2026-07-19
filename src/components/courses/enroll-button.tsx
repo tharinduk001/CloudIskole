@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowRight, Loader2, Lock } from "lucide-react";
+import { ArrowRight, CreditCard, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { idleResult } from "@/lib/actions/result";
 import { enrollInFreeCourse } from "@/lib/courses/actions";
+import { startCheckout } from "@/lib/payments/actions";
 
 export function EnrollFreeButton({
   courseId,
@@ -48,21 +49,31 @@ export function EnrollFreeButton({
   );
 }
 
-/** Shown for paid courses until the Phase 3 payment flow ships. */
-export function PaidEnrollComingSoon() {
+/**
+ * Opens (or resumes) a bank-transfer order and sends the student to
+ * checkout. `startCheckout` is idempotent — a student who already has a
+ * pending or under-review order for this course lands back on the same
+ * order instead of a new one.
+ */
+export function StartCheckoutButton({ courseId }: { courseId: string }) {
+  const [state, action, pending] = useActionState(startCheckout, idleResult);
+
   return (
-    <div className="flex flex-col gap-2 sm:items-start">
-      <Button size="lg" disabled className="w-full sm:w-auto">
-        <Lock aria-hidden="true" />
-        Paid enrolment opening soon
+    <form action={action} className="flex flex-col gap-2 sm:items-start">
+      <input type="hidden" name="courseId" value={courseId} />
+      <Button type="submit" size="lg" disabled={pending} className="w-full sm:w-auto">
+        {pending ? (
+          <Loader2 className="animate-spin" aria-hidden="true" />
+        ) : (
+          <CreditCard aria-hidden="true" />
+        )}
+        Enrol via bank transfer
       </Button>
-      <p className="text-ink-subtle text-xs">
-        Bank transfer enrolment is on its way.{" "}
-        <Link href="/contact" className="font-medium text-teal-600 hover:underline">
-          Contact us
-        </Link>{" "}
-        to be notified.
-      </p>
-    </div>
+      {state.status === "error" ? (
+        <p role="alert" className="text-danger text-xs">
+          {state.message}
+        </p>
+      ) : null}
+    </form>
   );
 }
