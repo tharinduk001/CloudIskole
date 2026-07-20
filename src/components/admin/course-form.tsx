@@ -66,6 +66,22 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
         )}
       </Field>
 
+      <Field
+        label="Cover image URL"
+        error={fieldErrors?.thumbnailUrl}
+        hint="Paste a Cloudinary link (https://res.cloudinary.com/...) — shown on the course card and detail page"
+      >
+        {(props) => (
+          <Input
+            {...props}
+            name="thumbnailUrl"
+            type="url"
+            placeholder="https://res.cloudinary.com/..."
+            defaultValue={course?.thumbnail_path ?? ""}
+          />
+        )}
+      </Field>
+
       <div className="grid gap-6 sm:grid-cols-3">
         <Field label="Level" required>
           {(props) => (

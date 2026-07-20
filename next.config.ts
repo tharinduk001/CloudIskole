@@ -33,7 +33,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   images: {
-    // Supabase Storage objects, YouTube thumbnails, Google avatars.
+    // Supabase Storage objects, YouTube thumbnails, Google avatars, and
+    // course/session cover images admins paste in from Cloudinary.
     remotePatterns: [
       {
         protocol: "https",
@@ -42,6 +43,7 @@ const nextConfig: NextConfig = {
       },
       { protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
     formats: ["image/avif", "image/webp"],
     // Default is [75]; the mural background images use lower qualities since

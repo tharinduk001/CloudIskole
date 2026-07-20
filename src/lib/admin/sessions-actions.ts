@@ -62,6 +62,17 @@ const sessionSchema = z.object({
     .max(500)
     .optional()
     .or(z.literal("")),
+  coverImageUrl: z
+    .string()
+    .trim()
+    .url("Enter a valid URL.")
+    .max(500)
+    .refine(
+      (url) => new URL(url).hostname === "res.cloudinary.com",
+      "Must be a Cloudinary URL (res.cloudinary.com).",
+    )
+    .optional()
+    .or(z.literal("")),
   capacity: z
     .string()
     .trim()
@@ -87,6 +98,7 @@ export async function upsertSession(
     hostName: formData.get("hostName") || undefined,
     joinUrl: formData.get("joinUrl") || undefined,
     recordingUrl: formData.get("recordingUrl") || undefined,
+    coverImageUrl: formData.get("coverImageUrl") || undefined,
     capacity: formData.get("capacity") || undefined,
     isFree: formData.get("isFree"),
     courseId: formData.get("courseId") || undefined,
@@ -121,6 +133,7 @@ export async function upsertSession(
     host_name: parsed.data.hostName ?? null,
     join_url: parsed.data.joinUrl || null,
     recording_url: parsed.data.recordingUrl || null,
+    cover_image_path: parsed.data.coverImageUrl || null,
     capacity: parsed.data.capacity ?? null,
     is_free: parsed.data.isFree === "on",
     course_id: parsed.data.courseId ?? null,

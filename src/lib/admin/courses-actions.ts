@@ -29,6 +29,17 @@ const courseSchema = z.object({
   title: z.string().trim().min(3).max(200),
   subtitle: z.string().trim().max(300).optional(),
   description: z.string().trim().max(4000).optional(),
+  thumbnailUrl: z
+    .string()
+    .trim()
+    .url("Enter a valid URL.")
+    .max(500)
+    .refine(
+      (url) => new URL(url).hostname === "res.cloudinary.com",
+      "Must be a Cloudinary URL (res.cloudinary.com).",
+    )
+    .optional()
+    .or(z.literal("")),
   level: z.enum(["beginner", "intermediate", "advanced"]),
   category: z.string().trim().max(80).optional(),
   isFree: z.union([z.literal("on"), z.null()]).optional(),
@@ -62,6 +73,7 @@ export async function upsertCourse(
     title: formData.get("title"),
     subtitle: formData.get("subtitle") || undefined,
     description: formData.get("description") || undefined,
+    thumbnailUrl: formData.get("thumbnailUrl") || undefined,
     level: formData.get("level"),
     category: formData.get("category") || undefined,
     isFree: formData.get("isFree"),
@@ -84,6 +96,7 @@ export async function upsertCourse(
     title: parsed.data.title,
     subtitle: parsed.data.subtitle ?? null,
     description: parsed.data.description ?? null,
+    thumbnail_path: parsed.data.thumbnailUrl || null,
     level: parsed.data.level,
     category: parsed.data.category ?? null,
     is_free: isFree,

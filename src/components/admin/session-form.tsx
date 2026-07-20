@@ -159,6 +159,22 @@ export function SessionForm({
       </Field>
 
       <Field
+        label="Cover image URL"
+        error={fieldErrors?.coverImageUrl}
+        hint="Paste a Cloudinary link (https://res.cloudinary.com/...) — shown on the session card"
+      >
+        {(props) => (
+          <Input
+            {...props}
+            name="coverImageUrl"
+            type="url"
+            placeholder="https://res.cloudinary.com/..."
+            defaultValue={session?.cover_image_path ?? ""}
+          />
+        )}
+      </Field>
+
+      <Field
         label="Associated course"
         hint="Optional — links this session from that course's page"
       >
