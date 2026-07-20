@@ -50,13 +50,19 @@ export default async function SessionDetailPage({
       <Container size="narrow" className="max-w-2xl">
         <div className="flex flex-wrap items-center gap-2">
           {session.status === "live" ? (
-            <Badge className="bg-terracotta-600 rounded-none border-0 text-white" size="sm">
+            <Badge
+              className="bg-terracotta-600 rounded-none border-0 text-white"
+              size="sm"
+            >
               <Radio aria-hidden="true" />
               Live now
             </Badge>
           ) : null}
           {session.status === "completed" ? (
-            <Badge className="bg-hairline/60 text-onyx-soft rounded-none border-0" size="sm">
+            <Badge
+              className="bg-hairline/60 text-onyx-soft rounded-none border-0"
+              size="sm"
+            >
               Completed
             </Badge>
           ) : null}
@@ -106,7 +112,7 @@ export default async function SessionDetailPage({
                 href={session.recording_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-terracotta-600 hover:underline"
+                className="text-terracotta-600 inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
               >
                 Watch the recording
                 <ExternalLink className="size-3.5" aria-hidden="true" />

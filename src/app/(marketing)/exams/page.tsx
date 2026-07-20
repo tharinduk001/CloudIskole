@@ -27,9 +27,7 @@ export default async function ExamsPage() {
       <Section>
         <Container size="wide">
           {exams.length === 0 ? (
-            <p className="text-mist text-sm">
-              No exams are open yet — check back soon.
-            </p>
+            <p className="text-mist text-sm">No exams are open yet — check back soon.</p>
           ) : (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {exams.map((exam) => (

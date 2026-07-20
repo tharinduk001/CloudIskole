@@ -38,7 +38,10 @@ function SessionCard({ session }: { session: SessionSummary }) {
       >
         <div className="flex items-center gap-2">
           {session.status === "live" ? (
-            <Badge className="bg-terracotta-600 rounded-none border-0 text-white" size="sm">
+            <Badge
+              className="bg-terracotta-600 rounded-none border-0 text-white"
+              size="sm"
+            >
               <Radio aria-hidden="true" />
               Live now
             </Badge>

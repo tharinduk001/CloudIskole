@@ -38,9 +38,7 @@ export default async function ExamDetailPage({
       <Container size="narrow" className="max-w-2xl">
         <h1 className="font-display text-onyx text-3xl font-semibold">{quiz.title}</h1>
         {quiz.description ? (
-          <p className="text-mist mt-3 text-base leading-relaxed">
-            {quiz.description}
-          </p>
+          <p className="text-mist mt-3 text-base leading-relaxed">{quiz.description}</p>
         ) : null}
 
         <div className="text-mist-soft mt-5 flex flex-wrap items-center gap-5 text-sm">
@@ -66,7 +64,7 @@ export default async function ExamDetailPage({
           {!profile ? (
             <a
               href={`/sign-in?next=${encodeURIComponent(`/exams/${quiz.slug}`)}`}
-              className="text-sm font-medium text-terracotta-600 hover:underline"
+              className="text-terracotta-600 text-sm font-medium hover:underline"
             >
               Sign in to take this exam
             </a>
@@ -92,9 +90,7 @@ export default async function ExamDetailPage({
                   key={attempt.id}
                   className="border-hairline flex items-center justify-between rounded-none px-4 py-3"
                 >
-                  <span className="text-mist text-sm">
-                    Attempt {attempt.attempt_no}
-                  </span>
+                  <span className="text-mist text-sm">Attempt {attempt.attempt_no}</span>
                   <div className="flex items-center gap-3">
                     <span className="text-onyx text-sm font-medium">
                       {attempt.score_pct}%

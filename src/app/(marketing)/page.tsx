@@ -72,9 +72,7 @@ function Hero() {
 
       <Container size="wide" className="relative pt-16 pb-20 sm:pt-24 lg:pt-28 lg:pb-28">
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-          <Badge
-            className="animate-in-up bg-terracotta-50 text-terracotta-600 rounded-none border-0"
-          >
+          <Badge className="animate-in-up bg-terracotta-50 text-terracotta-600 rounded-none border-0">
             <Sparkles aria-hidden="true" />
             Free courses open now — no card needed
           </Badge>

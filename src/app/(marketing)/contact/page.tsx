@@ -42,12 +42,14 @@ export default function ContactPage() {
                 <span className="bg-terracotta-50 text-terracotta-600 grid size-10 place-items-center rounded-none">
                   <Mail className="size-5" aria-hidden="true" />
                 </span>
-                <h3 className="font-display text-onyx mt-4 text-base font-semibold">Email us</h3>
+                <h3 className="font-display text-onyx mt-4 text-base font-semibold">
+                  Email us
+                </h3>
                 <p className="text-mist mt-2 text-sm leading-relaxed">
                   Prefer email? Write to us directly at{" "}
                   <a
                     href={`mailto:${brand.contact.email}`}
-                    className="font-medium text-terracotta-600 hover:underline"
+                    className="text-terracotta-600 font-medium hover:underline"
                   >
                     {brand.contact.email}
                   </a>
@@ -79,14 +81,14 @@ export default function ContactPage() {
                   Many answers are already on the{" "}
                   <Link
                     href="/#tracks"
-                    className="font-medium text-terracotta-600 hover:underline"
+                    className="text-terracotta-600 font-medium hover:underline"
                   >
                     home page FAQ
                   </Link>
                   , and refund questions are covered in our{" "}
                   <Link
                     href="/refunds"
-                    className="font-medium text-terracotta-600 hover:underline"
+                    className="text-terracotta-600 font-medium hover:underline"
                   >
                     refunds policy
                   </Link>

@@ -21,7 +21,9 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
           <div className="flex flex-col gap-5">
             <Logo />
-            <p className="text-mist measure text-sm leading-relaxed">{brand.description}</p>
+            <p className="text-mist measure text-sm leading-relaxed">
+              {brand.description}
+            </p>
             <div className="text-mist flex flex-col gap-2 text-sm">
               <a
                 href={`mailto:${brand.contact.email}`}

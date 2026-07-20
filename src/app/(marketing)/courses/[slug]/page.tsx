@@ -85,7 +85,9 @@ export default async function CourseDetailPage({
                 <Badge
                   className={cn(
                     "rounded-none border-0",
-                    course.is_free ? "bg-mint-500/15 text-mint-500" : "bg-onyx/10 text-onyx",
+                    course.is_free
+                      ? "bg-mint-500/15 text-mint-500"
+                      : "bg-onyx/10 text-onyx",
                   )}
                 >
                   {course.is_free ? "Free course" : formatLkr(course.price_cents)}

@@ -160,7 +160,7 @@ export function SiteHeader() {
                   asChild
                   variant="ghost"
                   size="sm"
-                  className="text-onyx-soft rounded-none hover:bg-terracotta-50 hover:text-terracotta-600"
+                  className="text-onyx-soft hover:bg-terracotta-50 hover:text-terracotta-600 rounded-none"
                 >
                   <Link href="/sign-in">Sign in</Link>
                 </Button>

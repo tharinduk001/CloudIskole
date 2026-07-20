@@ -27,7 +27,10 @@ export function CourseCard({ course }: { course: CourseSummary }) {
           >
             {course.is_free ? "Free" : formatLkr(course.price_cents)}
           </Badge>
-          <Badge className="bg-hairline/60 text-onyx-soft rounded-none border-0" size="sm">
+          <Badge
+            className="bg-hairline/60 text-onyx-soft rounded-none border-0"
+            size="sm"
+          >
             {formatLevel(course.level)}
           </Badge>
         </div>
