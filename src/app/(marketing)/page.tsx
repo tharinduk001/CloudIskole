@@ -61,7 +61,7 @@ export default function HomePage() {
 
 function Hero() {
   return (
-    <section className="bg-cream relative overflow-hidden">
+    <section className="bg-mural-wash relative overflow-hidden">
       <div className="absolute inset-0" aria-hidden="true">
         <Image
           src="/backgrounds/mural-hero.jpg"
@@ -70,9 +70,9 @@ function Hero() {
           priority
           sizes="100vw"
           quality={60}
-          className="object-cover object-bottom opacity-[0.22]"
+          className="object-cover object-bottom opacity-[0.42]"
         />
-        <div className="from-cream via-cream/80 to-cream/95 absolute inset-0 bg-gradient-to-b" />
+        <div className="from-mural-wash via-mural-wash/70 to-mural-wash/90 absolute inset-0 bg-gradient-to-b" />
       </div>
 
       <Container
@@ -129,7 +129,7 @@ function Hero() {
             { value: "Weekly", label: "Live sessions" },
             { value: "LKR", label: "Local pricing" },
           ].map((stat) => (
-            <li key={stat.label} className="bg-cream px-4 py-6 text-center">
+            <li key={stat.label} className="bg-mural-wash px-4 py-6 text-center">
               <p className="font-display text-terracotta-600 text-2xl font-semibold sm:text-3xl">
                 {stat.value}
               </p>

@@ -73,7 +73,7 @@ export default async function CourseDetailPage({
 
   return (
     <>
-      <section className="bg-cream border-hairline relative overflow-hidden border-b">
+      <section className="bg-mural-wash border-hairline relative overflow-hidden border-b">
         <Liyawel
           strokeClassName="stroke-terracotta-600"
           className="absolute -top-24 -right-28 size-96 opacity-[0.06]"

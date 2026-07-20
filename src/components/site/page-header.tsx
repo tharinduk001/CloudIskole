@@ -14,7 +14,7 @@ export function PageHeader({
   description?: string;
 }) {
   return (
-    <section className="bg-cream border-hairline relative overflow-hidden border-b">
+    <section className="bg-mural-wash border-hairline relative overflow-hidden border-b">
       <div
         className="absolute inset-y-0 right-0 hidden w-1/2 md:block"
         aria-hidden="true"
@@ -25,9 +25,9 @@ export function PageHeader({
           fill
           sizes="50vw"
           quality={50}
-          className="object-cover object-[85%_30%] opacity-[0.14]"
+          className="object-cover object-[85%_30%] opacity-[0.32]"
         />
-        <div className="from-cream to-cream/0 absolute inset-0 bg-gradient-to-r" />
+        <div className="from-mural-wash to-mural-wash/0 absolute inset-0 bg-gradient-to-r" />
       </div>
       <Liyawel
         strokeClassName="stroke-terracotta-600"

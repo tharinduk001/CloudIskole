@@ -99,13 +99,17 @@
      names, never reused ones — admin/app/auth keep Ceylon Teal (teal/gold/
      paper/ink above) completely untouched.
 
-     Palette is a Kandyan-mural-inspired direction: cream linen, oxblood/
-     maroon (the "terracotta-*" tokens — kept that name from the prior pass
-     so marketing pages didn't need re-touching, but the values below are
-     now sampled directly from public/backgrounds/mural-hero.png rather than
-     zuucrew.ai) and a muted antique gold accent used sparingly, as the
-     mural itself uses gold: for trim and small emphasis, never body text. */
-  --color-cream: #efeadd;
+     Palette is a Kandyan-mural-inspired direction: near-white everywhere
+     except the two spots that actually carry the mural artwork (the home
+     hero and interior PageHeader banners), which use the warmer linen tone
+     the mural itself sits on — oxblood/maroon (the "terracotta-*" tokens —
+     kept that name from the prior pass so marketing pages didn't need
+     re-touching, but the values below are now sampled directly from
+     public/backgrounds/mural-hero.png rather than zuucrew.ai) and a muted
+     antique gold accent used sparingly, as the mural itself uses gold: for
+     trim and small emphasis, never body text. */
+  --color-cream: #fcfcfa;
+  --color-mural-wash: #efeadd;
   --color-onyx: #0b0b0b;
   --color-onyx-soft: #2a2a2a;
   --color-mist: #6b5f57;
