@@ -1,12 +1,8 @@
 import {
   ArrowRight,
   Award,
-  Cloud,
-  Code2,
-  GitBranch,
   Sparkles,
   Target,
-  Terminal,
   Users,
   Wallet,
   type LucideIcon,
@@ -26,15 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
-import { faqs, features, steps, tracks } from "@/content/home";
-import { cn } from "@/lib/utils";
-
-const trackIcons: Record<(typeof tracks)[number]["icon"], LucideIcon> = {
-  cloud: Cloud,
-  pipeline: GitBranch,
-  terminal: Terminal,
-  code: Code2,
-};
+import { faqs, features, steps } from "@/content/home";
 
 const featureIcons: Record<(typeof features)[number]["icon"], LucideIcon> = {
   wallet: Wallet,
@@ -48,7 +36,6 @@ export default function HomePage() {
     <>
       <Hero />
       <ToolMarquee />
-      <Tracks />
       <Features />
       <HowItWorks />
       <Faq />
@@ -144,91 +131,6 @@ function Hero() {
 
 /* -------------------------------------------------------------------------- */
 
-function Tracks() {
-  return (
-    <Section id="tracks" className="bg-cream">
-      <Container size="wide">
-        <SectionHeading
-          size="xl"
-          eyebrow="Career tracks"
-          title="Four paths into the industry"
-          description="Each track takes you from zero to job-ready with lessons, hands-on labs and quizzes. Start with a free one and move up."
-          eyebrowClassName="text-terracotta-600"
-          titleClassName="text-onyx"
-        />
-
-        <div className="mt-14 grid gap-5 sm:grid-cols-2">
-          {tracks.map((track) => {
-            const Icon = trackIcons[track.icon];
-            return (
-              <Card
-                key={track.title}
-                interactive
-                className="border-hairline hover:border-onyx flex flex-col rounded-none p-7 hover:-translate-y-0.5 hover:shadow-md"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <span className="bg-terracotta-50 text-terracotta-600 grid size-12 place-items-center rounded-none">
-                    <Icon className="size-6" aria-hidden="true" />
-                  </span>
-                  <Badge
-                    className={cn(
-                      "rounded-none border-0",
-                      track.free
-                        ? "bg-mint-500/15 text-mint-500"
-                        : "bg-onyx/10 text-onyx",
-                    )}
-                  >
-                    {track.free ? "Free" : "Paid"}
-                  </Badge>
-                </div>
-
-                <h3 className="font-display text-onyx mt-5 text-xl font-semibold">
-                  {track.title}
-                </h3>
-                <p className="text-mist mt-2.5 text-sm leading-relaxed">
-                  {track.description}
-                </p>
-
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {track.topics.map((topic) => (
-                    <li key={topic}>
-                      <Badge className="bg-hairline/60 text-onyx-soft rounded-none border-0">
-                        {topic}
-                      </Badge>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="border-hairline text-mist mt-6 flex items-center gap-4 border-t pt-5 text-xs">
-                  <span>{track.level}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{track.duration}</span>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-
-        <div className="mt-10 text-center">
-          <Button
-            asChild
-            variant="secondary"
-            size="lg"
-            className="border-onyx text-onyx hover:bg-onyx rounded-none hover:text-white"
-          >
-            <Link href="/courses">
-              See all courses
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-
 function Features() {
   return (
     <Section className="border-hairline bg-surface border-y">
@@ -308,7 +210,7 @@ function HowItWorks() {
 
 function Faq() {
   return (
-    <Section className="border-hairline bg-surface border-y">
+    <Section id="faq" className="border-hairline bg-surface border-y">
       <Container size="narrow">
         <SectionHeading
           size="xl"

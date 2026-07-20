@@ -2,52 +2,7 @@
  * Landing page copy and curated content.
  *
  * Kept out of the JSX so wording can be revised without touching layout.
- * The tracks below are the intended course catalogue; once courses exist in
- * the database (Phase 2) the tracks section reads from there instead.
  */
-
-export const tracks = [
-  {
-    icon: "cloud" as const,
-    title: "Cloud Foundations",
-    description:
-      "How the cloud actually works - compute, storage, networking and identity - using AWS free tier so you pay nothing to practise.",
-    topics: ["AWS EC2 & S3", "VPC & networking", "IAM & security", "Billing & free tier"],
-    level: "Beginner",
-    duration: "6 weeks",
-    free: true,
-  },
-  {
-    icon: "pipeline" as const,
-    title: "DevOps Engineering",
-    description:
-      "The track employers hire for. Build real pipelines that take code from your laptop to production automatically.",
-    topics: ["Git & GitHub", "Docker", "CI/CD pipelines", "Kubernetes basics"],
-    level: "Intermediate",
-    duration: "10 weeks",
-    free: false,
-  },
-  {
-    icon: "terminal" as const,
-    title: "Linux & Networking",
-    description:
-      "The ground floor of every IT career. Command line fluency, servers, SSH and the networking every interview asks about.",
-    topics: ["Bash & shell", "Users & permissions", "SSH & servers", "DNS, HTTP, TCP/IP"],
-    level: "Beginner",
-    duration: "5 weeks",
-    free: true,
-  },
-  {
-    icon: "code" as const,
-    title: "Software Engineering",
-    description:
-      "Programming fundamentals, version control and the working habits that separate a hobbyist from a hireable engineer.",
-    topics: ["Python basics", "Git workflows", "APIs & databases", "Clean code"],
-    level: "Beginner",
-    duration: "8 weeks",
-    free: false,
-  },
-];
 
 export const features = [
   {

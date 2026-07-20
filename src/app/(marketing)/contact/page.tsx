@@ -80,7 +80,7 @@ export default function ContactPage() {
                 <p className="text-mist mt-2 text-sm leading-relaxed">
                   Many answers are already on the{" "}
                   <Link
-                    href="/#tracks"
+                    href="/#faq"
                     className="text-terracotta-600 font-medium hover:underline"
                   >
                     home page FAQ
