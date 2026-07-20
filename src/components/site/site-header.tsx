@@ -120,7 +120,7 @@ export function SiteHeader() {
       className={cn(
         "sticky top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-[var(--duration-base)]",
         scrolled || open
-          ? "border-line bg-paper/85 border-b backdrop-blur-md"
+          ? "border-hairline bg-cream/90 border-b backdrop-blur-md"
           : "border-b border-transparent",
       )}
     >
@@ -138,10 +138,10 @@ export function SiteHeader() {
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-[var(--duration-fast)]",
+                      "rounded-none px-4 py-2 text-sm font-medium transition-colors duration-[var(--duration-fast)]",
                       isActive(item.href)
-                        ? "bg-teal-50 text-teal-700"
-                        : "text-ink-muted hover:bg-teal-50/60 hover:text-teal-700",
+                        ? "bg-terracotta-50 text-terracotta-600"
+                        : "text-onyx-soft hover:bg-terracotta-50/60 hover:text-terracotta-600",
                     )}
                   >
                     {item.label}
@@ -156,10 +156,19 @@ export function SiteHeader() {
               <UserMenu profile={profile} />
             ) : (
               <>
-                <Button asChild variant="ghost" size="sm">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="text-onyx-soft rounded-none hover:bg-terracotta-50 hover:text-terracotta-600"
+                >
                   <Link href="/sign-in">Sign in</Link>
                 </Button>
-                <Button asChild size="sm">
+                <Button
+                  asChild
+                  size="sm"
+                  className="bg-terracotta-600 hover:bg-terracotta-700 active:bg-terracotta-700 rounded-none"
+                >
                   <Link href="/sign-up">Get started</Link>
                 </Button>
               </>
@@ -172,7 +181,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="text-ink -mr-2 grid size-11 place-items-center rounded-xl hover:bg-teal-50 lg:hidden"
+            className="text-onyx hover:bg-terracotta-50 -mr-2 grid size-11 place-items-center lg:hidden"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -182,7 +191,7 @@ export function SiteHeader() {
       {open ? (
         <div
           id="mobile-menu"
-          className="border-line bg-paper fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto border-t lg:hidden"
+          className="border-hairline bg-cream fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto border-t lg:hidden"
         >
           <Container className="py-6">
             <nav aria-label="Mobile">
@@ -193,10 +202,10 @@ export function SiteHeader() {
                       href={item.href}
                       aria-current={isActive(item.href) ? "page" : undefined}
                       className={cn(
-                        "block rounded-xl px-4 py-3.5 text-base font-medium",
+                        "block rounded-none px-4 py-3.5 text-base font-medium",
                         isActive(item.href)
-                          ? "bg-teal-50 text-teal-700"
-                          : "text-ink hover:bg-teal-50/60",
+                          ? "bg-terracotta-50 text-terracotta-600"
+                          : "text-onyx hover:bg-terracotta-50/60",
                       )}
                     >
                       {item.label}
@@ -208,15 +217,28 @@ export function SiteHeader() {
 
             <div className="mt-6 flex flex-col gap-3">
               {profile ? (
-                <Button asChild size="lg">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
+                >
                   <Link href="/dashboard">Go to dashboard</Link>
                 </Button>
               ) : (
                 <>
-                  <Button asChild size="lg">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
+                  >
                     <Link href="/sign-up">Get started free</Link>
                   </Button>
-                  <Button asChild variant="secondary" size="lg">
+                  <Button
+                    asChild
+                    variant="secondary"
+                    size="lg"
+                    className="border-hairline text-onyx hover:bg-terracotta-50 hover:border-terracotta-200 hover:text-terracotta-600 rounded-none"
+                  >
                     <Link href="/sign-in">Sign in</Link>
                   </Button>
                 </>

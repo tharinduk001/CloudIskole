@@ -73,32 +73,44 @@ export default async function CourseDetailPage({
 
   return (
     <>
-      <section className="bg-wash border-line relative overflow-hidden border-b">
-        <Liyawel className="absolute -top-24 -right-28 size-96 opacity-[0.05]" />
+      <section className="bg-cream border-hairline relative overflow-hidden border-b">
+        <Liyawel
+          strokeClassName="stroke-onyx"
+          className="absolute -top-24 -right-28 size-96 opacity-[0.05]"
+        />
         <Container size="wide" className="relative py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant={course.is_free ? "success" : "teal"}>
+                <Badge
+                  className={cn(
+                    "rounded-none border-0",
+                    course.is_free ? "bg-mint-500/15 text-mint-500" : "bg-onyx/10 text-onyx",
+                  )}
+                >
                   {course.is_free ? "Free course" : formatLkr(course.price_cents)}
                 </Badge>
-                <Badge variant="neutral">{formatLevel(course.level)}</Badge>
+                <Badge className="bg-hairline/60 text-onyx-soft rounded-none border-0">
+                  {formatLevel(course.level)}
+                </Badge>
                 {course.category ? (
-                  <Badge variant="neutral">{course.category}</Badge>
+                  <Badge className="bg-hairline/60 text-onyx-soft rounded-none border-0">
+                    {course.category}
+                  </Badge>
                 ) : null}
               </div>
 
-              <h1 className="font-display mt-4 text-3xl leading-tight sm:text-4xl lg:text-[2.75rem]">
+              <h1 className="font-display text-onyx mt-4 text-4xl leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
                 {course.title}
               </h1>
 
               {course.subtitle ? (
-                <p className="text-ink-muted mt-4 max-w-2xl text-lg leading-relaxed">
+                <p className="text-mist mt-4 max-w-2xl text-lg leading-relaxed">
                   {course.subtitle}
                 </p>
               ) : null}
 
-              <div className="text-ink-subtle mt-6 flex flex-wrap items-center gap-5 text-sm">
+              <div className="text-mist-soft mt-6 flex flex-wrap items-center gap-5 text-sm">
                 <span className="inline-flex items-center gap-1.5">
                   <PlayCircle className="size-4" aria-hidden="true" />
                   {lessons.length} lessons
@@ -112,22 +124,26 @@ export default async function CourseDetailPage({
               </div>
             </div>
 
-            <Card className="p-6">
+            <Card className="border-hairline rounded-none p-6">
               {isEnrolled ? (
                 <>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-ink-muted">Your progress</span>
-                    <span className="font-semibold text-teal-700">
+                    <span className="text-mist">Your progress</span>
+                    <span className="text-terracotta-600 font-semibold">
                       {enrollment?.progress_pct ?? 0}%
                     </span>
                   </div>
-                  <div className="bg-line mt-2 h-2 overflow-hidden rounded-full">
+                  <div className="bg-hairline mt-2 h-2 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-teal-600 transition-[width] duration-300"
+                      className="bg-terracotta-600 h-full transition-[width] duration-300"
                       style={{ width: `${enrollment?.progress_pct ?? 0}%` }}
                     />
                   </div>
-                  <Button asChild size="lg" className="mt-5 w-full">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-terracotta-600 hover:bg-terracotta-700 mt-5 w-full rounded-none"
+                  >
                     <Link href={lessonHref(course.slug, nextLesson)}>
                       {enrollment?.status === "completed"
                         ? "Review course"
@@ -137,10 +153,14 @@ export default async function CourseDetailPage({
                 </>
               ) : !profile ? (
                 <div className="flex flex-col gap-3">
-                  <p className="text-ink-muted text-sm leading-relaxed">
+                  <p className="text-mist text-sm leading-relaxed">
                     Sign in or create a free account to enrol.
                   </p>
-                  <Button asChild size="lg">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
+                  >
                     <Link
                       href={`/sign-in?next=${encodeURIComponent(`/courses/${course.slug}`)}`}
                     >
@@ -162,13 +182,15 @@ export default async function CourseDetailPage({
         </Container>
       </section>
 
-      <Section>
+      <Section className="bg-cream">
         <Container size="wide">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr]">
             {course.description ? (
               <div>
-                <h2 className="font-display text-xl font-semibold">About this course</h2>
-                <p className="text-ink-muted mt-4 text-[0.95rem] leading-relaxed whitespace-pre-line">
+                <h2 className="font-display text-onyx text-xl font-semibold">
+                  About this course
+                </h2>
+                <p className="text-mist mt-4 text-[0.95rem] leading-relaxed whitespace-pre-line">
                   {course.description}
                 </p>
               </div>
@@ -177,14 +199,16 @@ export default async function CourseDetailPage({
             )}
 
             <div>
-              <h2 className="font-display text-xl font-semibold">Course content</h2>
+              <h2 className="font-display text-onyx text-xl font-semibold">
+                Course content
+              </h2>
               <div className="mt-5 flex flex-col gap-5">
                 {course.modules.map((module, moduleIndex) => (
                   <div key={module.id}>
-                    <h3 className="text-ink-muted text-xs font-semibold tracking-wide uppercase">
+                    <h3 className="text-mist text-xs font-semibold tracking-wide uppercase">
                       Module {moduleIndex + 1} · {module.title}
                     </h3>
-                    <ul className="border-line bg-surface mt-3 divide-y divide-[var(--color-line)] overflow-hidden rounded-xl border">
+                    <ul className="border-hairline bg-surface mt-3 divide-y divide-[var(--color-hairline)] overflow-hidden border">
                       {module.lessons.map((lesson) => {
                         const locked = !isEnrolled && !lesson.is_preview;
                         const completed = Boolean(progress.get(lesson.id)?.completed_at);
@@ -194,35 +218,38 @@ export default async function CourseDetailPage({
                           <div className="flex items-center gap-3 px-4 py-3.5">
                             {completed ? (
                               <CheckCircle2
-                                className="size-4.5 shrink-0 text-teal-600"
+                                className="text-terracotta-600 size-4.5 shrink-0"
                                 aria-hidden="true"
                               />
                             ) : locked ? (
                               <Lock
-                                className="text-ink-subtle size-4.5 shrink-0"
+                                className="text-mist-soft size-4.5 shrink-0"
                                 aria-hidden="true"
                               />
                             ) : (
                               <PlayCircle
-                                className="text-ink-subtle size-4.5 shrink-0"
+                                className="text-mist-soft size-4.5 shrink-0"
                                 aria-hidden="true"
                               />
                             )}
                             <span
                               className={cn(
                                 "flex-1 text-sm",
-                                locked ? "text-ink-subtle" : "text-ink",
+                                locked ? "text-mist-soft" : "text-onyx",
                               )}
                             >
                               {lesson.title}
                             </span>
                             {lesson.is_preview && !isEnrolled ? (
-                              <Badge variant="gold" size="sm">
+                              <Badge
+                                className="bg-terracotta-50 text-terracotta-600 rounded-none border-0"
+                                size="sm"
+                              >
                                 Preview
                               </Badge>
                             ) : null}
                             {duration ? (
-                              <span className="text-ink-subtle text-xs">{duration}</span>
+                              <span className="text-mist-soft text-xs">{duration}</span>
                             ) : null}
                           </div>
                         );
@@ -234,7 +261,7 @@ export default async function CourseDetailPage({
                             ) : (
                               <Link
                                 href={`/courses/${course.slug}/${lesson.slug}`}
-                                className="block transition-colors hover:bg-teal-50/60"
+                                className="hover:bg-terracotta-50/60 block transition-colors"
                               >
                                 {content}
                               </Link>
@@ -247,7 +274,7 @@ export default async function CourseDetailPage({
                 ))}
 
                 {course.modules.length === 0 ? (
-                  <p className="text-ink-muted text-sm">
+                  <p className="text-mist text-sm">
                     Lessons for this course are being finalised.
                   </p>
                 ) : null}
@@ -255,7 +282,9 @@ export default async function CourseDetailPage({
 
               {quizzesWithAttempts.length > 0 ? (
                 <div className="mt-8">
-                  <h2 className="font-display text-xl font-semibold">Course quizzes</h2>
+                  <h2 className="font-display text-onyx text-xl font-semibold">
+                    Course quizzes
+                  </h2>
                   <div className="mt-4 flex flex-col gap-3">
                     {quizzesWithAttempts.map(({ quiz, attempts }) => {
                       const submitted = attempts.filter((a) => a.submitted_at);
@@ -275,27 +304,30 @@ export default async function CourseDetailPage({
                       return (
                         <Card
                           key={quiz.id}
-                          className="flex items-center justify-between gap-4 p-4"
+                          className="border-hairline flex items-center justify-between gap-4 rounded-none p-4"
                         >
                           <div>
-                            <p className="text-ink text-sm font-medium">{quiz.title}</p>
+                            <p className="text-onyx text-sm font-medium">{quiz.title}</p>
                             {best !== null ? (
-                              <p className="text-ink-muted mt-0.5 text-xs">
+                              <p className="text-mist mt-0.5 text-xs">
                                 Best score {best}%
                                 {anyPassed ? (
-                                  <Badge variant="success" size="sm" className="ml-2">
+                                  <Badge
+                                    className="bg-mint-500/15 text-mint-500 ml-2 rounded-none border-0"
+                                    size="sm"
+                                  >
                                     Passed
                                   </Badge>
                                 ) : null}
                               </p>
                             ) : (
-                              <p className="text-ink-subtle mt-0.5 text-xs">
+                              <p className="text-mist-soft mt-0.5 text-xs">
                                 Pass at {quiz.pass_mark_pct}%
                               </p>
                             )}
                           </div>
                           {outOfAttempts ? (
-                            <span className="text-ink-subtle text-xs">
+                            <span className="text-mist-soft text-xs">
                               No attempts left
                             </span>
                           ) : (

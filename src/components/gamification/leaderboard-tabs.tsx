@@ -9,8 +9,8 @@ import type { LeaderboardEntry } from "@/lib/data/gamification";
 import { cn } from "@/lib/utils";
 
 const medalColor: Record<number, string> = {
-  1: "text-gold-500",
-  2: "text-ink-subtle",
+  1: "text-terracotta-500",
+  2: "text-mist-soft",
   3: "text-[#B4813E]",
 };
 
@@ -23,26 +23,26 @@ function LeaderboardTable({
 }) {
   if (entries.length === 0) {
     return (
-      <p className="text-ink-muted p-8 text-center text-sm">
+      <p className="text-mist p-8 text-center text-sm">
         No one is ranked yet — be the first to opt in from your profile.
       </p>
     );
   }
 
   return (
-    <ol className="divide-line divide-y">
+    <ol className="divide-hairline divide-y">
       {entries.map((entry) => (
         <li
           key={entry.user_id}
           className={cn(
             "flex items-center gap-4 px-4 py-3",
-            entry.user_id === meId && "bg-teal-50/60",
+            entry.user_id === meId && "bg-terracotta-50/60",
           )}
         >
           <span
             className={cn(
               "w-7 shrink-0 text-center text-sm font-semibold",
-              medalColor[entry.rank] ?? "text-ink-subtle",
+              medalColor[entry.rank] ?? "text-mist-soft",
             )}
           >
             {entry.rank <= 3 ? (
@@ -58,25 +58,25 @@ function LeaderboardTable({
               width={32}
               height={32}
               unoptimized
-              className="size-8 shrink-0 rounded-full object-cover"
+              className="size-8 shrink-0 rounded-none object-cover"
             />
           ) : (
-            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-teal-600 text-xs font-semibold text-white">
+            <span className="bg-onyx grid size-8 shrink-0 place-items-center rounded-none text-xs font-semibold text-white">
               {entry.full_name.slice(0, 1).toUpperCase()}
             </span>
           )}
           <div className="min-w-0 flex-1">
-            <p className="text-ink truncate text-sm font-medium">
+            <p className="text-onyx truncate text-sm font-medium">
               {entry.full_name}
               {entry.user_id === meId ? (
-                <span className="text-teal-600"> (you)</span>
+                <span className="text-terracotta-600"> (you)</span>
               ) : null}
             </p>
             {entry.district ? (
-              <p className="text-ink-subtle text-xs">{entry.district}</p>
+              <p className="text-mist-soft text-xs">{entry.district}</p>
             ) : null}
           </div>
-          <span className="text-ink font-display text-sm font-semibold">
+          <span className="text-onyx font-display text-sm font-semibold">
             {entry.xp} XP
           </span>
         </li>
@@ -98,15 +98,13 @@ export function LeaderboardTabs({
 
   return (
     <div>
-      <div className="border-line inline-flex gap-1 rounded-full border p-1">
+      <div className="border-hairline inline-flex gap-1 border p-1">
         <button
           type="button"
           onClick={() => setTab("all_time")}
           className={cn(
-            "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-            tab === "all_time"
-              ? "bg-teal-600 text-white"
-              : "text-ink-muted hover:text-ink",
+            "px-4 py-1.5 text-sm font-medium transition-colors",
+            tab === "all_time" ? "bg-onyx text-white" : "text-mist hover:text-onyx",
           )}
         >
           All time
@@ -115,17 +113,15 @@ export function LeaderboardTabs({
           type="button"
           onClick={() => setTab("monthly")}
           className={cn(
-            "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-            tab === "monthly"
-              ? "bg-teal-600 text-white"
-              : "text-ink-muted hover:text-ink",
+            "px-4 py-1.5 text-sm font-medium transition-colors",
+            tab === "monthly" ? "bg-onyx text-white" : "text-mist hover:text-onyx",
           )}
         >
           This month
         </button>
       </div>
 
-      <Card className="mt-5 overflow-hidden">
+      <Card className="border-hairline mt-5 overflow-hidden rounded-none">
         <LeaderboardTable entries={tab === "all_time" ? allTime : monthly} meId={meId} />
       </Card>
     </div>

@@ -36,12 +36,19 @@ export function SectionHeading({
   title,
   description,
   align = "center",
+  size = "default",
+  eyebrowClassName,
+  titleClassName,
   className,
 }: {
   eyebrow?: string;
   title: React.ReactNode;
   description?: React.ReactNode;
   align?: "center" | "left";
+  /** "xl" is opt-in only — used by the marketing reramp for zuucrew-scale headings. */
+  size?: "default" | "xl";
+  eyebrowClassName?: string;
+  titleClassName?: string;
   className?: string;
 }) {
   return (
@@ -53,11 +60,23 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <span className="text-gold-700 text-xs font-semibold tracking-[0.14em] uppercase">
+        <span
+          className={cn(
+            "text-gold-700 text-xs font-semibold tracking-[0.14em] uppercase",
+            eyebrowClassName,
+          )}
+        >
           {eyebrow}
         </span>
       ) : null}
-      <h2 className="font-display text-3xl leading-[1.15] sm:text-4xl lg:text-[2.75rem]">
+      <h2
+        className={cn(
+          "font-display leading-[1.15]",
+          size === "default" && "text-3xl sm:text-4xl lg:text-[2.75rem]",
+          size === "xl" && "text-4xl tracking-tight sm:text-5xl lg:text-6xl",
+          titleClassName,
+        )}
+      >
         {title}
       </h2>
       {description ? (

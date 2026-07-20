@@ -28,12 +28,12 @@ export default function MarketingLayout({
       {/* Lets keyboard and screen-reader users jump past the nav on every page. */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-teal-600 focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-onyx focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white"
       >
         Skip to content
       </a>
       <SiteHeader />
-      <main id="main" className="flex-1">
+      <main id="main" className="bg-cream text-onyx flex-1">
         {children}
       </main>
       <SiteFooter />

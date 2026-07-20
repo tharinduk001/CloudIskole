@@ -27,21 +27,26 @@ export default async function ExamsPage() {
       <Section>
         <Container size="wide">
           {exams.length === 0 ? (
-            <p className="text-ink-muted text-sm">
+            <p className="text-mist text-sm">
               No exams are open yet — check back soon.
             </p>
           ) : (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {exams.map((exam) => (
                 <Link key={exam.id} href={`/exams/${exam.slug}`}>
-                  <Card interactive className="flex h-full flex-col p-6">
-                    <h2 className="font-display text-lg font-semibold">{exam.title}</h2>
+                  <Card
+                    interactive
+                    className="border-hairline hover:border-onyx flex h-full flex-col rounded-none p-6 hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <h2 className="font-display text-onyx text-lg font-semibold">
+                      {exam.title}
+                    </h2>
                     {exam.description ? (
-                      <p className="text-ink-muted mt-2 line-clamp-3 text-sm leading-relaxed">
+                      <p className="text-mist mt-2 line-clamp-3 text-sm leading-relaxed">
                         {exam.description}
                       </p>
                     ) : null}
-                    <div className="text-ink-subtle mt-auto flex items-center gap-4 pt-5 text-xs">
+                    <div className="text-mist-soft mt-auto flex items-center gap-4 pt-5 text-xs">
                       {exam.time_limit_minutes ? (
                         <span className="inline-flex items-center gap-1.5">
                           <Clock className="size-3.5" aria-hidden="true" />

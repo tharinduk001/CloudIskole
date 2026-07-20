@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Container, Section } from "@/components/ui/layout";
 import { getOptionalProfile } from "@/lib/data/auth";
 import { getQuizBySlug, listMyAttempts } from "@/lib/data/quizzes";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -35,14 +36,14 @@ export default async function ExamDetailPage({
   return (
     <Section className="py-10 sm:py-16">
       <Container size="narrow" className="max-w-2xl">
-        <h1 className="font-display text-3xl font-semibold">{quiz.title}</h1>
+        <h1 className="font-display text-onyx text-3xl font-semibold">{quiz.title}</h1>
         {quiz.description ? (
-          <p className="text-ink-muted mt-3 text-base leading-relaxed">
+          <p className="text-mist mt-3 text-base leading-relaxed">
             {quiz.description}
           </p>
         ) : null}
 
-        <div className="text-ink-subtle mt-5 flex flex-wrap items-center gap-5 text-sm">
+        <div className="text-mist-soft mt-5 flex flex-wrap items-center gap-5 text-sm">
           {quiz.time_limit_minutes ? (
             <span className="inline-flex items-center gap-1.5">
               <Clock className="size-4" aria-hidden="true" />
@@ -65,12 +66,12 @@ export default async function ExamDetailPage({
           {!profile ? (
             <a
               href={`/sign-in?next=${encodeURIComponent(`/exams/${quiz.slug}`)}`}
-              className="text-sm font-medium text-teal-600 hover:underline"
+              className="text-sm font-medium text-terracotta-600 hover:underline"
             >
               Sign in to take this exam
             </a>
           ) : outOfAttempts ? (
-            <p className="text-ink-muted text-sm">
+            <p className="text-mist text-sm">
               You have used all {quiz.max_attempts} attempts for this exam.
             </p>
           ) : (
@@ -84,21 +85,29 @@ export default async function ExamDetailPage({
 
         {submitted.length > 0 ? (
           <div className="mt-10">
-            <h2 className="text-ink text-sm font-semibold">Your attempts</h2>
+            <h2 className="text-onyx text-sm font-semibold">Your attempts</h2>
             <div className="mt-3 flex flex-col gap-2">
               {submitted.map((attempt) => (
                 <Card
                   key={attempt.id}
-                  className="flex items-center justify-between px-4 py-3"
+                  className="border-hairline flex items-center justify-between rounded-none px-4 py-3"
                 >
-                  <span className="text-ink-muted text-sm">
+                  <span className="text-mist text-sm">
                     Attempt {attempt.attempt_no}
                   </span>
                   <div className="flex items-center gap-3">
-                    <span className="text-ink text-sm font-medium">
+                    <span className="text-onyx text-sm font-medium">
                       {attempt.score_pct}%
                     </span>
-                    <Badge variant={attempt.passed ? "success" : "danger"} size="sm">
+                    <Badge
+                      className={cn(
+                        "rounded-none border-0",
+                        attempt.passed
+                          ? "bg-mint-500/15 text-mint-500"
+                          : "bg-terracotta-50 text-terracotta-600",
+                      )}
+                      size="sm"
+                    >
                       {attempt.passed ? (
                         <>
                           <CheckCircle2 aria-hidden="true" /> Passed

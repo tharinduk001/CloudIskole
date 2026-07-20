@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Container, Section } from "@/components/ui/layout";
 import { listSessions, type SessionSummary } from "@/lib/data/sessions";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Live sessions",
@@ -31,25 +32,36 @@ function SessionCard({ session }: { session: SessionSummary }) {
 
   return (
     <Link key={session.id} href={`/sessions/${session.slug}`}>
-      <Card interactive className="flex h-full flex-col p-6">
+      <Card
+        interactive
+        className="border-hairline hover:border-onyx flex h-full flex-col rounded-none p-6 hover:-translate-y-0.5 hover:shadow-md"
+      >
         <div className="flex items-center gap-2">
           {session.status === "live" ? (
-            <Badge variant="danger" size="sm">
+            <Badge className="bg-terracotta-600 rounded-none border-0 text-white" size="sm">
               <Radio aria-hidden="true" />
               Live now
             </Badge>
           ) : null}
-          <Badge variant={session.is_free ? "success" : "gold"} size="sm">
+          <Badge
+            className={cn(
+              "rounded-none border-0",
+              session.is_free ? "bg-mint-500/15 text-mint-500" : "bg-onyx/10 text-onyx",
+            )}
+            size="sm"
+          >
             {session.is_free ? "Free" : "Paid"}
           </Badge>
         </div>
-        <h2 className="font-display mt-3 text-lg font-semibold">{session.title}</h2>
+        <h2 className="font-display text-onyx mt-3 text-lg font-semibold">
+          {session.title}
+        </h2>
         {session.description ? (
-          <p className="text-ink-muted mt-2 line-clamp-2 text-sm leading-relaxed">
+          <p className="text-mist mt-2 line-clamp-2 text-sm leading-relaxed">
             {session.description}
           </p>
         ) : null}
-        <div className="text-ink-subtle mt-auto flex flex-wrap items-center gap-4 pt-5 text-xs">
+        <div className="text-mist-soft mt-auto flex flex-wrap items-center gap-4 pt-5 text-xs">
           <span className="inline-flex items-center gap-1.5">
             <Calendar className="size-3.5" aria-hidden="true" />
             {dateFormatter.format(new Date(session.starts_at))}
@@ -77,9 +89,9 @@ function SessionGroup({
 }) {
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold">{title}</h2>
+      <h2 className="font-display text-onyx text-xl font-semibold">{title}</h2>
       {sessions.length === 0 ? (
-        <p className="text-ink-muted mt-3 text-sm">{empty}</p>
+        <p className="text-mist mt-3 text-sm">{empty}</p>
       ) : (
         <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {sessions.map((session) => (

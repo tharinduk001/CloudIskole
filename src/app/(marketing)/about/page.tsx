@@ -52,7 +52,7 @@ export default function AboutPage() {
 
       <Section>
         <Container size="narrow">
-          <div className="measure text-ink-muted mx-auto flex flex-col gap-5 text-base leading-relaxed">
+          <div className="measure text-mist mx-auto flex flex-col gap-5 text-base leading-relaxed">
             <p>
               After A/Ls, most Sri Lankan students face a gap of twelve to eighteen months
               before university placement — and for many, a place never comes at all. That
@@ -71,7 +71,7 @@ export default function AboutPage() {
               Neither is built for a student in Matara or Vavuniya with a laptop and a
               year to spare.
             </p>
-            <p className="text-ink font-medium">
+            <p className="text-onyx font-medium">
               {brand.name} is built for exactly that student: practical Cloud, DevOps and
               Software Engineering training that is affordable, online, and designed from
               the ground up for Sri Lankans starting from zero.
@@ -80,20 +80,25 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <Section className="border-line bg-surface border-y">
+      <Section className="border-hairline bg-surface border-y">
         <Container size="wide">
           <SectionHeading
+            size="xl"
             eyebrow="What we stand for"
             title="Four commitments we hold ourselves to"
+            eyebrowClassName="text-terracotta-600"
+            titleClassName="text-onyx"
           />
           <div className="mt-14 grid gap-5 sm:grid-cols-2">
             {values.map((value) => (
-              <Card key={value.title} className="p-7">
-                <span className="grid size-11 place-items-center rounded-xl bg-teal-50 text-teal-600">
+              <Card key={value.title} className="border-hairline rounded-none p-7">
+                <span className="bg-terracotta-50 text-terracotta-600 grid size-11 place-items-center rounded-none">
                   <value.icon className="size-5" aria-hidden="true" />
                 </span>
-                <h3 className="font-display mt-5 text-lg font-semibold">{value.title}</h3>
-                <p className="text-ink-muted mt-2 text-sm leading-relaxed">
+                <h3 className="font-display text-onyx mt-5 text-lg font-semibold">
+                  {value.title}
+                </h3>
+                <p className="text-mist mt-2 text-sm leading-relaxed">
                   {value.description}
                 </p>
               </Card>
@@ -102,21 +107,30 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <Section>
+      <Section className="bg-cream">
         <Container size="narrow">
           <div className="text-center">
-            <h2 className="font-display text-2xl font-semibold sm:text-3xl">
+            <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
               Want to talk to us?
             </h2>
-            <p className="text-ink-muted mx-auto mt-4 max-w-xl text-base leading-relaxed">
+            <p className="text-mist mx-auto mt-4 max-w-xl text-base leading-relaxed">
               Whether you are a student deciding where to start, or an employer looking
               for trained juniors, we would like to hear from you.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg">
+              <Button
+                asChild
+                size="lg"
+                className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
+              >
                 <Link href="/contact">Contact us</Link>
               </Button>
-              <Button asChild variant="secondary" size="lg">
+              <Button
+                asChild
+                variant="secondary"
+                size="lg"
+                className="border-onyx text-onyx hover:bg-onyx rounded-none hover:text-white"
+              >
                 <Link href="/courses">Browse courses</Link>
               </Button>
             </div>

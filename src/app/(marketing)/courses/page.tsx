@@ -62,11 +62,11 @@ export default async function CoursesPage({
       <Section className="py-12 sm:py-16">
         <Container size="wide">
           {courses.length === 0 ? (
-            <div className="border-line bg-surface rounded-2xl border px-6 py-16 text-center">
-              <h2 className="font-display text-xl font-semibold">
+            <div className="border-hairline bg-surface rounded-none border px-6 py-16 text-center">
+              <h2 className="font-display text-onyx text-xl font-semibold">
                 Courses are coming very soon
               </h2>
-              <p className="text-ink-muted mx-auto mt-3 max-w-md text-sm leading-relaxed">
+              <p className="text-mist mx-auto mt-3 max-w-md text-sm leading-relaxed">
                 We are putting the finishing touches on the first tracks. Create a free
                 account and we will let you know the moment they open.
               </p>
@@ -94,7 +94,7 @@ export default async function CoursesPage({
                 </FilterPill>
 
                 {categories.length > 0 ? (
-                  <span className="bg-line mx-1 h-5 w-px" aria-hidden="true" />
+                  <span className="bg-hairline mx-1 h-5 w-px" aria-hidden="true" />
                 ) : null}
 
                 {categories.map((category) => (
@@ -111,11 +111,11 @@ export default async function CoursesPage({
               </div>
 
               {filtered.length === 0 ? (
-                <p className="text-ink-muted mt-12 text-center text-sm">
+                <p className="text-mist mt-12 text-center text-sm">
                   No courses match these filters yet.{" "}
                   <Link
                     href="/courses"
-                    className="font-medium text-teal-600 hover:underline"
+                    className="text-terracotta-600 font-medium hover:underline"
                   >
                     Clear filters
                   </Link>
@@ -148,10 +148,11 @@ function FilterPill({
   return (
     <Link href={href} scroll={false}>
       <Badge
-        variant={active ? "solid" : "neutral"}
         className={cn(
-          "cursor-pointer px-3.5 py-1.5 text-[13px] transition-colors",
-          !active && "hover:border-teal-200 hover:text-teal-700",
+          "cursor-pointer rounded-none border-0 px-3.5 py-1.5 text-[13px] transition-colors",
+          active
+            ? "bg-onyx text-white"
+            : "bg-hairline/50 text-onyx-soft hover:bg-terracotta-50 hover:text-terracotta-600",
         )}
       >
         {children}

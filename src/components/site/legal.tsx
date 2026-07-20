@@ -23,19 +23,19 @@ export function LegalBody({
   });
 
   return (
-    <Section>
+    <Section className="bg-cream">
       <Container size="narrow">
-        <p className="text-ink-subtle text-sm">Last updated: {formatted}</p>
+        <p className="text-mist-soft text-sm">Last updated: {formatted}</p>
 
         <div
           className={cn(
             "mt-10 flex flex-col gap-8",
-            "[&_h2]:font-display [&_h2]:mt-4 [&_h2]:text-xl [&_h2]:font-semibold",
-            "[&_h3]:font-display [&_h3]:text-base [&_h3]:font-semibold",
-            "[&_p]:text-ink-muted [&_p]:text-[0.95rem] [&_p]:leading-relaxed",
-            "[&_li]:text-ink-muted [&_li]:text-[0.95rem] [&_li]:leading-relaxed",
+            "[&_h2]:font-display [&_h2]:text-onyx [&_h2]:mt-4 [&_h2]:text-xl [&_h2]:font-semibold",
+            "[&_h3]:font-display [&_h3]:text-onyx [&_h3]:text-base [&_h3]:font-semibold",
+            "[&_p]:text-mist [&_p]:text-[0.95rem] [&_p]:leading-relaxed",
+            "[&_li]:text-mist [&_li]:text-[0.95rem] [&_li]:leading-relaxed",
             "[&_ul]:flex [&_ul]:list-disc [&_ul]:flex-col [&_ul]:gap-2 [&_ul]:pl-5",
-            "[&_a]:font-medium [&_a]:text-teal-600 hover:[&_a]:underline",
+            "[&_a]:text-terracotta-600 [&_a]:font-medium hover:[&_a]:underline",
           )}
         >
           {children}
@@ -68,10 +68,10 @@ export function Clause({
  */
 export function DraftNotice() {
   return (
-    <aside className="border-info/20 bg-info-soft flex gap-3 rounded-2xl border p-5">
+    <aside className="border-info/20 bg-info-soft flex gap-3 rounded-none border p-5">
       <Info className="text-info mt-0.5 size-5 shrink-0" aria-hidden="true" />
-      <p className="text-ink-muted text-sm leading-relaxed">
-        <strong className="text-ink font-medium">Note for review:</strong> this document
+      <p className="text-mist text-sm leading-relaxed">
+        <strong className="text-onyx font-medium">Note for review:</strong> this document
         is a working draft written for a Sri Lankan online education service. It should be
         reviewed by a qualified attorney before launch, particularly the sections covering
         payments, refunds and personal data.

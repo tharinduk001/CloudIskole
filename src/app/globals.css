@@ -93,6 +93,24 @@
   --duration-fast: 120ms;
   --duration-base: 180ms;
   --duration-slow: 320ms;
+
+  /* --- Zuu — marketing theme --------------------------------------------
+     Scoped by convention to the (marketing) route group only. New token
+     names, never reused ones — admin/app/auth keep Ceylon Teal (teal/gold/
+     paper/ink above) completely untouched. Values matched directly from
+     zuucrew.ai's live computed styles, not approximated. */
+  --color-cream: #faf9f4;
+  --color-onyx: #0b0b0b;
+  --color-onyx-soft: #2a2a2a;
+  --color-mist: #767676;
+  --color-mist-soft: #b5b5b5;
+  --color-hairline: #e5e3dd;
+  --color-terracotta-50: #f7eae7;
+  --color-terracotta-400: #df6f62;
+  --color-terracotta-500: #d4564a;
+  --color-terracotta-600: #a63d32;
+  --color-terracotta-700: #7f2e26;
+  --color-mint-500: #34d399;
 }
 
 /* ==========================================================================
@@ -191,6 +209,17 @@
   .animate-in-up {
     animation: in-up var(--duration-slow) var(--ease-out-soft) both;
   }
+
+  /* Continuous horizontal scroll for the marketing tools strip. */
+  .animate-marquee {
+    animation: marquee 28s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }
 
 @keyframes in-up {
@@ -201,6 +230,15 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
