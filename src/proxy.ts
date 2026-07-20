@@ -30,8 +30,25 @@ function buildCsp(nonce: string, supabaseUrl: string, isDev: boolean): string {
   return [
     `default-src 'self'`,
     // 'strict-dynamic' lets Next's nonce'd bootstrap load its own chunks
-    // without us having to enumerate them. 'unsafe-eval' is dev-only: React
-    // uses eval to rebuild server stack traces for the error overlay.
+    // without us having to enumerate them.
+    //
+    // Tried dropping this to let statically-generated pages skip the nonce
+    // requirement (verifying via next.config.ts's experimental.sri hashes
+    // instead) — reverted. Even with SRI correctly matching, hydration still
+    // failed on every static page: React Server Components stream their
+    // payload via *inline* <script> tags on every page, which SRI's external-
+    // file hashing does not cover, and a static page has no nonce to give
+    // them either. They got silently blocked (no console error — a CSP
+    // violation on an inline script is logged differently than a network
+    // failure), so hydration never received its data. Proven by testing, not
+    // assumed: verified the click handler on the mobile nav button was
+    // permanently dead on every static page, in isolation, with SRI on and
+    // off. This is a genuine limitation of nonce-based CSP + streaming RSC
+    // in this Next.js/Turbopack version, not something the SRI docs page
+    // actually solves for inline payload scripts.
+    //
+    // 'unsafe-eval' is dev-only: React uses eval to rebuild server stack
+    // traces for the error overlay.
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
     `style-src 'self' 'nonce-${nonce}'`,
     // Radix and other primitives set inline `style` attributes to drive

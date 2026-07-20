@@ -10,11 +10,13 @@ import { SiteHeader } from "@/components/site/site-header";
  * generate as static HTML, but nonce-based CSP (src/proxy.ts) cannot be
  * injected into a page prerendered at build time — Next.js's own docs are
  * explicit that a static page has no request/response headers to read the
- * nonce from. Left static, every script on these pages was silently blocked
- * in production: the mobile nav menu did nothing, and the contact form
- * never became interactive. Correctness wins over the CDN-caching win here;
- * see LAUNCH.md for the (currently unused) SRI-based alternative that would
- * restore static generation without weakening the CSP.
+ * nonce from. Tried the documented SRI-based alternative (build-time
+ * integrity hashes instead of a nonce) and reverted it after testing showed
+ * it doesn't cover the inline scripts Next uses to stream RSC payloads —
+ * see the long comment in proxy.ts's buildCsp for the full story. Left
+ * static, every script on these pages was silently blocked in production:
+ * the mobile nav menu did nothing, and the contact form never became
+ * interactive. Correctness wins over the CDN-caching win here.
  */
 export const dynamic = "force-dynamic";
 
