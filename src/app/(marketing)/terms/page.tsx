@@ -120,8 +120,8 @@ export default function TermsPage() {
 
         <Clause title="6. Intellectual property">
           <p>
-            All course material on the platform — videos, written lessons, slides,
-            exercises and assessments — remains our property or that of its licensors.
+            All course material on the platform - videos, written lessons, slides,
+            exercises and assessments - remains our property or that of its licensors.
             Your enrolment gives you a personal, non-transferable licence to use that
             material for your own learning. It does not transfer ownership or permit
             redistribution.
@@ -134,7 +134,7 @@ export default function TermsPage() {
 
         <Clause title="7. Badges">
           <p>
-            Badges confirm that you met a specific achievement — completing a course,
+            Badges confirm that you met a specific achievement - completing a course,
             passing an exam, maintaining a streak. They are not an academic qualification,
             are not accredited by any university or government body, and do not guarantee
             employment. We may revoke a badge obtained through cheating or

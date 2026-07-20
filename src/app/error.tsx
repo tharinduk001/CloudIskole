@@ -32,7 +32,7 @@ export default function ErrorBoundary({
         Something went wrong
       </h1>
       <p className="text-ink-muted mt-3 max-w-md text-sm leading-relaxed">
-        This one is on us, not you. Try again — if it keeps happening, let us know and we
+        This one is on us, not you. Try again - if it keeps happening, let us know and we
         will fix it.
       </p>
 

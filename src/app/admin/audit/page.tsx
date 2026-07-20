@@ -17,7 +17,7 @@ export default async function AdminAuditPage() {
       <div>
         <h1 className="font-display text-2xl font-semibold">Payment events</h1>
         <p className="text-ink-muted mt-1 text-sm">
-          The append-only financial log — every order transition, success or failure.
+          The append-only financial log - every order transition, success or failure.
         </p>
         <Card className="mt-4 overflow-hidden">
           <table className="w-full text-sm">
@@ -37,7 +37,7 @@ export default async function AdminAuditPage() {
                     {new Date(event.created_at).toLocaleString("en-LK")}
                   </td>
                   <td className="px-4 py-2.5 font-mono text-xs text-teal-700">
-                    {event.order?.reference_code ?? "—"}
+                    {event.order?.reference_code ?? "-"}
                   </td>
                   <td className="px-4 py-2.5">
                     <Badge size="sm" variant="neutral">
@@ -45,10 +45,10 @@ export default async function AdminAuditPage() {
                     </Badge>
                   </td>
                   <td className="text-ink-muted px-4 py-2.5 text-xs">
-                    {event.from_status ?? "—"} &rarr; {event.to_status ?? "—"}
+                    {event.from_status ?? "-"} &rarr; {event.to_status ?? "-"}
                   </td>
                   <td className="text-ink-muted px-4 py-2.5 text-xs">
-                    {event.note ?? "—"}
+                    {event.note ?? "-"}
                   </td>
                 </tr>
               ))}
@@ -67,7 +67,7 @@ export default async function AdminAuditPage() {
       <div>
         <h2 className="font-display text-2xl font-semibold">Audit log</h2>
         <p className="text-ink-muted mt-1 text-sm">
-          Non-payment administrative actions — role changes, publishing, enrollment
+          Non-payment administrative actions - role changes, publishing, enrollment
           grants.
         </p>
         <Card className="mt-4 overflow-hidden">
@@ -96,7 +96,7 @@ export default async function AdminAuditPage() {
                     {log.entity_id ? ` · ${log.entity_id.slice(0, 8)}` : ""}
                   </td>
                   <td className="text-ink-subtle px-4 py-2.5 font-mono text-xs">
-                    {log.after ? JSON.stringify(log.after) : "—"}
+                    {log.after ? JSON.stringify(log.after) : "-"}
                   </td>
                 </tr>
               ))}

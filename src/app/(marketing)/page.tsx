@@ -82,7 +82,7 @@ function Hero() {
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
           <Badge className="animate-in-up bg-terracotta-50 text-terracotta-600 rounded-none border-0">
             <Sparkles aria-hidden="true" />
-            Free courses open now — no card needed
+            Free courses open now - no card needed
           </Badge>
 
           <h1 className="animate-in-up font-display text-onyx mt-6 text-5xl leading-[0.98] tracking-tight sm:text-7xl lg:text-8xl">

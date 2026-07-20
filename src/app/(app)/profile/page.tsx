@@ -48,7 +48,7 @@ export default async function ProfilePage() {
           <h2 className="font-display text-lg font-semibold">Badges</h2>
           {gamification.badges.length === 0 ? (
             <p className="text-ink-muted mt-3 text-sm">
-              No badges yet — finish a course or build a streak to earn your first one.
+              No badges yet - finish a course or build a streak to earn your first one.
             </p>
           ) : (
             <div className="mt-4 grid gap-4 sm:grid-cols-2">

@@ -74,7 +74,7 @@ let serverCache: ServerEnv | null = null;
 export function serverEnv(): ServerEnv {
   if (typeof window !== "undefined") {
     throw new Error(
-      "serverEnv() was called in the browser. This would leak secrets — " +
+      "serverEnv() was called in the browser. This would leak secrets - " +
         "import it only from server components, server actions, or route handlers.",
     );
   }

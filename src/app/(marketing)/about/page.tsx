@@ -19,7 +19,7 @@ const values = [
     icon: Scale,
     title: "Priced for students here",
     description:
-      "Our fees are set in rupees against what a Sri Lankan student can actually afford — never converted from a dollar price built for another market.",
+      "Our fees are set in rupees against what a Sri Lankan student can actually afford - never converted from a dollar price built for another market.",
   },
   {
     icon: Compass,
@@ -55,13 +55,13 @@ export default function AboutPage() {
           <div className="measure text-mist mx-auto flex flex-col gap-5 text-base leading-relaxed">
             <p>
               After A/Ls, most Sri Lankan students face a gap of twelve to eighteen months
-              before university placement — and for many, a place never comes at all. That
+              before university placement - and for many, a place never comes at all. That
               time is usually spent waiting rather than building.
             </p>
             <p>
               Meanwhile, the local tech industry has a genuine shortage of Cloud and
               DevOps engineers. These are among the best-paid entry points into the field,
-              and unlike many careers, they do not require a degree to begin — they
+              and unlike many careers, they do not require a degree to begin - they
               require demonstrable skill.
             </p>
             <p>

@@ -24,7 +24,7 @@ function LeaderboardTable({
   if (entries.length === 0) {
     return (
       <p className="text-mist p-8 text-center text-sm">
-        No one is ranked yet — be the first to opt in from your profile.
+        No one is ranked yet - be the first to opt in from your profile.
       </p>
     );
   }

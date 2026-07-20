@@ -32,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(clientEnv.NEXT_PUBLIC_SITE_URL),
   title: {
-    default: `${brand.name} — ${brand.tagline}`,
+    default: `${brand.name} - ${brand.tagline}`,
     template: `%s · ${brand.name}`,
   },
   description: brand.description,
@@ -50,13 +50,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: brand.locale,
     siteName: brand.name,
-    title: `${brand.name} — ${brand.tagline}`,
+    title: `${brand.name} - ${brand.tagline}`,
     description: brand.description,
     url: clientEnv.NEXT_PUBLIC_SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${brand.name} — ${brand.tagline}`,
+    title: `${brand.name} - ${brand.tagline}`,
     description: brand.description,
   },
   robots: {

@@ -35,21 +35,21 @@ export default function PrivacyPage() {
           <h3>Information you give us</h3>
           <ul>
             <li>
-              <strong>Account details</strong> — your name, email address and mobile
+              <strong>Account details</strong> - your name, email address and mobile
               number when you register.
             </li>
             <li>
-              <strong>Profile details</strong> — optional information such as your
+              <strong>Profile details</strong> - optional information such as your
               district, profile photo and the year you sat your A/Ls.
             </li>
             <li>
-              <strong>Payment records</strong> — for bank transfers, the deposit slip you
+              <strong>Payment records</strong> - for bank transfers, the deposit slip you
               upload and the reference number issued to you. We do not collect or store
               card numbers; when card payments are introduced they will be handled
               entirely by a licensed payment provider.
             </li>
             <li>
-              <strong>Messages</strong> — anything you send us through the contact form or
+              <strong>Messages</strong> - anything you send us through the contact form or
               by email.
             </li>
           </ul>
@@ -82,7 +82,7 @@ export default function PrivacyPage() {
             </li>
             <li>To record your progress, marks, badges and leaderboard position.</li>
             <li>
-              To send you service messages by email and SMS — registration confirmations,
+              To send you service messages by email and SMS - registration confirmations,
               enrolment confirmations, payment updates and session reminders.
             </li>
             <li>To verify and record payments, and to resolve payment disputes.</li>
@@ -98,24 +98,24 @@ export default function PrivacyPage() {
         <Clause title="4. Your choices">
           <ul>
             <li>
-              <strong>Leaderboard visibility</strong> — appearing on the public
+              <strong>Leaderboard visibility</strong> - appearing on the public
               leaderboard is optional and off unless you choose it. You can change this at
               any time in your profile.
             </li>
             <li>
-              <strong>Marketing messages</strong> — you may opt out at any time. Essential
+              <strong>Marketing messages</strong> - you may opt out at any time. Essential
               service messages about your account, enrolments and payments will still be
               sent.
             </li>
             <li>
-              <strong>Access, correction and deletion</strong> — you may request a copy of
+              <strong>Access, correction and deletion</strong> - you may request a copy of
               your data, ask us to correct it, or ask us to delete your account by writing
               to <a href={`mailto:${brand.contact.email}`}>{brand.contact.email}</a>.
             </li>
           </ul>
           <p>
-            Where we must keep records to meet financial or legal obligations — payment
-            and audit records in particular — we will retain those even after an account
+            Where we must keep records to meet financial or legal obligations - payment
+            and audit records in particular - we will retain those even after an account
             is closed, and will tell you when this applies.
           </p>
         </Clause>
@@ -127,22 +127,22 @@ export default function PrivacyPage() {
           </p>
           <ul>
             <li>
-              <strong>Supabase</strong> — database, authentication and file storage.
+              <strong>Supabase</strong> - database, authentication and file storage.
             </li>
             <li>
-              <strong>Vercel</strong> — website hosting and delivery.
+              <strong>Vercel</strong> - website hosting and delivery.
             </li>
             <li>
-              <strong>Google</strong> — if you choose to sign in with a Google account.
+              <strong>Google</strong> - if you choose to sign in with a Google account.
             </li>
             <li>
-              <strong>Resend</strong> — sending transactional email.
+              <strong>Resend</strong> - sending transactional email.
             </li>
             <li>
-              <strong>text.lk</strong> — sending SMS messages within Sri Lanka.
+              <strong>text.lk</strong> - sending SMS messages within Sri Lanka.
             </li>
             <li>
-              <strong>YouTube</strong> — hosting and playing course videos.
+              <strong>YouTube</strong> - hosting and playing course videos.
             </li>
           </ul>
           <p>
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
 
         <Clause title="7. Cookies">
           <p>
-            We use cookies that are strictly necessary to run the service — principally to
+            We use cookies that are strictly necessary to run the service - principally to
             keep you signed in and to protect against cross-site request forgery. We do
             not use advertising or cross-site tracking cookies. Blocking essential cookies
             will prevent you from signing in.

@@ -132,5 +132,5 @@ export async function submitPaymentSlip(
 
   revalidatePath(`/checkout/${parsed.data.orderId}`);
 
-  return { status: "success", message: "Slip submitted — we'll review it shortly." };
+  return { status: "success", message: "Slip submitted - we'll review it shortly." };
 }

@@ -131,7 +131,7 @@ export function SessionForm({
       <Field
         label="Join URL"
         error={fieldErrors?.joinUrl}
-        hint="Zoom/Meet link — only shown to registered students once the session is live or starting soon"
+        hint="Zoom/Meet link - only shown to registered students once the session is live or starting soon"
       >
         {(props) => (
           <Input
@@ -161,7 +161,7 @@ export function SessionForm({
       <Field
         label="Cover image URL"
         error={fieldErrors?.coverImageUrl}
-        hint="Paste a Cloudinary link (https://res.cloudinary.com/...) — shown on the session card"
+        hint="Paste a Cloudinary link (https://res.cloudinary.com/...) - shown on the session card"
       >
         {(props) => (
           <Input
@@ -176,7 +176,7 @@ export function SessionForm({
 
       <Field
         label="Associated course"
-        hint="Optional — links this session from that course's page"
+        hint="Optional - links this session from that course's page"
       >
         {(props) => (
           <Select {...props} name="courseId" defaultValue={session?.course_id ?? ""}>

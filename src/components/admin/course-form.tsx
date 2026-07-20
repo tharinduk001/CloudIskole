@@ -69,7 +69,7 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
       <Field
         label="Cover image URL"
         error={fieldErrors?.thumbnailUrl}
-        hint="Paste a Cloudinary link (https://res.cloudinary.com/...) — shown on the course card and detail page"
+        hint="Paste a Cloudinary link (https://res.cloudinary.com/...) - shown on the course card and detail page"
       >
         {(props) => (
           <Input

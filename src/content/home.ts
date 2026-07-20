@@ -11,7 +11,7 @@ export const tracks = [
     icon: "cloud" as const,
     title: "Cloud Foundations",
     description:
-      "How the cloud actually works — compute, storage, networking and identity — using AWS free tier so you pay nothing to practise.",
+      "How the cloud actually works - compute, storage, networking and identity - using AWS free tier so you pay nothing to practise.",
     topics: ["AWS EC2 & S3", "VPC & networking", "IAM & security", "Billing & free tier"],
     level: "Beginner",
     duration: "6 weeks",
@@ -54,7 +54,7 @@ export const features = [
     icon: "wallet" as const,
     title: "Start free, always",
     description:
-      "Full courses at no cost, with paid tracks priced in rupees for Sri Lankan students — not converted from dollars.",
+      "Full courses at no cost, with paid tracks priced in rupees for Sri Lankan students - not converted from dollars.",
   },
   {
     icon: "users" as const,
@@ -72,7 +72,7 @@ export const features = [
     icon: "award" as const,
     title: "Badges that mean something",
     description:
-      "Earn badges as you learn — finish courses, build streaks, pass exams — and carry them with you as verifiable digital credentials.",
+      "Earn badges as you learn - finish courses, build streaks, pass exams - and carry them with you as verifiable digital credentials.",
   },
 ];
 
@@ -98,7 +98,7 @@ export const faqs = [
   {
     question: "Do I need any programming experience to start?",
     answer:
-      "No. The Cloud Foundations and Linux & Networking tracks assume you have never opened a terminal before. If you passed A/Ls in any stream — Maths, Bio, Commerce or Arts — you can follow along.",
+      "No. The Cloud Foundations and Linux & Networking tracks assume you have never opened a terminal before. If you passed A/Ls in any stream - Maths, Bio, Commerce or Arts - you can follow along.",
   },
   {
     question: "Is it really free?",
@@ -118,7 +118,7 @@ export const faqs = [
   {
     question: "Are the courses in Sinhala or English?",
     answer:
-      "English. Every cloud and DevOps tool, exam and job interview you will meet is in English, so we teach in it deliberately — but at a pace built for Sri Lankan students, not native speakers.",
+      "English. Every cloud and DevOps tool, exam and job interview you will meet is in English, so we teach in it deliberately - but at a pace built for Sri Lankan students, not native speakers.",
   },
   {
     question: "Will this actually help me get a job?",

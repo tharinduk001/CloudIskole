@@ -48,12 +48,12 @@ export default async function AdminOrderDetailPage({
           {order.bank_transfer ? (
             <>
               <dt className="text-ink-muted">Depositor</dt>
-              <dd className="text-ink">{order.bank_transfer.depositor_name ?? "—"}</dd>
+              <dd className="text-ink">{order.bank_transfer.depositor_name ?? "-"}</dd>
               <dt className="text-ink-muted">Declared amount</dt>
               <dd className="text-ink">
                 {order.bank_transfer.amount_declared_cents
                   ? formatLkr(order.bank_transfer.amount_declared_cents)
-                  : "—"}
+                  : "-"}
               </dd>
               <dt className="text-ink-muted">Slip</dt>
               <dd>

@@ -154,7 +154,7 @@ export function AuthPanel({ mode }: { mode: "sign-in" | "sign-up" }) {
               error={
                 sendState.status === "error" ? sendState.fieldErrors?.email : undefined
               }
-              hint="We'll email you a 6-digit code — no password to remember."
+              hint="We'll email you a 6-digit code - no password to remember."
             >
               {(props) => (
                 <Input

@@ -67,7 +67,7 @@ export function RegistrationControls({
           You&rsquo;re registered
           {isOpen ? (
             <span className="text-ink-subtle font-normal">
-              — the join link appears shortly before start
+              - the join link appears shortly before start
             </span>
           ) : null}
         </div>

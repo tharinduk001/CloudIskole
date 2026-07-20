@@ -62,7 +62,7 @@ export default async function AdminQuizzesPage() {
                   {scopeLabel[quiz.scope] ?? quiz.scope}
                 </td>
                 <td className="text-ink-muted px-4 py-3">
-                  {(quiz.course as { title: string } | null)?.title ?? "—"}
+                  {(quiz.course as { title: string } | null)?.title ?? "-"}
                 </td>
                 <td className="px-4 py-3">
                   <Badge variant={statusVariant[quiz.status]} size="sm">

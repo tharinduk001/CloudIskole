@@ -56,7 +56,7 @@ export default async function CoursesPage({
       <PageHeader
         eyebrow="Catalogue"
         title="Courses"
-        description="Free and paid tracks in Cloud, DevOps, Linux and Software Engineering — each one built to take you from zero to job-ready."
+        description="Free and paid tracks in Cloud, DevOps, Linux and Software Engineering - each one built to take you from zero to job-ready."
       />
 
       <Section className="py-12 sm:py-16">

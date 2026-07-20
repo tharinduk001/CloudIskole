@@ -21,7 +21,7 @@ const contactSchema = z.object({
     .string()
     .trim()
     .min(10, "Please give us a little more detail (at least 10 characters).")
-    .max(4000, "That message is too long — please keep it under 4000 characters."),
+    .max(4000, "That message is too long - please keep it under 4000 characters."),
   // Honeypot: a real person never fills a field they cannot see.
   website: z.string().max(0).optional().or(z.literal("")),
 });
@@ -59,7 +59,7 @@ export async function submitContactMessage(
   // Silently accept and discard bot submissions: telling a bot it failed just
   // teaches it to try again.
   if (parsed.data.website) {
-    return { status: "success", message: "Thanks — we'll be in touch soon." };
+    return { status: "success", message: "Thanks - we'll be in touch soon." };
   }
 
   const supabase = await createClient();
@@ -76,7 +76,7 @@ export async function submitContactMessage(
     return {
       status: "error",
       message:
-        "You've sent a few messages already — please wait a bit before sending another.",
+        "You've sent a few messages already - please wait a bit before sending another.",
     };
   }
 
@@ -103,6 +103,6 @@ export async function submitContactMessage(
 
   return {
     status: "success",
-    message: "Thanks — we've got your message and will reply within 2 working days.",
+    message: "Thanks - we've got your message and will reply within 2 working days.",
   };
 }

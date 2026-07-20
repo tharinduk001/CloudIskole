@@ -55,7 +55,7 @@ export default async function SessionsPage() {
           <SessionGroup
             title="Upcoming"
             sessions={upcoming}
-            empty="No sessions are scheduled yet — check back soon."
+            empty="No sessions are scheduled yet - check back soon."
           />
           <SessionGroup
             title="Completed"

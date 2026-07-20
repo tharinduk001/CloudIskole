@@ -46,7 +46,7 @@ export default async function CheckoutPage({
             <Card className="p-6 text-center">
               <CheckCircle2 className="mx-auto size-8 text-teal-600" aria-hidden="true" />
               <p className="text-ink mt-3 text-sm font-medium">
-                Payment confirmed — you&rsquo;re enrolled.
+                Payment confirmed - you&rsquo;re enrolled.
               </p>
               <Button asChild className="mt-4">
                 <Link href={`/courses/${order.course.slug}`}>Go to course</Link>
@@ -96,7 +96,7 @@ export default async function CheckoutPage({
                     Your slip is being reviewed.
                   </p>
                   <p className="text-ink-muted mt-1 text-xs">
-                    We&rsquo;ll email you once it&rsquo;s confirmed — usually within one
+                    We&rsquo;ll email you once it&rsquo;s confirmed - usually within one
                     business day.
                   </p>
                   {slipUrl ? (

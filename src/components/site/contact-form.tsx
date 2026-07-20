@@ -63,7 +63,7 @@ export function ContactForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
           label="Mobile number"
-          hint="Optional — helps us reply faster."
+          hint="Optional - helps us reply faster."
           error={fieldErrors?.phone}
         >
           {(props) => (

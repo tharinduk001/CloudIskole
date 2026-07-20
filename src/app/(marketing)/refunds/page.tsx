@@ -30,13 +30,13 @@ export default function RefundsPage() {
             that, refunds are considered case by case.
           </p>
           <p>
-            Because our courses are digital, there is nothing to physically return —
+            Because our courses are digital, there is nothing to physically return -
             &ldquo;returns&rdquo; here means withdrawal from a course and removal of your
             access to it.
           </p>
         </Clause>
 
-        <Clause title="2. Full refund — no questions asked">
+        <Clause title="2. Full refund - no questions asked">
           <p>You are entitled to a full refund when all of the following are true:</p>
           <ul>
             <li>
@@ -47,7 +47,7 @@ export default function RefundsPage() {
           </ul>
         </Clause>
 
-        <Clause title="3. Full refund — regardless of time or progress">
+        <Clause title="3. Full refund - regardless of time or progress">
           <p>We will refund you in full, whatever your progress, if:</p>
           <ul>
             <li>We cancel a course or fail to deliver the material advertised.</li>
@@ -73,7 +73,7 @@ export default function RefundsPage() {
               and none of the circumstances in section 3 apply.
             </li>
             <li>More than 30 days have passed since enrolment.</li>
-            <li>Free courses — nothing was paid, so there is nothing to refund.</li>
+            <li>Free courses - nothing was paid, so there is nothing to refund.</li>
             <li>
               Your account was terminated for breaching our{" "}
               <Link href="/terms">terms &amp; conditions</Link>, for example by sharing
