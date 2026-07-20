@@ -1,42 +1,17 @@
-import Image from "next/image";
-
 import { cn } from "@/lib/utils";
 import { brand } from "@/lib/brand";
 
-/** The icon-only mark, cropped tight from the full lockup artwork. */
-export function LogoMark({ className }: { className?: string }) {
+/** Text-only wordmark. Used in the header, footer, auth screens and admin. */
+export function Logo({ className }: { className?: string }) {
   return (
-    <Image
-      src="/logo/favikon.png"
-      alt={`${brand.name} logo`}
-      width={260}
-      height={257}
-      priority
-      className={cn("size-9 object-contain", className)}
-    />
-  );
-}
-
-/** Mark plus wordmark. Used in the header, footer and auth screens. */
-export function Logo({
-  className,
-  showWordmark = true,
-}: {
-  className?: string;
-  showWordmark?: boolean;
-}) {
-  if (!showWordmark) {
-    return <LogoMark className={className} />;
-  }
-
-  return (
-    <Image
-      src="/logo/logo-cropped.png"
-      alt={brand.name}
-      width={868}
-      height={220}
-      priority
-      className={cn("h-10 w-auto object-contain", className)}
-    />
+    <span
+      className={cn(
+        "font-display text-ink text-[1.35rem] leading-none font-semibold tracking-tight",
+        className,
+      )}
+    >
+      {brand.nameParts.first}
+      <span className="text-teal-600">{brand.nameParts.second}</span>
+    </span>
   );
 }
