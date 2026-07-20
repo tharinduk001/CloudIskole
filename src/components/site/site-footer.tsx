@@ -13,8 +13,8 @@ export function SiteFooter() {
   return (
     <footer className="border-hairline bg-cream relative mt-auto overflow-hidden border-t">
       <Liyawel
-        strokeClassName="stroke-onyx"
-        className="pointer-events-none absolute -right-16 -bottom-20 size-80 opacity-[0.045]"
+        strokeClassName="stroke-terracotta-600"
+        className="pointer-events-none absolute -right-16 -bottom-20 size-80 opacity-[0.06]"
       />
 
       <Container size="wide" className="relative py-14 lg:py-16">

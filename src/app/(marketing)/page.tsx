@@ -11,6 +11,7 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Liyawel } from "@/components/brand/liyawel";
@@ -61,16 +62,23 @@ export default function HomePage() {
 function Hero() {
   return (
     <section className="bg-cream relative overflow-hidden">
-      <Liyawel
-        strokeClassName="stroke-onyx"
-        className="absolute -top-24 -left-32 size-[34rem] opacity-[0.05]"
-      />
-      <Liyawel
-        strokeClassName="stroke-onyx"
-        className="absolute -right-40 -bottom-40 size-[38rem] -scale-x-100 opacity-[0.04]"
-      />
+      <div className="absolute inset-0" aria-hidden="true">
+        <Image
+          src="/backgrounds/mural-hero.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={60}
+          className="object-cover object-bottom opacity-[0.22]"
+        />
+        <div className="from-cream via-cream/80 to-cream/95 absolute inset-0 bg-gradient-to-b" />
+      </div>
 
-      <Container size="wide" className="relative pt-16 pb-20 sm:pt-24 lg:pt-28 lg:pb-28">
+      <Container
+        size="wide"
+        className="relative z-10 pt-16 pb-20 sm:pt-24 lg:pt-28 lg:pb-28"
+      >
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
           <Badge className="animate-in-up bg-terracotta-50 text-terracotta-600 rounded-none border-0">
             <Sparkles aria-hidden="true" />
@@ -356,7 +364,11 @@ function FinalCta() {
           />
 
           <div className="relative mx-auto max-w-2xl">
-            <h2 className="font-display text-4xl leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <span
+              className="bg-mural-gold-400 mx-auto block h-0.5 w-14"
+              aria-hidden="true"
+            />
+            <h2 className="font-display mt-6 text-4xl leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
               Your A/L results do not decide your career. Your skills do.
             </h2>
             <p className="mt-5 text-base leading-relaxed text-white/70 sm:text-lg">

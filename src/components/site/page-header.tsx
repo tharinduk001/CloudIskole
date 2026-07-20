@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Liyawel } from "@/components/brand/liyawel";
 import { Container } from "@/components/ui/layout";
 
@@ -13,11 +15,25 @@ export function PageHeader({
 }) {
   return (
     <section className="bg-cream border-hairline relative overflow-hidden border-b">
+      <div
+        className="absolute inset-y-0 right-0 hidden w-1/2 md:block"
+        aria-hidden="true"
+      >
+        <Image
+          src="/backgrounds/mural-hero.jpg"
+          alt=""
+          fill
+          sizes="50vw"
+          quality={50}
+          className="object-cover object-[85%_30%] opacity-[0.14]"
+        />
+        <div className="from-cream to-cream/0 absolute inset-0 bg-gradient-to-r" />
+      </div>
       <Liyawel
-        strokeClassName="stroke-onyx"
-        className="absolute -top-20 -right-24 size-96 opacity-[0.05]"
+        strokeClassName="stroke-terracotta-600"
+        className="absolute -top-20 -right-24 size-96 opacity-[0.06]"
       />
-      <Container size="wide" className="relative py-16 sm:py-20">
+      <Container size="wide" className="relative z-10 py-16 sm:py-20">
         <div className="max-w-3xl">
           {eyebrow ? (
             <span className="text-terracotta-600 text-xs font-semibold tracking-[0.14em] uppercase">

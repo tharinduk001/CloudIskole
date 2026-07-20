@@ -44,6 +44,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
     formats: ["image/avif", "image/webp"],
+    // Default is [75]; the mural background images use lower qualities since
+    // they're decorative and heavily faded, so the extra detail is wasted bytes.
+    qualities: [50, 60, 75],
   },
 
   async headers() {

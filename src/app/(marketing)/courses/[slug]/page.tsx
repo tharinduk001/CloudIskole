@@ -75,8 +75,8 @@ export default async function CourseDetailPage({
     <>
       <section className="bg-cream border-hairline relative overflow-hidden border-b">
         <Liyawel
-          strokeClassName="stroke-onyx"
-          className="absolute -top-24 -right-28 size-96 opacity-[0.05]"
+          strokeClassName="stroke-terracotta-600"
+          className="absolute -top-24 -right-28 size-96 opacity-[0.06]"
         />
         <Container size="wide" className="relative py-14 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">
