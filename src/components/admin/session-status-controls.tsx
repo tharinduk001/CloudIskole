@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -34,6 +35,9 @@ export function SessionStatusControls({
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  // Tracks which step triggered the transition, so only that button shows a
+  // spinner — `pending` alone can't tell the buttons apart.
+  const [pendingTo, setPendingTo] = useState<SessionStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const steps = nextSteps[status] ?? [];
@@ -43,6 +47,7 @@ export function SessionStatusControls({
 
   function go(to: SessionStatus) {
     setError(null);
+    setPendingTo(to);
     startTransition(async () => {
       const result = await setSessionStatus(sessionId, status, to);
       if (result.status === "error") {
@@ -65,6 +70,9 @@ export function SessionStatusControls({
             disabled={pending}
             onClick={() => go(step.to)}
           >
+            {pending && pendingTo === step.to ? (
+              <Loader2 className="animate-spin" aria-hidden="true" />
+            ) : null}
             {step.label}
           </Button>
         ))}

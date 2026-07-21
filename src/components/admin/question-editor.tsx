@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Circle, Plus } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, Plus } from "lucide-react";
 import * as React from "react";
 import { useActionState } from "react";
 
@@ -84,6 +84,7 @@ export function QuestionEditor({
           </Field>
         </div>
         <Button type="submit" size="sm" disabled={pending} className="self-start">
+          {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
           Save question
         </Button>
         {state.status === "error" ? (

@@ -1,11 +1,40 @@
-import { LogOut, ShieldCheck } from "lucide-react";
+"use client";
+
+import { Loader2, LogOut, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useFormStatus } from "react-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth/actions";
 import type { Profile } from "@/lib/data/auth";
+
+/**
+ * `useFormStatus` must run in a component rendered *inside* the `<form>`, not
+ * the component that renders the form itself — hence this being split out.
+ * `signOut` takes no args and never resolves (it redirects), so it can't go
+ * through `useActionState`; this is the correct way to get a pending state
+ * out of a bare server-action form.
+ */
+function SignOutButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      variant="ghost"
+      size="icon"
+      aria-label="Sign out"
+      disabled={pending}
+    >
+      {pending ? (
+        <Loader2 className="animate-spin" aria-hidden="true" />
+      ) : (
+        <LogOut aria-hidden="true" />
+      )}
+    </Button>
+  );
+}
 
 /**
  * Only the columns this menu actually renders. Kept narrow deliberately: the
@@ -77,9 +106,7 @@ export function UserMenu({ profile }: { profile: HeaderProfile }) {
       ) : null}
 
       <form action={signOut}>
-        <Button type="submit" variant="ghost" size="icon" aria-label="Sign out">
-          <LogOut aria-hidden="true" />
-        </Button>
+        <SignOutButton />
       </form>
     </div>
   );
