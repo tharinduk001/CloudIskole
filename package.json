@@ -15,7 +15,8 @@
     "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts",
     "db:test": "docker exec -i supabase_db_CloudIskole psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f - < supabase/tests/rls_test.sql",
     "db:reset": "supabase db reset",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:admin": "playwright test e2e/admin"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

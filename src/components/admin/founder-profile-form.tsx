@@ -13,7 +13,10 @@ export function FounderProfileForm({ profile }: { profile: FounderProfile }) {
   const [state, action, pending] = useActionState(updateFounderProfile, idleResult);
 
   return (
-    <div className="border-line bg-surface rounded-2xl border p-5">
+    <div
+      className="border-line bg-surface rounded-2xl border p-5"
+      data-testid="founder-profile-form"
+    >
       <h2 className="font-display text-lg font-semibold">Founder profile</h2>
       <form action={action} className="mt-4 flex flex-col gap-4">
         <div className="grid gap-4 sm:grid-cols-2">

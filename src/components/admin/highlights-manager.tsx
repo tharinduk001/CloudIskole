@@ -92,7 +92,10 @@ export function HighlightsManager({ highlights }: { highlights: Highlight[] }) {
   const [adding, setAdding] = React.useState(false);
 
   return (
-    <div className="border-line bg-surface rounded-2xl border p-5">
+    <div
+      className="border-line bg-surface rounded-2xl border p-5"
+      data-testid="highlights-manager"
+    >
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-semibold">Moments photos</h2>
         {!adding ? (

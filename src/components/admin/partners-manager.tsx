@@ -86,7 +86,10 @@ export function PartnersManager({ partners }: { partners: Partner[] }) {
   const [adding, setAdding] = React.useState(false);
 
   return (
-    <div className="border-line bg-surface rounded-2xl border p-5">
+    <div
+      className="border-line bg-surface rounded-2xl border p-5"
+      data-testid="partners-manager"
+    >
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-semibold">Partners</h2>
         {!adding ? (
