@@ -1,9 +1,11 @@
 import Image from "next/image";
 
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
-import { partners } from "@/content/home";
+import type { Partner } from "@/lib/data/site-content";
 
-export function PartnersMarquee() {
+export function PartnersMarquee({ partners }: { partners: Partner[] }) {
+  if (partners.length === 0) return null;
+
   return (
     <Section className="bg-cream">
       <Container size="wide">
@@ -27,11 +29,11 @@ export function PartnersMarquee() {
         >
           {[...partners, ...partners].map((partner, i) => (
             <div
-              key={`${partner.name}-${i}`}
+              key={`${partner.id}-${i}`}
               className="relative h-16 w-44 shrink-0 sm:h-20 sm:w-52"
             >
               <Image
-                src={partner.logoUrl}
+                src={partner.logo_url}
                 alt=""
                 fill
                 sizes="208px"

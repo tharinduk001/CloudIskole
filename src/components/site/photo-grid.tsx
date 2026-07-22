@@ -1,4 +1,4 @@
-import { momentPhotos } from "@/content/home";
+import type { Highlight } from "@/lib/data/site-content";
 
 /**
  * Subtle alternating tilt per tile keeps the collage from feeling too rigid
@@ -13,12 +13,14 @@ const TILTS = ["-rotate-1", "rotate-1", "rotate-0", "rotate-1", "-rotate-1", "ro
  * than next/image, since there is no single width/height to declare for
  * photos of mixed orientation from an external, admin-curated source.
  */
-export function PhotoGrid() {
+export function PhotoGrid({ photos }: { photos: Highlight[] }) {
+  if (photos.length === 0) return null;
+
   return (
     <div className="columns-2 gap-4 [column-fill:_balance] sm:columns-3">
-      {momentPhotos.map((photo, i) => (
+      {photos.map((photo, i) => (
         <div
-          key={photo.src}
+          key={photo.id}
           className={`border-hairline group relative mb-4 break-inside-avoid overflow-hidden rounded-xl border transition-transform duration-300 hover:z-10 hover:scale-[1.03] ${TILTS[i % TILTS.length]}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- mixed-orientation external photos, no fixed aspect ratio to declare */}

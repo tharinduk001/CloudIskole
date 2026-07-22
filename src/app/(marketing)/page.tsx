@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
 import { faqs, features, steps } from "@/content/home";
+import { getHighlights, getPartners, type Highlight } from "@/lib/data/site-content";
 
 const featureIcons: Record<(typeof features)[number]["icon"], LucideIcon> = {
   wallet: Wallet,
@@ -33,15 +34,17 @@ const featureIcons: Record<(typeof features)[number]["icon"], LucideIcon> = {
   award: Award,
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [partners, highlights] = await Promise.all([getPartners(), getHighlights()]);
+
   return (
     <>
       <Hero />
       <ToolMarquee />
-      <PartnersMarquee />
+      <PartnersMarquee partners={partners} />
       <Features />
       <HowItWorks />
-      <Moments />
+      <Moments photos={highlights} />
       <Faq />
       <FinalCta />
     </>
@@ -173,7 +176,9 @@ function Features() {
 
 /* -------------------------------------------------------------------------- */
 
-function Moments() {
+function Moments({ photos }: { photos: Highlight[] }) {
+  if (photos.length === 0) return null;
+
   return (
     <Section className="bg-cream">
       <Container size="wide">
@@ -186,7 +191,7 @@ function Moments() {
           titleClassName="text-onyx"
         />
         <div className="mt-14">
-          <PhotoGrid />
+          <PhotoGrid photos={photos} />
         </div>
       </Container>
     </Section>

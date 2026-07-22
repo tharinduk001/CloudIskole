@@ -413,6 +413,141 @@ export type Database = {
           },
         ]
       }
+      founder_certifications: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      founder_education: {
+        Row: {
+          created_at: string
+          detail: string
+          id: string
+          institution: string
+          period: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          detail: string
+          id?: string
+          institution: string
+          period: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string
+          id?: string
+          institution?: string
+          period?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      founder_experience: {
+        Row: {
+          created_at: string
+          id: string
+          org: string
+          period: string
+          role_title: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          org: string
+          period: string
+          role_title: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          org?: string
+          period?: string
+          role_title?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      founder_profile: {
+        Row: {
+          bio: string
+          id: number
+          name: string
+          photo_url: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          bio?: string
+          id?: number
+          name?: string
+          photo_url?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          bio?: string
+          id?: number
+          name?: string
+          photo_url?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      highlights: {
+        Row: {
+          alt: string
+          created_at: string
+          id: string
+          sort_order: number
+          src: string
+          updated_at: string
+        }
+        Insert: {
+          alt: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          src: string
+          updated_at?: string
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          src?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string | null
@@ -729,6 +864,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      partners: {
+        Row: {
+          created_at: string
+          id: string
+          logo_url: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo_url: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo_url?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       payment_events: {
         Row: {

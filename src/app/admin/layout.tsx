@@ -2,6 +2,7 @@ import {
   Award,
   BookOpen,
   CalendarDays,
+  Images,
   LayoutDashboard,
   ListChecks,
   ReceiptText,
@@ -20,6 +21,7 @@ const navItems = [
   { href: "/admin/quizzes", label: "Quizzes", icon: ListChecks },
   { href: "/admin/sessions", label: "Sessions", icon: CalendarDays },
   { href: "/admin/badges", label: "Badges", icon: Award },
+  { href: "/admin/site-content", label: "Site content", icon: Images },
   { href: "/admin/audit", label: "Audit & payments", icon: ScrollText },
 ];
 

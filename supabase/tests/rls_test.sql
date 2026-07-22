@@ -1445,6 +1445,119 @@ reset role;
 rollback to savepoint s16;
 
 -- ===========================================================================
+-- 17 · Site content (partners, highlights, founder profile)
+-- ===========================================================================
+
+savepoint s17;
+
+insert into public.partners (id, name, logo_url, sort_order) values
+  ('dddddddd-0000-4000-8000-000000000001', 'Test Partner',
+   'https://res.cloudinary.com/dopkcplb3/image/upload/test.png', 0);
+
+insert into public.highlights (id, src, alt, sort_order) values
+  ('eeeeeeee-0000-4000-8000-000000000001',
+   'https://res.cloudinary.com/dopkcplb3/image/upload/test.jpg', 'Test photo', 0);
+
+insert into public.founder_education (id, period, institution, detail, sort_order) values
+  ('ffffffff-0000-4000-8000-000000000001', '2020', 'Test University', 'Test degree', 0);
+
+insert into public.founder_experience (id, period, role_title, org, sort_order) values
+  ('11111111-0000-4000-8000-000000000001', '2020', 'Test Role', 'Test Org', 0);
+
+insert into public.founder_certifications (id, label, sort_order) values
+  ('22222222-0000-4000-8000-000000000001', 'Test Certification', 0);
+
+select tests.act_as_anon();
+
+select tests.ok(
+  (select count(*) from public.partners where id::text like 'dddddddd-%') = 1,
+  'anon reads partners'
+);
+select tests.ok(
+  (select count(*) from public.highlights where id::text like 'eeeeeeee-%') = 1,
+  'anon reads highlights'
+);
+select tests.ok(
+  (select name from public.founder_profile where id = 1) = 'Tharindu Kalhara',
+  'anon reads the founder profile singleton'
+);
+select tests.ok(
+  (select count(*) from public.founder_education where id::text like 'ffffffff-%') = 1,
+  'anon reads founder education entries'
+);
+select tests.ok(
+  (select count(*) from public.founder_experience where id::text like '11111111-%') = 1,
+  'anon reads founder experience entries'
+);
+select tests.ok(
+  (select count(*) from public.founder_certifications where id::text like '22222222-%') = 1,
+  'anon reads founder certifications'
+);
+
+select tests.must_fail(
+  $$insert into public.partners (name, logo_url)
+    values ('Rogue Partner', 'https://res.cloudinary.com/dopkcplb3/image/upload/x.png')$$,
+  'anon cannot insert a partner'
+);
+select tests.must_fail(
+  $$update public.founder_profile set name = 'Hijacked' where id = 1$$,
+  'anon cannot update the founder profile'
+);
+
+select tests.act_as(:'alice');
+
+select tests.must_fail(
+  $$insert into public.highlights (src, alt)
+    values ('https://res.cloudinary.com/dopkcplb3/image/upload/x.jpg', 'x')$$,
+  'a student cannot insert a highlight'
+);
+-- UPDATE and DELETE are USING-clause filtered, not WITH CHECK-rejected, so a
+-- blocked one of these isn't a raised error - it's RLS silently matching zero
+-- rows, same shape as the session_registrations attendance case further up
+-- this file. INSERT above raises because it's WITH CHECK that fails it.
+update public.founder_profile set name = 'Hijacked' where id = 1;
+delete from public.founder_certifications
+  where id = '22222222-0000-4000-8000-000000000001';
+
+select tests.act_as(:'admin');
+
+select tests.ok(
+  (select name from public.founder_profile where id = 1) <> 'Hijacked',
+  'a student cannot update the founder profile - the update above silently matched zero rows'
+);
+select tests.ok(
+  (select count(*) from public.founder_certifications
+   where id = '22222222-0000-4000-8000-000000000001') = 1,
+  'a student cannot delete a founder certification - the delete above silently matched zero rows'
+);
+
+update public.partners set name = 'Renamed Partner'
+  where id = 'dddddddd-0000-4000-8000-000000000001';
+select tests.ok(
+  (select name from public.partners where id = 'dddddddd-0000-4000-8000-000000000001')
+    = 'Renamed Partner',
+  'an admin can update a partner'
+);
+
+update public.founder_profile set name = 'Admin Edited' where id = 1;
+select tests.ok(
+  (select name from public.founder_profile where id = 1) = 'Admin Edited',
+  'an admin can update the founder profile'
+);
+
+delete from public.founder_certifications
+  where id = '22222222-0000-4000-8000-000000000001';
+select tests.ok(
+  (select count(*) from public.founder_certifications
+   where id = '22222222-0000-4000-8000-000000000001') = 0,
+  'an admin can delete a founder certification'
+);
+
+reset role;
+
+rollback to savepoint s17;
+
+-- ===========================================================================
 -- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and

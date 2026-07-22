@@ -16,8 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
-import { founder } from "@/content/founder";
 import { brand } from "@/lib/brand";
+import { getFounderProfile, type FounderProfile } from "@/lib/data/site-content";
 
 export const metadata: Metadata = {
   title: "About us",
@@ -52,7 +52,9 @@ const values = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const founder = await getFounderProfile();
+
   return (
     <>
       <PageHeader
@@ -91,10 +93,10 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <FounderSection />
-      <EducationSection />
-      <ExperienceSection />
-      <CertificationsSection />
+      <FounderSection founder={founder} />
+      <EducationSection education={founder.education} />
+      <ExperienceSection experience={founder.experience} />
+      <CertificationsSection certifications={founder.certifications} />
 
       <Section className="bg-cream">
         <Container size="wide">
@@ -159,7 +161,9 @@ export default function AboutPage() {
 
 /* -------------------------------------------------------------------------- */
 
-function FounderSection() {
+function FounderSection({ founder }: { founder: FounderProfile }) {
+  const bioParagraphs = founder.bio.split("\n\n");
+
   return (
     <Section className="bg-cream">
       <Container size="wide">
@@ -175,7 +179,7 @@ function FounderSection() {
           <div>
             <div className="border-hairline relative aspect-[4/5] w-full max-w-sm overflow-hidden border">
               <Image
-                src={founder.photo}
+                src={founder.photo_url}
                 alt={founder.name}
                 fill
                 sizes="(min-width: 1024px) 24rem, 100vw"
@@ -189,7 +193,7 @@ function FounderSection() {
           </div>
 
           <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
-            {founder.bio.map((paragraph) => (
+            {bioParagraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
           </div>
@@ -201,7 +205,7 @@ function FounderSection() {
 
 /* -------------------------------------------------------------------------- */
 
-function EducationSection() {
+function EducationSection({ education }: { education: FounderProfile["education"] }) {
   return (
     <Section className="border-hairline bg-surface border-y">
       <Container size="narrow">
@@ -213,7 +217,7 @@ function EducationSection() {
         </div>
         <div className="mt-10">
           <Timeline
-            entries={founder.education.map((entry) => ({
+            entries={education.map((entry) => ({
               period: entry.period,
               title: entry.institution,
               subtitle: entry.detail,
@@ -227,7 +231,7 @@ function EducationSection() {
 
 /* -------------------------------------------------------------------------- */
 
-function ExperienceSection() {
+function ExperienceSection({ experience }: { experience: FounderProfile["experience"] }) {
   return (
     <Section className="bg-cream">
       <Container size="narrow">
@@ -239,9 +243,9 @@ function ExperienceSection() {
         </div>
         <div className="mt-10">
           <Timeline
-            entries={founder.experience.map((entry) => ({
+            entries={experience.map((entry) => ({
               period: entry.period,
-              title: entry.role,
+              title: entry.role_title,
               subtitle: entry.org,
             }))}
           />
@@ -253,7 +257,11 @@ function ExperienceSection() {
 
 /* -------------------------------------------------------------------------- */
 
-function CertificationsSection() {
+function CertificationsSection({
+  certifications,
+}: {
+  certifications: FounderProfile["certifications"];
+}) {
   return (
     <Section className="border-hairline bg-surface border-y">
       <Container size="narrow">
@@ -264,12 +272,12 @@ function CertificationsSection() {
           </h2>
         </div>
         <div className="mt-8 flex flex-wrap gap-2">
-          {founder.certifications.map((cert) => (
+          {certifications.map((cert) => (
             <Badge
-              key={cert}
+              key={cert.id}
               className="border-terracotta-400/40 bg-terracotta-50 text-terracotta-600 rounded-none border"
             >
-              {cert}
+              {cert.label}
             </Badge>
           ))}
         </div>
