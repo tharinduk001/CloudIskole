@@ -22,8 +22,10 @@ export const brand = {
   contact: {
     email: "hello@cloudiskole.lk",
     supportEmail: "support@cloudiskole.lk",
-    phone: "",
-    whatsapp: "",
+    // TODO: replace with the real business number before launch — this is a
+    // placeholder so the WhatsApp button on /contact has somewhere to point.
+    // E.164 format, no spaces (used to build the wa.me link directly).
+    whatsapp: "+94000000000",
   },
 
   social: {

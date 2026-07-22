@@ -11,6 +11,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Liyawel } from "@/components/brand/liyawel";
+import { Logo } from "@/components/brand/logo";
 import { PageHeader } from "@/components/site/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -63,31 +65,41 @@ export default async function AboutPage() {
       />
 
       <Section>
-        <Container size="narrow">
-          <div className="measure text-mist mx-auto flex flex-col gap-5 text-base leading-relaxed">
-            <p>
-              After A/Ls, most Sri Lankan students face a gap of twelve to eighteen months
-              before university placement - and for many, a place never comes at all. That
-              time is usually spent waiting rather than building.
-            </p>
-            <p>
-              Meanwhile, the local tech industry has a genuine shortage of Cloud and
-              DevOps engineers. These are among the best-paid entry points into the field,
-              and unlike many careers, they do not require a degree to begin - they
-              require demonstrable skill.
-            </p>
-            <p>
-              The problem is access. International platforms price their courses in
-              dollars and assume background knowledge that A/L students have not been
-              given. Local institutes are expensive and largely confined to Colombo.
-              Neither is built for a student in Matara or Vavuniya with a laptop and a
-              year to spare.
-            </p>
-            <p className="text-onyx font-medium">
-              {brand.name} is built for exactly that student: practical Cloud, DevOps and
-              Software Engineering training that is affordable, online, and designed from
-              the ground up for Sri Lankans starting from zero.
-            </p>
+        <Container size="wide">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:items-center lg:gap-16">
+            <div className="border-hairline bg-mural-wash relative flex aspect-[4/3] items-center justify-center overflow-hidden border lg:aspect-square">
+              <Liyawel
+                strokeClassName="stroke-terracotta-400"
+                className="absolute inset-0 m-auto size-2/3 opacity-40"
+              />
+              <Logo className="relative text-4xl sm:text-5xl" />
+            </div>
+
+            <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
+              <p>
+                After A/Ls, most Sri Lankan students face a gap of twelve to eighteen
+                months before university placement - and for many, a place never comes at
+                all. That time is usually spent waiting rather than building.
+              </p>
+              <p>
+                Meanwhile, the local tech industry has a genuine shortage of Cloud and
+                DevOps engineers. These are among the best-paid entry points into the
+                field, and unlike many careers, they do not require a degree to begin -
+                they require demonstrable skill.
+              </p>
+              <p>
+                The problem is access. International platforms price their courses in
+                dollars and assume background knowledge that A/L students have not been
+                given. Local institutes are expensive and largely confined to Colombo.
+                Neither is built for a student in Matara or Vavuniya with a laptop and a
+                year to spare.
+              </p>
+              <p className="text-onyx font-medium">
+                {brand.name} is built for exactly that student: practical Cloud, DevOps
+                and Software Engineering training that is affordable, online, and designed
+                from the ground up for Sri Lankans starting from zero.
+              </p>
+            </div>
           </div>
         </Container>
       </Section>
@@ -127,31 +139,45 @@ export default async function AboutPage() {
       </Section>
 
       <Section className="bg-cream">
-        <Container size="narrow">
-          <div className="text-center">
-            <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
-              Want to talk to us?
-            </h2>
-            <p className="text-mist mx-auto mt-4 max-w-xl text-base leading-relaxed">
-              Whether you are a student deciding where to start, or an employer looking
-              for trained juniors, we would like to hear from you.
-            </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button
-                asChild
-                size="lg"
-                className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
-              >
-                <Link href="/contact">Contact us</Link>
-              </Button>
-              <Button
-                asChild
-                variant="secondary"
-                size="lg"
-                className="border-onyx text-onyx hover:bg-onyx rounded-none hover:text-white"
-              >
-                <Link href="/courses">Browse courses</Link>
-              </Button>
+        <Container size="wide">
+          <div className="bg-onyx relative overflow-hidden px-6 py-16 text-center sm:px-12 lg:py-20">
+            <Liyawel
+              strokeClassName="stroke-white"
+              className="absolute -top-20 -left-20 size-96 opacity-[0.10]"
+            />
+            <Liyawel
+              strokeClassName="stroke-white"
+              className="absolute -right-24 -bottom-24 size-96 -scale-x-100 opacity-[0.08]"
+            />
+
+            <div className="relative mx-auto max-w-2xl">
+              <span
+                className="bg-mural-gold-400 mx-auto block h-0.5 w-14"
+                aria-hidden="true"
+              />
+              <h2 className="font-display mt-6 text-4xl leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Want to talk to us?
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-white/70 sm:text-lg">
+                Whether you are a student deciding where to start, or an employer looking
+                for trained juniors, we would like to hear from you.
+              </p>
+              <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-terracotta-500 hover:bg-terracotta-400 rounded-none text-white"
+                >
+                  <Link href="/contact">Contact us</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  className="rounded-none border border-white/25 bg-white/10 text-white hover:bg-white/20"
+                >
+                  <Link href="/courses">Browse courses</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </Container>
@@ -176,27 +202,29 @@ function FounderSection({ founder }: { founder: FounderProfile }) {
           titleClassName="text-onyx"
         />
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
-          <div>
-            <div className="border-hairline relative aspect-[4/5] w-full max-w-sm overflow-hidden border">
-              <Image
-                src={founder.photo_url}
-                alt={founder.name}
-                fill
-                sizes="(min-width: 1024px) 24rem, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <h3 className="font-display text-onyx mt-6 text-xl font-semibold">
-              {founder.name}
-            </h3>
-            <p className="text-mist mt-1 text-sm leading-relaxed">{founder.title}</p>
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:items-center lg:gap-14">
+          <div className="border-hairline relative aspect-[4/5] w-full max-w-sm overflow-hidden border">
+            <Image
+              src={founder.photo_url}
+              alt={founder.name}
+              fill
+              sizes="(min-width: 1024px) 24rem, 100vw"
+              className="object-cover"
+            />
           </div>
 
-          <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
-            {bioParagraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-            ))}
+          <div>
+            <h3 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
+              {founder.name}
+            </h3>
+            <p className="text-terracotta-600 mt-1 text-sm font-medium">
+              {founder.title}
+            </p>
+            <div className="measure text-mist mt-5 flex flex-col gap-4 text-base leading-relaxed">
+              {bioParagraphs.map((paragraph) => (
+                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+              ))}
+            </div>
           </div>
         </div>
       </Container>
