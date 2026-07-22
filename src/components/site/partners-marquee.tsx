@@ -3,12 +3,6 @@ import Image from "next/image";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
 import { partners } from "@/content/home";
 
-/**
- * The section itself stays on the site's cream/surface palette; only the
- * individual logo chips go dark. Several partner logos (notably the AWS
- * Community Builders mark) are supplied as light-on-transparent art meant
- * for a dark background and would wash out directly on a cream surface.
- */
 export function PartnersMarquee() {
   return (
     <Section className="bg-cream">
@@ -28,23 +22,21 @@ export function PartnersMarquee() {
         aria-label={`Partner and collaborating organisations: ${partners.map((p) => p.name).join(", ")}`}
       >
         <div
-          className="animate-marquee flex w-max items-center gap-4 py-6"
+          className="animate-marquee flex w-max items-center gap-16 py-8"
           aria-hidden="true"
         >
           {[...partners, ...partners].map((partner, i) => (
             <div
               key={`${partner.name}-${i}`}
-              className="bg-onyx flex h-20 w-48 shrink-0 items-center justify-center px-6"
+              className="relative h-16 w-44 shrink-0 sm:h-20 sm:w-52"
             >
-              <div className="relative h-10 w-32">
-                <Image
-                  src={partner.logoUrl}
-                  alt=""
-                  fill
-                  sizes="140px"
-                  className="object-contain"
-                />
-              </div>
+              <Image
+                src={partner.logoUrl}
+                alt=""
+                fill
+                sizes="208px"
+                className="object-contain"
+              />
             </div>
           ))}
         </div>
