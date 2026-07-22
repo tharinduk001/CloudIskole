@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { QuizDeleteButton } from "@/components/admin/quiz-delete-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -44,6 +45,7 @@ export default async function AdminQuizzesPage() {
               <th className="px-4 py-3">Scope</th>
               <th className="px-4 py-3">Course</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody className="divide-line divide-y">
@@ -69,11 +71,14 @@ export default async function AdminQuizzesPage() {
                     {quiz.status}
                   </Badge>
                 </td>
+                <td className="px-4 py-3 text-right">
+                  <QuizDeleteButton quizId={quiz.id} title={quiz.title} />
+                </td>
               </tr>
             ))}
             {quizzes.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-ink-muted px-4 py-8 text-center">
+                <td colSpan={5} className="text-ink-muted px-4 py-8 text-center">
                   No quizzes yet.
                 </td>
               </tr>

@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { CourseDeleteButton } from "@/components/admin/course-delete-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -38,6 +39,7 @@ export default async function AdminCoursesPage() {
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Price</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody className="divide-line divide-y">
@@ -60,11 +62,14 @@ export default async function AdminCoursesPage() {
                     {course.status}
                   </Badge>
                 </td>
+                <td className="px-4 py-3 text-right">
+                  <CourseDeleteButton courseId={course.id} title={course.title} />
+                </td>
               </tr>
             ))}
             {courses.length === 0 ? (
               <tr>
-                <td colSpan={3} className="text-ink-muted px-4 py-8 text-center">
+                <td colSpan={4} className="text-ink-muted px-4 py-8 text-center">
                   No courses yet.
                 </td>
               </tr>

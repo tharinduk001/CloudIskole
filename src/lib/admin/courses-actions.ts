@@ -163,6 +163,34 @@ export async function setCourseStatus(
   return { status: "success" };
 }
 
+/**
+ * Deleting a course cascades to its modules, lessons, enrollments and
+ * progress (0003_courses.sql) — but `orders.course_id` and
+ * `certificates.course_id` are `on delete restrict`, so the database itself
+ * refuses this outright once real money or a certificate is on record,
+ * rather than silently destroying that history.
+ */
+export async function deleteCourse(courseId: string): Promise<ActionResult> {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("courses").delete().eq("id", courseId);
+  if (error) {
+    console.error("deleteCourse failed", error);
+    return {
+      status: "error",
+      message:
+        error.code === "23503"
+          ? "This course has orders or certificates linked to it and cannot be deleted. Archive it instead."
+          : "Could not delete this course.",
+    };
+  }
+
+  revalidatePath("/admin/courses");
+  revalidatePath("/courses");
+  return { status: "success" };
+}
+
 const moduleSchema = z.object({
   id: z.uuid().optional(),
   courseId: z.uuid(),

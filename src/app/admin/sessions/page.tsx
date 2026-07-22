@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { SessionDeleteButton } from "@/components/admin/session-delete-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -47,6 +48,7 @@ export default async function AdminSessionsPage() {
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Starts</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody className="divide-line divide-y">
@@ -69,11 +71,14 @@ export default async function AdminSessionsPage() {
                     {session.status}
                   </Badge>
                 </td>
+                <td className="px-4 py-3 text-right">
+                  <SessionDeleteButton sessionId={session.id} title={session.title} />
+                </td>
               </tr>
             ))}
             {sessions.length === 0 ? (
               <tr>
-                <td colSpan={3} className="text-ink-muted px-4 py-8 text-center">
+                <td colSpan={4} className="text-ink-muted px-4 py-8 text-center">
                   No sessions yet.
                 </td>
               </tr>

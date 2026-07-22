@@ -222,6 +222,46 @@ export async function setSessionStatus(
   return { status: "success" };
 }
 
+/**
+ * `session_registrations.session_id` cascades (0006_sessions.sql) — nothing
+ * at the database level stops this from silently wiping every student's
+ * registration/attendance record for the session. So this checks for
+ * registrations itself and refuses if any exist, pointing the admin at
+ * `setSessionStatus` (cancel) instead. Uses the plain client: unlike
+ * `upsertSession`, this never touches `join_url`, so there's no reason to
+ * reach for the service-role client here.
+ */
+export async function deleteSession(sessionId: string): Promise<ActionResult> {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  const { count, error: countError } = await supabase
+    .from("session_registrations")
+    .select("*", { count: "exact", head: true })
+    .eq("session_id", sessionId);
+
+  if (countError) {
+    console.error("deleteSession registration check failed", countError);
+    return { status: "error", message: "Could not verify this session's registrations." };
+  }
+  if (count && count > 0) {
+    return {
+      status: "error",
+      message: `This session has ${count} registration(s) and cannot be deleted. Cancel it instead.`,
+    };
+  }
+
+  const { error } = await supabase.from("sessions").delete().eq("id", sessionId);
+  if (error) {
+    console.error("deleteSession failed", error);
+    return { status: "error", message: "Could not delete this session." };
+  }
+
+  revalidatePath("/admin/sessions");
+  revalidatePath("/sessions");
+  return { status: "success" };
+}
+
 export async function markAttendance(
   sessionId: string,
   userId: string,

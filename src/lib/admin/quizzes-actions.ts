@@ -149,6 +149,43 @@ export async function setQuizStatus(
   return { status: "success" };
 }
 
+/**
+ * Unlike courses (protected by an `on delete restrict` FK on orders and
+ * certificates), `quiz_attempts.quiz_id` cascades — nothing at the database
+ * level stops this from silently wiping every student's score history for
+ * the quiz. So this checks for attempts itself and refuses if any exist,
+ * pointing the admin at `setQuizStatus` (archive) instead.
+ */
+export async function deleteQuiz(quizId: string): Promise<ActionResult> {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  const { count, error: countError } = await supabase
+    .from("quiz_attempts")
+    .select("*", { count: "exact", head: true })
+    .eq("quiz_id", quizId);
+
+  if (countError) {
+    console.error("deleteQuiz attempt check failed", countError);
+    return { status: "error", message: "Could not verify this quiz's attempt history." };
+  }
+  if (count && count > 0) {
+    return {
+      status: "error",
+      message: `This quiz has ${count} student attempt(s) and cannot be deleted. Archive it instead.`,
+    };
+  }
+
+  const { error } = await supabase.from("quizzes").delete().eq("id", quizId);
+  if (error) {
+    console.error("deleteQuiz failed", error);
+    return { status: "error", message: "Could not delete this quiz." };
+  }
+
+  revalidatePath("/admin/quizzes");
+  return { status: "success" };
+}
+
 const questionSchema = z.object({
   id: z.uuid().optional(),
   quizId: z.uuid(),

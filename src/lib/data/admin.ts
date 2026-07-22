@@ -235,19 +235,6 @@ export async function getSessionForAdmin(sessionId: string): Promise<SessionRow>
   return data;
 }
 
-export type BadgeRow = Database["public"]["Tables"]["badges"]["Row"];
-
-export async function listBadgesAdmin(): Promise<BadgeRow[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("badges")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) throw new Error(`Failed to load badges: ${error.message}`);
-  return data;
-}
-
 export type SessionRegistrationAdminRow =
   Database["public"]["Tables"]["session_registrations"]["Row"] & {
     student: { full_name: string; email: string };
