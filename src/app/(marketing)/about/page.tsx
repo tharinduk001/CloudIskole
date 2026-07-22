@@ -12,7 +12,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/site/page-header";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
@@ -261,6 +260,17 @@ function EducationAndExperienceSection({
 
 /* -------------------------------------------------------------------------- */
 
+/** "2026-06-02" -> "Jun 2026". Falsy input (never issued) renders nothing. */
+function formatCertMonth(isoDate: string | null): string | null {
+  if (!isoDate) return null;
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 function CertificationsSection({
   certifications,
 }: {
@@ -268,22 +278,65 @@ function CertificationsSection({
 }) {
   return (
     <Section className="border-hairline bg-surface border-y">
-      <Container size="narrow">
+      <Container size="wide">
         <div className="flex items-center gap-2">
           <BadgeCheck className="text-terracotta-600 size-5" aria-hidden="true" />
           <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
             Certifications
           </h2>
         </div>
-        <div className="mt-8 flex flex-wrap gap-2">
-          {certifications.map((cert) => (
-            <Badge
-              key={cert.id}
-              className="border-terracotta-400/40 bg-terracotta-50 text-terracotta-600 rounded-none border"
-            >
-              {cert.label}
-            </Badge>
-          ))}
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {certifications.map((cert) => {
+            const issued = formatCertMonth(cert.issued_date);
+            const expires = formatCertMonth(cert.expiry_date);
+            const Wrapper = cert.verify_url ? "a" : "div";
+
+            return (
+              <Wrapper
+                key={cert.id}
+                {...(cert.verify_url
+                  ? { href: cert.verify_url, target: "_blank", rel: "noreferrer" }
+                  : {})}
+                className={`border-hairline bg-cream flex gap-4 border p-5 ${
+                  cert.verify_url
+                    ? "hover:border-terracotta-400/60 transition-colors"
+                    : ""
+                }`}
+              >
+                <div className="border-hairline bg-surface relative size-14 shrink-0 overflow-hidden border">
+                  {cert.badge_image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- external badge artwork from Credly/CertDirectory/etc., not a next/image remotePatterns candidate
+                    <img
+                      src={cert.badge_image_url}
+                      alt=""
+                      className="h-full w-full object-contain p-1.5"
+                    />
+                  ) : (
+                    <span className="grid h-full w-full place-items-center">
+                      <BadgeCheck
+                        className="text-terracotta-400 size-6"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-display text-onyx text-sm leading-snug font-semibold">
+                    {cert.label}
+                  </h3>
+                  {cert.provider ? (
+                    <p className="text-mist mt-1 text-xs">{cert.provider}</p>
+                  ) : null}
+                  {issued ? (
+                    <p className="text-mist-soft mt-1 text-xs">
+                      Issued {issued}
+                      {expires ? ` · Expires ${expires}` : ""}
+                    </p>
+                  ) : null}
+                </div>
+              </Wrapper>
+            );
+          })}
         </div>
       </Container>
     </Section>

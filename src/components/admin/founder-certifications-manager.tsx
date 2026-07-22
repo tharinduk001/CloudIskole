@@ -22,6 +22,7 @@ function CertificationForm({
   onDone?: () => void;
 }) {
   const [state, action, pending] = useActionState(upsertCertification, idleResult);
+  const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
 
   useEffect(() => {
     if (state.status === "success") onDone?.();
@@ -29,42 +30,104 @@ function CertificationForm({
   }, [state]);
 
   return (
-    <form action={action} className="flex flex-wrap items-end gap-3">
+    <form action={action} className="flex flex-col gap-3">
       {cert ? <input type="hidden" name="id" value={cert.id} /> : null}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="Certification name" error={fieldErrors?.label}>
+          {(props) => (
+            <Input {...props} name="label" required defaultValue={cert?.label} />
+          )}
+        </Field>
+        <Field label="Provider / issuer" error={fieldErrors?.provider}>
+          {(props) => (
+            <Input {...props} name="provider" defaultValue={cert?.provider ?? ""} />
+          )}
+        </Field>
+      </div>
       <Field
-        label="Certification"
-        className="min-w-56 flex-1"
-        error={state.status === "error" ? state.fieldErrors?.label : undefined}
+        label="Badge image URL"
+        hint="Credly, CertDirectory, or any HTTPS image link"
+        error={fieldErrors?.badgeImageUrl}
       >
-        {(props) => <Input {...props} name="label" required defaultValue={cert?.label} />}
-      </Field>
-      <Field label="Sort order">
         {(props) => (
           <Input
             {...props}
-            name="sortOrder"
-            type="number"
-            className="w-24"
-            defaultValue={cert?.sort_order ?? 0}
+            name="badgeImageUrl"
+            type="url"
+            placeholder="https://images.credly.com/..."
+            defaultValue={cert?.badge_image_url ?? ""}
           />
         )}
       </Field>
-      <Button type="submit" size="sm" disabled={pending}>
-        {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
-        Save
-      </Button>
-      {onDone ? (
-        <button
-          type="button"
-          onClick={onDone}
-          className="text-ink-subtle text-xs hover:underline"
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Field label="Issued" error={fieldErrors?.issuedDate}>
+          {(props) => (
+            <Input
+              {...props}
+              name="issuedDate"
+              type="date"
+              defaultValue={cert?.issued_date ?? ""}
+            />
+          )}
+        </Field>
+        <Field
+          label="Expires"
+          hint="Leave blank if it never expires"
+          error={fieldErrors?.expiryDate}
         >
-          Cancel
-        </button>
-      ) : null}
-      {state.status === "error" ? (
-        <span className="text-danger text-xs">{state.message}</span>
-      ) : null}
+          {(props) => (
+            <Input
+              {...props}
+              name="expiryDate"
+              type="date"
+              defaultValue={cert?.expiry_date ?? ""}
+            />
+          )}
+        </Field>
+        <Field label="Sort order">
+          {(props) => (
+            <Input
+              {...props}
+              name="sortOrder"
+              type="number"
+              defaultValue={cert?.sort_order ?? 0}
+            />
+          )}
+        </Field>
+      </div>
+      <Field
+        label="Verify URL"
+        hint="Link to the public credential page"
+        error={fieldErrors?.verifyUrl}
+      >
+        {(props) => (
+          <Input
+            {...props}
+            name="verifyUrl"
+            type="url"
+            placeholder="https://www.credly.com/badges/..."
+            defaultValue={cert?.verify_url ?? ""}
+          />
+        )}
+      </Field>
+      <div className="flex items-center gap-3">
+        <Button type="submit" size="sm" disabled={pending}>
+          {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
+          Save
+        </Button>
+        {onDone ? (
+          <button
+            type="button"
+            onClick={onDone}
+            className="text-ink-subtle text-xs hover:underline"
+          >
+            Cancel
+          </button>
+        ) : null}
+        {state.status === "error" ? (
+          <span className="text-danger text-xs">{state.message}</span>
+        ) : null}
+      </div>
     </form>
   );
 }
@@ -107,7 +170,23 @@ export function FounderCertificationsManager({
             </li>
           ) : (
             <li key={cert.id} className="flex items-center gap-3 py-3">
-              <span className="flex-1 text-sm font-medium">{cert.label}</span>
+              <span className="border-line bg-paper relative h-10 w-10 shrink-0 overflow-hidden rounded-md border">
+                {cert.badge_image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- admin-entered badge artwork from Credly/CertDirectory/etc., not a next/image remotePatterns candidate for this preview thumbnail
+                  <img
+                    src={cert.badge_image_url}
+                    alt=""
+                    className="h-full w-full object-contain p-1"
+                  />
+                ) : null}
+              </span>
+              <div className="flex-1">
+                <p className="text-sm font-medium">{cert.label}</p>
+                <p className="text-ink-muted text-xs">
+                  {cert.provider}
+                  {cert.issued_date ? ` · Issued ${cert.issued_date}` : ""}
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setEditingId(cert.id)}

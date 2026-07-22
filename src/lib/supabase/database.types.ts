@@ -415,22 +415,37 @@ export type Database = {
       }
       founder_certifications: {
         Row: {
+          badge_image_url: string | null
           created_at: string
+          expiry_date: string | null
           id: string
+          issued_date: string | null
           label: string
+          provider: string | null
           sort_order: number
+          verify_url: string | null
         }
         Insert: {
+          badge_image_url?: string | null
           created_at?: string
+          expiry_date?: string | null
           id?: string
+          issued_date?: string | null
           label: string
+          provider?: string | null
           sort_order?: number
+          verify_url?: string | null
         }
         Update: {
+          badge_image_url?: string | null
           created_at?: string
+          expiry_date?: string | null
           id?: string
+          issued_date?: string | null
           label?: string
+          provider?: string | null
           sort_order?: number
+          verify_url?: string | null
         }
         Relationships: []
       }

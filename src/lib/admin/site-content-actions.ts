@@ -352,9 +352,24 @@ export async function deleteExperience(id: string): Promise<ActionResult> {
 
 // --- Founder certifications ------------------------------------------
 
+// Badge art and verify links come from whichever issuer hosts them (Credly,
+// CertDirectory, Microsoft has neither) - unlike the Cloudinary-only fields
+// elsewhere in this file, only "https" is required here.
+const httpsUrl = z
+  .string()
+  .trim()
+  .url("Enter a valid URL.")
+  .max(500)
+  .refine((url) => url.startsWith("https://"), "Must be an HTTPS URL.");
+
 const certificationSchema = z.object({
   id: z.uuid().optional(),
   label: z.string().trim().min(2).max(200),
+  provider: z.string().trim().max(200).optional(),
+  badgeImageUrl: httpsUrl.optional().or(z.literal("")),
+  issuedDate: z.string().trim().optional(),
+  expiryDate: z.string().trim().optional(),
+  verifyUrl: httpsUrl.optional().or(z.literal("")),
   sortOrder: sortOrderField,
 });
 
@@ -367,6 +382,11 @@ export async function upsertCertification(
   const parsed = certificationSchema.safeParse({
     id: formData.get("id") || undefined,
     label: formData.get("label"),
+    provider: formData.get("provider") || undefined,
+    badgeImageUrl: formData.get("badgeImageUrl") || undefined,
+    issuedDate: formData.get("issuedDate") || undefined,
+    expiryDate: formData.get("expiryDate") || undefined,
+    verifyUrl: formData.get("verifyUrl") || undefined,
     sortOrder: formData.get("sortOrder") || undefined,
   });
 
@@ -381,6 +401,11 @@ export async function upsertCertification(
   const supabase = await createClient();
   const row = {
     label: parsed.data.label,
+    provider: parsed.data.provider || null,
+    badge_image_url: parsed.data.badgeImageUrl || null,
+    issued_date: parsed.data.issuedDate || null,
+    expiry_date: parsed.data.expiryDate || null,
+    verify_url: parsed.data.verifyUrl || null,
     sort_order: parsed.data.sortOrder,
   };
 

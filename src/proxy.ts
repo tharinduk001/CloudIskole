@@ -55,7 +55,12 @@ function buildCsp(nonce: string, supabaseUrl: string, isDev: boolean): string {
     // animations. Style *attributes* cannot execute script, so allowing them
     // is materially safer than allowing inline <style> blocks.
     `style-src-attr 'unsafe-inline'`,
-    `img-src 'self' blob: data: https://*.supabase.co https://i.ytimg.com https://lh3.googleusercontent.com https://res.cloudinary.com`,
+    // Certification badge artwork is deliberately not locked to one host -
+    // admins paste in whatever URL Credly, CertDirectory, or a future issuer
+    // gives them - so this allows any HTTPS image rather than an allowlist.
+    // Low risk: img-src cannot execute script, and only an admin can write
+    // the URLs that end up here (RLS-gated).
+    `img-src 'self' blob: data: https:`,
     `font-src 'self'`,
     `connect-src 'self' ${supabaseUrl} ${supabaseWs}${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
     // Course videos are unlisted YouTube embeds, served from the
