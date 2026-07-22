@@ -94,8 +94,10 @@ export default async function AboutPage() {
       </Section>
 
       <FounderSection founder={founder} />
-      <EducationSection education={founder.education} />
-      <ExperienceSection experience={founder.experience} />
+      <EducationAndExperienceSection
+        education={founder.education}
+        experience={founder.experience}
+      />
       <CertificationsSection certifications={founder.certifications} />
 
       <Section className="bg-cream">
@@ -205,50 +207,52 @@ function FounderSection({ founder }: { founder: FounderProfile }) {
 
 /* -------------------------------------------------------------------------- */
 
-function EducationSection({ education }: { education: FounderProfile["education"] }) {
+function EducationAndExperienceSection({
+  education,
+  experience,
+}: {
+  education: FounderProfile["education"];
+  experience: FounderProfile["experience"];
+}) {
   return (
     <Section className="border-hairline bg-surface border-y">
-      <Container size="narrow">
-        <div className="flex items-center gap-2">
-          <GraduationCap className="text-terracotta-600 size-5" aria-hidden="true" />
-          <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
-            Academic background
-          </h2>
-        </div>
-        <div className="mt-10">
-          <Timeline
-            entries={education.map((entry) => ({
-              period: entry.period,
-              title: entry.institution,
-              subtitle: entry.detail,
-            }))}
-          />
-        </div>
-      </Container>
-    </Section>
-  );
-}
+      <Container size="wide">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <div className="flex items-center gap-2">
+              <GraduationCap className="text-terracotta-600 size-5" aria-hidden="true" />
+              <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
+                Academic background
+              </h2>
+            </div>
+            <div className="mt-10">
+              <Timeline
+                entries={education.map((entry) => ({
+                  period: entry.period,
+                  title: entry.institution,
+                  subtitle: entry.detail,
+                }))}
+              />
+            </div>
+          </div>
 
-/* -------------------------------------------------------------------------- */
-
-function ExperienceSection({ experience }: { experience: FounderProfile["experience"] }) {
-  return (
-    <Section className="bg-cream">
-      <Container size="narrow">
-        <div className="flex items-center gap-2">
-          <Briefcase className="text-terracotta-600 size-5" aria-hidden="true" />
-          <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
-            Work history
-          </h2>
-        </div>
-        <div className="mt-10">
-          <Timeline
-            entries={experience.map((entry) => ({
-              period: entry.period,
-              title: entry.role_title,
-              subtitle: entry.org,
-            }))}
-          />
+          <div>
+            <div className="flex items-center gap-2">
+              <Briefcase className="text-terracotta-600 size-5" aria-hidden="true" />
+              <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
+                Work history
+              </h2>
+            </div>
+            <div className="mt-10">
+              <Timeline
+                entries={experience.map((entry) => ({
+                  period: entry.period,
+                  title: entry.role_title,
+                  subtitle: entry.org,
+                }))}
+              />
+            </div>
+          </div>
         </div>
       </Container>
     </Section>
