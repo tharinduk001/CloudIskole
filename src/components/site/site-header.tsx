@@ -156,23 +156,13 @@ export function SiteHeader() {
               {profile ? (
                 <UserMenu profile={profile} />
               ) : (
-                <>
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="text-onyx-soft hover:bg-terracotta-50 hover:text-terracotta-600 rounded-none"
-                  >
-                    <Link href="/sign-in">Sign in</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    size="sm"
-                    className="bg-terracotta-600 hover:bg-terracotta-700 active:bg-terracotta-700 rounded-none"
-                  >
-                    <Link href="/contact">Contact us</Link>
-                  </Button>
-                </>
+                <Button
+                  asChild
+                  size="sm"
+                  className="bg-terracotta-600 hover:bg-terracotta-700 active:bg-terracotta-700 rounded-none"
+                >
+                  <Link href="/sign-in">Sign in</Link>
+                </Button>
               )}
             </div>
 
@@ -237,23 +227,13 @@ export function SiteHeader() {
                   <Link href="/dashboard">Go to dashboard</Link>
                 </Button>
               ) : (
-                <>
-                  <Button
-                    asChild
-                    variant="secondary"
-                    size="lg"
-                    className="border-hairline text-onyx hover:bg-terracotta-50 hover:border-terracotta-200 hover:text-terracotta-600 rounded-none"
-                  >
-                    <Link href="/sign-in">Sign in</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
-                  >
-                    <Link href="/contact">Contact us</Link>
-                  </Button>
-                </>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
+                >
+                  <Link href="/sign-in">Sign in</Link>
+                </Button>
               )}
             </div>
           </Container>

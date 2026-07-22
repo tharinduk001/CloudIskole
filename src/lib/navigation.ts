@@ -17,6 +17,7 @@ export const mainNav: NavItem[] = [
   { label: "Exams", href: "/exams" },
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
