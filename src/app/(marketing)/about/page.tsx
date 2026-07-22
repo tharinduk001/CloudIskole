@@ -92,8 +92,11 @@ export default function AboutPage() {
       </Section>
 
       <FounderSection />
+      <EducationSection />
+      <ExperienceSection />
+      <CertificationsSection />
 
-      <Section className="border-hairline bg-surface border-y">
+      <Section className="bg-cream">
         <Container size="wide">
           <SectionHeading
             size="xl"
@@ -185,77 +188,129 @@ function FounderSection() {
             <p className="text-mist mt-1 text-sm leading-relaxed">{founder.title}</p>
           </div>
 
-          <div className="flex flex-col gap-10">
-            <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
-              {founder.bio.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-              ))}
-            </div>
-
-            <div className="grid gap-8 sm:grid-cols-2">
-              <div>
-                <div className="flex items-center gap-2">
-                  <GraduationCap
-                    className="text-terracotta-600 size-4"
-                    aria-hidden="true"
-                  />
-                  <h4 className="text-onyx text-sm font-semibold tracking-wide uppercase">
-                    Education
-                  </h4>
-                </div>
-                <ul className="border-hairline mt-4 flex flex-col gap-4 border-l pl-4">
-                  {founder.education.map((entry) => (
-                    <li key={entry.institution}>
-                      <p className="text-mist-soft text-xs">{entry.period}</p>
-                      <p className="text-onyx mt-0.5 text-sm font-medium">
-                        {entry.institution}
-                      </p>
-                      <p className="text-mist mt-0.5 text-sm">{entry.detail}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2">
-                  <Briefcase className="text-terracotta-600 size-4" aria-hidden="true" />
-                  <h4 className="text-onyx text-sm font-semibold tracking-wide uppercase">
-                    Experience
-                  </h4>
-                </div>
-                <ul className="border-hairline mt-4 flex flex-col gap-4 border-l pl-4">
-                  {founder.experience.map((entry) => (
-                    <li key={`${entry.role}-${entry.org}`}>
-                      <p className="text-mist-soft text-xs">{entry.period}</p>
-                      <p className="text-onyx mt-0.5 text-sm font-medium">{entry.role}</p>
-                      <p className="text-mist mt-0.5 text-sm">{entry.org}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2">
-                <BadgeCheck className="text-terracotta-600 size-4" aria-hidden="true" />
-                <h4 className="text-onyx text-sm font-semibold tracking-wide uppercase">
-                  Certifications
-                </h4>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {founder.certifications.map((cert) => (
-                  <Badge
-                    key={cert}
-                    className="border-terracotta-400/40 bg-terracotta-50 text-terracotta-600 rounded-none border"
-                  >
-                    {cert}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+          <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
+            {founder.bio.map((paragraph) => (
+              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+            ))}
           </div>
         </div>
       </Container>
     </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function EducationSection() {
+  return (
+    <Section className="border-hairline bg-surface border-y">
+      <Container size="narrow">
+        <div className="flex items-center gap-2">
+          <GraduationCap className="text-terracotta-600 size-5" aria-hidden="true" />
+          <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
+            Academic background
+          </h2>
+        </div>
+        <div className="mt-10">
+          <Timeline
+            entries={founder.education.map((entry) => ({
+              period: entry.period,
+              title: entry.institution,
+              subtitle: entry.detail,
+            }))}
+          />
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function ExperienceSection() {
+  return (
+    <Section className="bg-cream">
+      <Container size="narrow">
+        <div className="flex items-center gap-2">
+          <Briefcase className="text-terracotta-600 size-5" aria-hidden="true" />
+          <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
+            Work history
+          </h2>
+        </div>
+        <div className="mt-10">
+          <Timeline
+            entries={founder.experience.map((entry) => ({
+              period: entry.period,
+              title: entry.role,
+              subtitle: entry.org,
+            }))}
+          />
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function CertificationsSection() {
+  return (
+    <Section className="border-hairline bg-surface border-y">
+      <Container size="narrow">
+        <div className="flex items-center gap-2">
+          <BadgeCheck className="text-terracotta-600 size-5" aria-hidden="true" />
+          <h2 className="font-display text-onyx text-2xl font-semibold sm:text-3xl">
+            Certifications
+          </h2>
+        </div>
+        <div className="mt-8 flex flex-wrap gap-2">
+          {founder.certifications.map((cert) => (
+            <Badge
+              key={cert}
+              className="border-terracotta-400/40 bg-terracotta-50 text-terracotta-600 rounded-none border"
+            >
+              {cert}
+            </Badge>
+          ))}
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Vertical timeline: a dot-and-line rail built from a column flexbox rather
+ * than absolute positioning, so the connecting line stretches correctly
+ * between entries regardless of how tall each entry's text runs.
+ */
+function Timeline({
+  entries,
+}: {
+  entries: { period: string; title: string; subtitle: string }[];
+}) {
+  return (
+    <ol className="flex flex-col">
+      {entries.map((entry, index) => (
+        <li key={`${entry.title}-${entry.period}`} className="flex gap-5">
+          <div className="flex flex-col items-center">
+            <span className="bg-terracotta-600 mt-1.5 size-2.5 shrink-0 rounded-full" />
+            {index < entries.length - 1 ? (
+              <span className="bg-hairline mt-1.5 w-px flex-1" aria-hidden="true" />
+            ) : null}
+          </div>
+          <div className="pb-10">
+            <p className="text-terracotta-600 text-xs font-semibold tracking-wide uppercase">
+              {entry.period}
+            </p>
+            <h3 className="font-display text-onyx mt-1 text-lg font-semibold">
+              {entry.title}
+            </h3>
+            <p className="text-mist mt-1 text-sm leading-relaxed">{entry.subtitle}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
