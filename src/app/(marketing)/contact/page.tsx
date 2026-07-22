@@ -86,61 +86,71 @@ export default function ContactPage() {
               </Card>
 
               <Card className="border-hairline rounded-none p-6">
-                <span className="bg-terracotta-50 text-terracotta-600 grid size-10 place-items-center rounded-none">
-                  <Mail className="size-5" aria-hidden="true" />
-                </span>
-                <h3 className="font-display text-onyx mt-4 text-base font-semibold">
-                  Email us
-                </h3>
-                <p className="text-mist mt-2 text-sm leading-relaxed">
-                  Prefer email? Write to us directly at{" "}
-                  <a
-                    href={`mailto:${brand.contact.email}`}
-                    className="text-terracotta-600 font-medium hover:underline"
-                  >
-                    {brand.contact.email}
-                  </a>
-                  .
-                </p>
-              </Card>
+                <ul className="divide-hairline -my-1 divide-y">
+                  <li className="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
+                    <span className="bg-terracotta-50 text-terracotta-600 grid size-9 shrink-0 place-items-center rounded-none">
+                      <Mail className="size-4.5" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="font-display text-onyx text-sm font-semibold">
+                        Email us
+                      </h3>
+                      <p className="text-mist mt-1 text-sm leading-relaxed">
+                        Write to us at{" "}
+                        <a
+                          href={`mailto:${brand.contact.email}`}
+                          className="text-terracotta-600 font-medium hover:underline"
+                        >
+                          {brand.contact.email}
+                        </a>
+                        .
+                      </p>
+                    </div>
+                  </li>
 
-              <Card className="border-hairline rounded-none p-6">
-                <span className="bg-terracotta-50 text-terracotta-600 grid size-10 place-items-center rounded-none">
-                  <Clock className="size-5" aria-hidden="true" />
-                </span>
-                <h3 className="font-display text-onyx mt-4 text-base font-semibold">
-                  Response time
-                </h3>
-                <p className="text-mist mt-2 text-sm leading-relaxed">
-                  We reply within 2 working days. Payment and enrollment questions are
-                  handled first.
-                </p>
-              </Card>
+                  <li className="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
+                    <span className="bg-terracotta-50 text-terracotta-600 grid size-9 shrink-0 place-items-center rounded-none">
+                      <Clock className="size-4.5" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="font-display text-onyx text-sm font-semibold">
+                        Response time
+                      </h3>
+                      <p className="text-mist mt-1 text-sm leading-relaxed">
+                        Within 2 working days. Payment and enrollment questions are
+                        handled first.
+                      </p>
+                    </div>
+                  </li>
 
-              <Card className="border-hairline rounded-none p-6">
-                <span className="border-terracotta-400/40 bg-terracotta-50 text-terracotta-600 grid size-10 place-items-center rounded-none border">
-                  <MessageCircleQuestion className="size-5" aria-hidden="true" />
-                </span>
-                <h3 className="font-display text-onyx mt-4 text-base font-semibold">
-                  Common questions
-                </h3>
-                <p className="text-mist mt-2 text-sm leading-relaxed">
-                  Many answers are already on the{" "}
-                  <Link
-                    href="/#faq"
-                    className="text-terracotta-600 font-medium hover:underline"
-                  >
-                    home page FAQ
-                  </Link>
-                  , and refund questions are covered in our{" "}
-                  <Link
-                    href="/refunds"
-                    className="text-terracotta-600 font-medium hover:underline"
-                  >
-                    refunds policy
-                  </Link>
-                  .
-                </p>
+                  <li className="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
+                    <span className="bg-terracotta-50 text-terracotta-600 grid size-9 shrink-0 place-items-center rounded-none">
+                      <MessageCircleQuestion className="size-4.5" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="font-display text-onyx text-sm font-semibold">
+                        Common questions
+                      </h3>
+                      <p className="text-mist mt-1 text-sm leading-relaxed">
+                        See the{" "}
+                        <Link
+                          href="/#faq"
+                          className="text-terracotta-600 font-medium hover:underline"
+                        >
+                          home page FAQ
+                        </Link>{" "}
+                        or our{" "}
+                        <Link
+                          href="/refunds"
+                          className="text-terracotta-600 font-medium hover:underline"
+                        >
+                          refunds policy
+                        </Link>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                </ul>
               </Card>
             </aside>
           </div>
