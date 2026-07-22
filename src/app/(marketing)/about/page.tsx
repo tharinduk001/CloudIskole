@@ -1,11 +1,22 @@
-import { Compass, HeartHandshake, Scale, Sprout } from "lucide-react";
+import {
+  BadgeCheck,
+  Briefcase,
+  Compass,
+  GraduationCap,
+  HeartHandshake,
+  Scale,
+  Sprout,
+} from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/site/page-header";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
+import { founder } from "@/content/founder";
 import { brand } from "@/lib/brand";
 
 export const metadata: Metadata = {
@@ -80,6 +91,8 @@ export default function AboutPage() {
         </Container>
       </Section>
 
+      <FounderSection />
+
       <Section className="border-hairline bg-surface border-y">
         <Container size="wide">
           <SectionHeading
@@ -138,5 +151,111 @@ export default function AboutPage() {
         </Container>
       </Section>
     </>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function FounderSection() {
+  return (
+    <Section className="bg-cream">
+      <Container size="wide">
+        <SectionHeading
+          size="xl"
+          eyebrow="About the founder"
+          title="Built by someone who's spent years in the classroom"
+          eyebrowClassName="text-terracotta-600"
+          titleClassName="text-onyx"
+        />
+
+        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
+          <div>
+            <div className="border-hairline relative aspect-[4/5] w-full max-w-sm overflow-hidden border">
+              <Image
+                src={founder.photo}
+                alt={founder.name}
+                fill
+                sizes="(min-width: 1024px) 24rem, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <h3 className="font-display text-onyx mt-6 text-xl font-semibold">
+              {founder.name}
+            </h3>
+            <p className="text-mist mt-1 text-sm leading-relaxed">{founder.title}</p>
+          </div>
+
+          <div className="flex flex-col gap-10">
+            <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
+              {founder.bio.map((paragraph) => (
+                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="grid gap-8 sm:grid-cols-2">
+              <div>
+                <div className="flex items-center gap-2">
+                  <GraduationCap
+                    className="text-terracotta-600 size-4"
+                    aria-hidden="true"
+                  />
+                  <h4 className="text-onyx text-sm font-semibold tracking-wide uppercase">
+                    Education
+                  </h4>
+                </div>
+                <ul className="border-hairline mt-4 flex flex-col gap-4 border-l pl-4">
+                  {founder.education.map((entry) => (
+                    <li key={entry.institution}>
+                      <p className="text-mist-soft text-xs">{entry.period}</p>
+                      <p className="text-onyx mt-0.5 text-sm font-medium">
+                        {entry.institution}
+                      </p>
+                      <p className="text-mist mt-0.5 text-sm">{entry.detail}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2">
+                  <Briefcase className="text-terracotta-600 size-4" aria-hidden="true" />
+                  <h4 className="text-onyx text-sm font-semibold tracking-wide uppercase">
+                    Experience
+                  </h4>
+                </div>
+                <ul className="border-hairline mt-4 flex flex-col gap-4 border-l pl-4">
+                  {founder.experience.map((entry) => (
+                    <li key={`${entry.role}-${entry.org}`}>
+                      <p className="text-mist-soft text-xs">{entry.period}</p>
+                      <p className="text-onyx mt-0.5 text-sm font-medium">{entry.role}</p>
+                      <p className="text-mist mt-0.5 text-sm">{entry.org}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <BadgeCheck className="text-terracotta-600 size-4" aria-hidden="true" />
+                <h4 className="text-onyx text-sm font-semibold tracking-wide uppercase">
+                  Certifications
+                </h4>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {founder.certifications.map((cert) => (
+                  <Badge
+                    key={cert}
+                    className="border-terracotta-400/40 bg-terracotta-50 text-terracotta-600 rounded-none border"
+                  >
+                    {cert}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </Section>
   );
 }

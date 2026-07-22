@@ -11,6 +11,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Liyawel } from "@/components/brand/liyawel";
+import { PartnersMarquee } from "@/components/site/partners-marquee";
+import { PhotoGrid } from "@/components/site/photo-grid";
 import { ToolMarquee } from "@/components/site/tool-marquee";
 import {
   Accordion,
@@ -36,7 +38,9 @@ export default function HomePage() {
     <>
       <Hero />
       <ToolMarquee />
+      <PartnersMarquee />
       <Features />
+      <Moments />
       <HowItWorks />
       <Faq />
       <FinalCta />
@@ -161,6 +165,28 @@ function Features() {
               </div>
             );
           })}
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function Moments() {
+  return (
+    <Section className="bg-cream">
+      <Container size="wide">
+        <SectionHeading
+          size="xl"
+          eyebrow="Community"
+          title="Moments from the journey"
+          description="Meetups, hackathons and training sessions from the community CloudIskole grew out of."
+          eyebrowClassName="text-terracotta-600"
+          titleClassName="text-onyx"
+        />
+        <div className="mt-14">
+          <PhotoGrid />
         </div>
       </Container>
     </Section>

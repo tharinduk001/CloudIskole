@@ -49,6 +49,78 @@ export const steps = [
   },
 ];
 
+/**
+ * Academic and community organisations CloudIskole's founder has trained,
+ * judged for, or partnered with — the same relationships that feed the
+ * course content and community events. Logos duplicated at render time by
+ * the marquee component, not here.
+ */
+export const partners = [
+  {
+    name: "AWS Community Builders",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783670441/Community_Builders_logo_for_dark_background_mq3vgk.png",
+  },
+  {
+    name: "IDET - Institute of Digital Engineering Technology",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783603855/download_bdsp4e.png",
+  },
+  {
+    name: "FOSS Community Sri Lanka",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783602831/FOSS_epzsbf.webp",
+  },
+  {
+    name: "IEEE CS - University of Sri Jayewardenepura",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783602879/ieee_cs_student_branch_chapter_university_of_sri_jayewardenepura_logo_evoxbp.jpg",
+  },
+  {
+    name: "NIBM",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783602971/1778030305129_eirpic.jpg",
+  },
+  {
+    name: "University of Moratuwa Leo Club",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783603972/leo_ztyhcn.png",
+  },
+  {
+    name: "IEEE SB - University of Vavuniya",
+    logoUrl:
+      "https://res.cloudinary.com/dopkcplb3/image/upload/v1783709980/ieeesbuov_logo_cxuvx8.jpg",
+  },
+];
+
+/**
+ * Five photos, one designated as the large anchor tile — the grid layout
+ * (see `PhotoGrid`) is built to exactly fill both its mobile (2x4) and
+ * desktop (4x2) cell counts with this count, no rotation logic needed.
+ */
+export const momentPhotos = [
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783742890/654222454_926408150252488_6231460814954891148_n_jsrc5t.jpg",
+    alt: "Speaking at a University of Moratuwa tech event",
+  },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783675783/highlights_1_kgsj5v.jpg",
+    alt: "Judging the Beauty of Cloud hackathon",
+  },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783675780/highlights_11_hao4gw.jpg",
+    alt: "Leading CryptX, an island-wide hackathon and CTF",
+  },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783742890/569976493_811777995048838_9210082039700355004_n_efyp1x.jpg",
+    alt: "At Kubernetes Community Day Sri Lanka",
+  },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783680392/741906689_2810501982647474_856743842466341450_n_mxbrmj.jpg",
+    alt: "Running a cloud training session at NIBM",
+  },
+];
+
 export const faqs = [
   {
     question: "Do I need any programming experience to start?",
