@@ -6,6 +6,7 @@ import { FounderExperienceManager } from "@/components/admin/founder-experience-
 import { FounderProfileForm } from "@/components/admin/founder-profile-form";
 import { HighlightsManager } from "@/components/admin/highlights-manager";
 import { PartnersManager } from "@/components/admin/partners-manager";
+import { SiteContentTabs } from "@/components/admin/site-content-tabs";
 import { getFounderProfile, getHighlights, getPartners } from "@/lib/data/site-content";
 
 export const metadata: Metadata = { title: "Site content" };
@@ -27,12 +28,42 @@ export default async function AdminSiteContentPage() {
         </p>
       </div>
 
-      <PartnersManager partners={partners} />
-      <HighlightsManager highlights={highlights} />
-      <FounderProfileForm profile={founder} />
-      <FounderEducationManager entries={founder.education} />
-      <FounderExperienceManager entries={founder.experience} />
-      <FounderCertificationsManager certifications={founder.certifications} />
+      <SiteContentTabs
+        sections={[
+          {
+            id: "partners",
+            label: "Partners",
+            content: <PartnersManager partners={partners} />,
+          },
+          {
+            id: "highlights",
+            label: "Moments photos",
+            content: <HighlightsManager highlights={highlights} />,
+          },
+          {
+            id: "founder-profile",
+            label: "Founder profile",
+            content: <FounderProfileForm profile={founder} />,
+          },
+          {
+            id: "founder-education",
+            label: "Education",
+            content: <FounderEducationManager entries={founder.education} />,
+          },
+          {
+            id: "founder-experience",
+            label: "Experience",
+            content: <FounderExperienceManager entries={founder.experience} />,
+          },
+          {
+            id: "founder-certifications",
+            label: "Certifications",
+            content: (
+              <FounderCertificationsManager certifications={founder.certifications} />
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }

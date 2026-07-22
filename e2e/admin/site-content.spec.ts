@@ -38,6 +38,7 @@ test("an admin can add and delete a moments photo", async ({ page }) => {
   const email = testEmail("admin-highlight");
   await signInAsAdmin(page, email);
   await page.goto("/admin/site-content");
+  await page.getByRole("button", { name: "Moments photos" }).click();
 
   const manager = page.getByTestId("highlights-manager");
   await manager.getByRole("button", { name: "Add photo" }).click();
@@ -64,6 +65,7 @@ test("an admin can update the founder profile and see it reflected on /about", a
   const email = testEmail("admin-founder");
   await signInAsAdmin(page, email);
   await page.goto("/admin/site-content");
+  await page.getByRole("button", { name: "Founder profile" }).click();
 
   const form = page.getByTestId("founder-profile-form");
   const marker = `E2E bio marker ${Date.now()}`;
