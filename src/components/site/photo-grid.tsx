@@ -1,31 +1,28 @@
-import Image from "next/image";
-
 import { momentPhotos } from "@/content/home";
 
 /**
- * Five photos exactly fill both breakpoints' cell count: mobile is a 2x4
- * grid (8 cells) and desktop is a 4x2 grid (8 cells); the first photo's
- * 2x2 span accounts for 4 of those cells at both sizes, leaving the
- * remaining four photos as single cells. Add a photo only alongside a
- * matching change to this span map.
+ * Subtle alternating tilt per tile keeps the collage from feeling too rigid
+ * while staying readable — a "collage" feel rather than true randomness.
  */
-const SPANS = ["col-span-2 row-span-2", "", "", "", ""];
+const TILTS = ["-rotate-1", "rotate-1", "rotate-0", "rotate-1", "-rotate-1", "rotate-0"];
 
+/**
+ * CSS multi-column masonry, not a grid: each photo keeps its own natural
+ * aspect ratio (no cropping to a fixed cell), and the browser packs items
+ * into the shortest column as it goes - so a plain <img> is used rather
+ * than next/image, since there is no single width/height to declare for
+ * photos of mixed orientation from an external, admin-curated source.
+ */
 export function PhotoGrid() {
   return (
-    <div className="grid h-[520px] grid-cols-2 grid-rows-4 gap-3 sm:h-[340px] sm:grid-cols-4 sm:grid-rows-2 md:h-[400px]">
+    <div className="columns-2 gap-4 [column-fill:_balance] sm:columns-3">
       {momentPhotos.map((photo, i) => (
         <div
           key={photo.src}
-          className={`border-hairline relative overflow-hidden border ${SPANS[i] ?? ""}`}
+          className={`border-hairline group relative mb-4 break-inside-avoid overflow-hidden rounded-xl border transition-transform duration-300 hover:z-10 hover:scale-[1.03] ${TILTS[i % TILTS.length]}`}
         >
-          <Image
-            src={photo.src}
-            alt={photo.alt}
-            fill
-            sizes="(min-width: 640px) 25vw, 50vw"
-            className="object-cover transition-transform duration-[var(--duration-base)] hover:scale-105"
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element -- mixed-orientation external photos, no fixed aspect ratio to declare */}
+          <img src={photo.src} alt={photo.alt} className="h-auto w-full object-cover" />
         </div>
       ))}
     </div>

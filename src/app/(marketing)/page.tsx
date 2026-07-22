@@ -40,9 +40,9 @@ export default function HomePage() {
       <ToolMarquee />
       <PartnersMarquee />
       <Features />
-      <Moments />
       <HowItWorks />
       <Faq />
+      <Moments />
       <FinalCta />
     </>
   );

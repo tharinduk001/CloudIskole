@@ -119,6 +119,18 @@ export const momentPhotos = [
     src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783680392/741906689_2810501982647474_856743842466341450_n_mxbrmj.jpg",
     alt: "Running a cloud training session at NIBM",
   },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783675784/highlights_2_ibzlxn.jpg",
+    alt: "On the judging panel at Beauty of Cloud",
+  },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783742890/732610192_1598260788381984_288652173330552542_n_lyv6sx.jpg",
+    alt: "Kubernetes community meetup in Colombo",
+  },
+  {
+    src: "https://res.cloudinary.com/dopkcplb3/image/upload/v1783675781/highlights_15_hhd93y.jpg",
+    alt: "FOSS Community Sri Lanka session",
+  },
 ];
 
 export const faqs = [
