@@ -55,7 +55,7 @@ function buildCsp(nonce: string, supabaseUrl: string, isDev: boolean): string {
     // animations. Style *attributes* cannot execute script, so allowing them
     // is materially safer than allowing inline <style> blocks.
     `style-src-attr 'unsafe-inline'`,
-    `img-src 'self' blob: data: https://*.supabase.co https://i.ytimg.com https://lh3.googleusercontent.com`,
+    `img-src 'self' blob: data: https://*.supabase.co https://i.ytimg.com https://lh3.googleusercontent.com https://res.cloudinary.com`,
     `font-src 'self'`,
     `connect-src 'self' ${supabaseUrl} ${supabaseWs}${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
     // Course videos are unlisted YouTube embeds, served from the

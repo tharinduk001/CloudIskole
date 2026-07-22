@@ -41,8 +41,8 @@ export default function HomePage() {
       <PartnersMarquee />
       <Features />
       <HowItWorks />
-      <Faq />
       <Moments />
+      <Faq />
       <FinalCta />
     </>
   );
