@@ -5,11 +5,12 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Underline tab strip for the site-content subsections — a horizontal
- * pattern rather than the app's vertical admin sidebar, so the two levels
- * of navigation stay visually distinct instead of nesting two sidebars.
+ * Underline tab strip for grouping subsections within one admin page — a
+ * horizontal pattern rather than the app's vertical admin sidebar, so the
+ * two levels of navigation stay visually distinct instead of nesting two
+ * sidebars. Used by the site-content and audit pages.
  */
-export function SiteContentTabs({
+export function AdminTabs({
   sections,
 }: {
   sections: { id: string; label: string; content: React.ReactNode }[];

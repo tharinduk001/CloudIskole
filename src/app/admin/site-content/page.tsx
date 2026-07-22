@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
+import { AdminTabs } from "@/components/admin/admin-tabs";
 import { FounderCertificationsManager } from "@/components/admin/founder-certifications-manager";
 import { FounderEducationManager } from "@/components/admin/founder-education-manager";
 import { FounderExperienceManager } from "@/components/admin/founder-experience-manager";
 import { FounderProfileForm } from "@/components/admin/founder-profile-form";
 import { HighlightsManager } from "@/components/admin/highlights-manager";
 import { PartnersManager } from "@/components/admin/partners-manager";
-import { SiteContentTabs } from "@/components/admin/site-content-tabs";
 import { getFounderProfile, getHighlights, getPartners } from "@/lib/data/site-content";
 
 export const metadata: Metadata = { title: "Site content" };
@@ -28,7 +28,7 @@ export default async function AdminSiteContentPage() {
         </p>
       </div>
 
-      <SiteContentTabs
+      <AdminTabs
         sections={[
           {
             id: "partners",

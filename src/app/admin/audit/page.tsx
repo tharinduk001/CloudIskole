@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { AdminTabs } from "@/components/admin/admin-tabs";
+import { BackupsPanel } from "@/components/admin/backups-panel";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { listAuditLogs, listPaymentEvents } from "@/lib/data/admin";
@@ -13,104 +15,150 @@ export default async function AdminAuditPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold">Payment events</h1>
+        <h1 className="font-display text-2xl font-semibold">Audit & payments</h1>
         <p className="text-ink-muted mt-1 text-sm">
-          The append-only financial log - every order transition, success or failure.
+          The financial log, administrative actions, and manual backups.
         </p>
-        <Card className="mt-4 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
-              <tr>
-                <th className="px-4 py-3">When</th>
-                <th className="px-4 py-3">Order</th>
-                <th className="px-4 py-3">Event</th>
-                <th className="px-4 py-3">Transition</th>
-                <th className="px-4 py-3">Note</th>
-              </tr>
-            </thead>
-            <tbody className="divide-line divide-y">
-              {paymentEvents.map((event) => (
-                <tr key={event.id}>
-                  <td className="text-ink-subtle px-4 py-2.5 text-xs">
-                    {new Date(event.created_at).toLocaleString("en-LK")}
-                  </td>
-                  <td className="px-4 py-2.5 font-mono text-xs text-teal-700">
-                    {event.order?.reference_code ?? "-"}
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <Badge size="sm" variant="neutral">
-                      {event.type}
-                    </Badge>
-                  </td>
-                  <td className="text-ink-muted px-4 py-2.5 text-xs">
-                    {event.from_status ?? "-"} &rarr; {event.to_status ?? "-"}
-                  </td>
-                  <td className="text-ink-muted px-4 py-2.5 text-xs">
-                    {event.note ?? "-"}
-                  </td>
-                </tr>
-              ))}
-              {paymentEvents.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="text-ink-muted px-4 py-8 text-center">
-                    No payment events yet.
-                  </td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
-        </Card>
       </div>
 
-      <div>
-        <h2 className="font-display text-2xl font-semibold">Audit log</h2>
-        <p className="text-ink-muted mt-1 text-sm">
-          Non-payment administrative actions - role changes, publishing, enrollment
-          grants.
-        </p>
-        <Card className="mt-4 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
-              <tr>
-                <th className="px-4 py-3">When</th>
-                <th className="px-4 py-3">Action</th>
-                <th className="px-4 py-3">Entity</th>
-                <th className="px-4 py-3">Details</th>
-              </tr>
-            </thead>
-            <tbody className="divide-line divide-y">
-              {auditLogs.map((log) => (
-                <tr key={log.id}>
-                  <td className="text-ink-subtle px-4 py-2.5 text-xs">
-                    {new Date(log.created_at).toLocaleString("en-LK")}
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <Badge size="sm" variant="neutral">
-                      {log.action}
-                    </Badge>
-                  </td>
-                  <td className="text-ink-muted px-4 py-2.5 text-xs">
-                    {log.entity_type}
-                    {log.entity_id ? ` · ${log.entity_id.slice(0, 8)}` : ""}
-                  </td>
-                  <td className="text-ink-subtle px-4 py-2.5 font-mono text-xs">
-                    {log.after ? JSON.stringify(log.after) : "-"}
-                  </td>
-                </tr>
-              ))}
-              {auditLogs.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="text-ink-muted px-4 py-8 text-center">
-                    No audit entries yet.
-                  </td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
-        </Card>
-      </div>
+      <AdminTabs
+        sections={[
+          {
+            id: "payments",
+            label: "Payment events",
+            content: (
+              <div>
+                <h2 className="font-display text-lg font-semibold">Payment events</h2>
+                <p className="text-ink-muted mt-1 text-sm">
+                  The append-only financial log - every order transition, success or
+                  failure. Most recent 100 shown here.
+                </p>
+                <Card className="mt-4 overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
+                      <tr>
+                        <th className="px-4 py-3">When</th>
+                        <th className="px-4 py-3">Order</th>
+                        <th className="px-4 py-3">Event</th>
+                        <th className="px-4 py-3">Transition</th>
+                        <th className="px-4 py-3">Note</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-line divide-y">
+                      {paymentEvents.map((event) => (
+                        <tr key={event.id}>
+                          <td className="text-ink-subtle px-4 py-2.5 text-xs">
+                            {new Date(event.created_at).toLocaleString("en-LK")}
+                          </td>
+                          <td className="px-4 py-2.5 font-mono text-xs text-teal-700">
+                            {event.order?.reference_code ?? "-"}
+                          </td>
+                          <td className="px-4 py-2.5">
+                            <Badge size="sm" variant="neutral">
+                              {event.type}
+                            </Badge>
+                          </td>
+                          <td className="text-ink-muted px-4 py-2.5 text-xs">
+                            {event.from_status ?? "-"} &rarr; {event.to_status ?? "-"}
+                          </td>
+                          <td className="text-ink-muted px-4 py-2.5 text-xs">
+                            {event.note ?? "-"}
+                          </td>
+                        </tr>
+                      ))}
+                      {paymentEvents.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan={5}
+                            className="text-ink-muted px-4 py-8 text-center"
+                          >
+                            No payment events yet.
+                          </td>
+                        </tr>
+                      ) : null}
+                    </tbody>
+                  </table>
+                </Card>
+              </div>
+            ),
+          },
+          {
+            id: "audit-log",
+            label: "Audit log",
+            content: (
+              <div>
+                <h2 className="font-display text-lg font-semibold">Audit log</h2>
+                <p className="text-ink-muted mt-1 text-sm">
+                  Non-payment administrative actions - role changes, publishing,
+                  enrollment grants. Most recent 100 shown here.
+                </p>
+                <Card className="mt-4 overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead className="bg-paper text-ink-muted text-left text-xs font-semibold tracking-wide uppercase">
+                      <tr>
+                        <th className="px-4 py-3">When</th>
+                        <th className="px-4 py-3">Action</th>
+                        <th className="px-4 py-3">Entity</th>
+                        <th className="px-4 py-3">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-line divide-y">
+                      {auditLogs.map((log) => (
+                        <tr key={log.id}>
+                          <td className="text-ink-subtle px-4 py-2.5 text-xs">
+                            {new Date(log.created_at).toLocaleString("en-LK")}
+                          </td>
+                          <td className="px-4 py-2.5">
+                            <Badge size="sm" variant="neutral">
+                              {log.action}
+                            </Badge>
+                          </td>
+                          <td className="text-ink-muted px-4 py-2.5 text-xs">
+                            {log.entity_type}
+                            {log.entity_id ? ` · ${log.entity_id.slice(0, 8)}` : ""}
+                          </td>
+                          <td className="text-ink-subtle px-4 py-2.5 font-mono text-xs">
+                            {log.after ? JSON.stringify(log.after) : "-"}
+                          </td>
+                        </tr>
+                      ))}
+                      {auditLogs.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan={4}
+                            className="text-ink-muted px-4 py-8 text-center"
+                          >
+                            No audit entries yet.
+                          </td>
+                        </tr>
+                      ) : null}
+                    </tbody>
+                  </table>
+                </Card>
+              </div>
+            ),
+          },
+          {
+            id: "backups",
+            label: "Backups",
+            content: (
+              <div>
+                <h2 className="font-display text-lg font-semibold">Manual backups</h2>
+                <p className="text-ink-muted mt-1 text-sm">
+                  Download the full data set to your own machine. There&apos;s no
+                  automated off-site backup yet, so pulling these down periodically is the
+                  current safety net.
+                </p>
+                <div className="mt-4">
+                  <BackupsPanel />
+                </div>
+              </div>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }
