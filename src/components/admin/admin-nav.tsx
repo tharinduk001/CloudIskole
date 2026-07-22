@@ -21,12 +21,12 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/orders", label: "Orders", icon: ReceiptText },
+  { href: "/admin/sessions", label: "Sessions", icon: CalendarDays },
   { href: "/admin/courses", label: "Courses", icon: BookOpen },
   { href: "/admin/quizzes", label: "Quizzes", icon: ListChecks },
-  { href: "/admin/sessions", label: "Sessions", icon: CalendarDays },
-  { href: "/admin/site-content", label: "Site content", icon: Images },
+  { href: "/admin/orders", label: "Orders", icon: ReceiptText },
   { href: "/admin/audit", label: "Audit & payments", icon: ScrollText },
+  { href: "/admin/site-content", label: "Site content", icon: Images },
 ];
 
 function NavLinks({
