@@ -23,7 +23,11 @@ export function EnrollFreeButton({
 
   if (state.status === "success") {
     return (
-      <Button asChild size="lg" className="w-full sm:w-auto">
+      <Button
+        asChild
+        size="lg"
+        className="bg-terracotta-600 hover:bg-terracotta-700 w-full rounded-none"
+      >
         <Link href={firstLessonHref ?? `/courses/${courseSlug}`}>
           Start learning
           <ArrowRight aria-hidden="true" />
@@ -33,10 +37,15 @@ export function EnrollFreeButton({
   }
 
   return (
-    <form action={action} className="flex flex-col gap-2 sm:items-start">
+    <form action={action} className="flex flex-col gap-2">
       <input type="hidden" name="courseId" value={courseId} />
       <input type="hidden" name="courseSlug" value={courseSlug} />
-      <Button type="submit" size="lg" disabled={pending} className="w-full sm:w-auto">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={pending}
+        className="bg-terracotta-600 hover:bg-terracotta-700 w-full rounded-none"
+      >
         {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
         Enrol for free
       </Button>
@@ -59,9 +68,14 @@ export function StartCheckoutButton({ courseId }: { courseId: string }) {
   const [state, action, pending] = useActionState(startCheckout, idleResult);
 
   return (
-    <form action={action} className="flex flex-col gap-2 sm:items-start">
+    <form action={action} className="flex flex-col gap-2">
       <input type="hidden" name="courseId" value={courseId} />
-      <Button type="submit" size="lg" disabled={pending} className="w-full sm:w-auto">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={pending}
+        className="bg-terracotta-600 hover:bg-terracotta-700 w-full rounded-none"
+      >
         {pending ? (
           <Loader2 className="animate-spin" aria-hidden="true" />
         ) : (
