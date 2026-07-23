@@ -42,29 +42,17 @@ export function ModuleForm({
     >
       {mod ? <input type="hidden" name="id" value={mod.id} /> : null}
       <input type="hidden" name="courseId" value={courseId} />
-      <div className="flex flex-wrap items-end gap-3">
-        <Field label={mod ? "Title" : "New module title"} className="min-w-48 flex-1">
-          {(props) => (
-            <Input
-              {...props}
-              name="title"
-              required
-              placeholder="Module title"
-              defaultValue={mod?.title}
-            />
-          )}
-        </Field>
-        <Field label="Sort order" className="w-28">
-          {(props) => (
-            <Input
-              {...props}
-              name="sortOrder"
-              type="number"
-              defaultValue={mod?.sort_order ?? 0}
-            />
-          )}
-        </Field>
-      </div>
+      <Field label={mod ? "Title" : "New module title"} className="min-w-48 flex-1">
+        {(props) => (
+          <Input
+            {...props}
+            name="title"
+            required
+            placeholder="Module title"
+            defaultValue={mod?.title}
+          />
+        )}
+      </Field>
       {mod ? (
         <Field label="Summary" hint="Optional, shown to students">
           {(props) => (

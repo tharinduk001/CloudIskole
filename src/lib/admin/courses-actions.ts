@@ -53,12 +53,50 @@ const courseSchema = z.object({
     .trim()
     .optional()
     .transform((v) => (v ? Number(v) : undefined)),
-  sortOrder: z
-    .string()
-    .trim()
-    .optional()
-    .transform((v) => (v ? Number(v) : 0)),
 });
+
+/** One past the highest existing `sort_order` in `courses`, so new rows sort last. */
+async function nextCourseSortOrder(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<number> {
+  const { data } = await supabase
+    .from("courses")
+    .select("sort_order")
+    .order("sort_order", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (data?.sort_order ?? -1) + 1;
+}
+
+/** One past the highest existing `sort_order` among a course's modules. */
+async function nextModuleSortOrder(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  courseId: string,
+): Promise<number> {
+  const { data } = await supabase
+    .from("modules")
+    .select("sort_order")
+    .eq("course_id", courseId)
+    .order("sort_order", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (data?.sort_order ?? -1) + 1;
+}
+
+/** One past the highest existing `sort_order` among a module's lessons. */
+async function nextLessonSortOrder(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  moduleId: string,
+): Promise<number> {
+  const { data } = await supabase
+    .from("lessons")
+    .select("sort_order")
+    .eq("module_id", moduleId)
+    .order("sort_order", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (data?.sort_order ?? -1) + 1;
+}
 
 export async function upsertCourse(
   _prev: ActionResult,
@@ -79,7 +117,6 @@ export async function upsertCourse(
     isFree: formData.get("isFree"),
     priceRupees: isFree ? undefined : formData.get("priceRupees") || undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
-    sortOrder: formData.get("sortOrder") || undefined,
   });
 
   if (!parsed.success) {
@@ -102,7 +139,6 @@ export async function upsertCourse(
     is_free: isFree,
     price_cents: isFree ? 0 : parsed.data.priceRupees,
     duration_minutes: parsed.data.durationMinutes ?? null,
-    sort_order: parsed.data.sortOrder,
   };
 
   if (parsed.data.id) {
@@ -119,7 +155,7 @@ export async function upsertCourse(
 
   const { data: created, error } = await supabase
     .from("courses")
-    .insert(row)
+    .insert({ ...row, sort_order: await nextCourseSortOrder(supabase) })
     .select("id")
     .single();
   if (error || !created) {
@@ -196,11 +232,6 @@ const moduleSchema = z.object({
   courseId: z.uuid(),
   title: z.string().trim().min(2).max(200),
   summary: z.string().trim().max(500).optional(),
-  sortOrder: z
-    .string()
-    .trim()
-    .optional()
-    .transform((v) => (v ? Number(v) : 0)),
 });
 
 export async function upsertModule(
@@ -214,7 +245,6 @@ export async function upsertModule(
     courseId: formData.get("courseId"),
     title: formData.get("title"),
     summary: formData.get("summary") || undefined,
-    sortOrder: formData.get("sortOrder") || undefined,
   });
 
   if (!parsed.success) {
@@ -226,12 +256,14 @@ export async function upsertModule(
     course_id: parsed.data.courseId,
     title: parsed.data.title,
     summary: parsed.data.summary ?? null,
-    sort_order: parsed.data.sortOrder,
   };
 
   const { error } = parsed.data.id
     ? await supabase.from("modules").update(row).eq("id", parsed.data.id)
-    : await supabase.from("modules").insert(row);
+    : await supabase.from("modules").insert({
+        ...row,
+        sort_order: await nextModuleSortOrder(supabase, parsed.data.courseId),
+      });
 
   if (error) {
     console.error("upsertModule failed", error);
@@ -276,11 +308,6 @@ const lessonSchema = z.object({
     .optional()
     .transform((v) => (v ? Number(v) : undefined)),
   isPreview: z.union([z.literal("on"), z.null()]).optional(),
-  sortOrder: z
-    .string()
-    .trim()
-    .optional()
-    .transform((v) => (v ? Number(v) : 0)),
 });
 
 export async function upsertLesson(
@@ -301,7 +328,6 @@ export async function upsertLesson(
     attachmentPath: formData.get("attachmentPath") || undefined,
     durationSeconds: formData.get("durationSeconds") || undefined,
     isPreview: formData.get("isPreview"),
-    sortOrder: formData.get("sortOrder") || undefined,
   });
 
   if (!parsed.success) {
@@ -335,12 +361,14 @@ export async function upsertLesson(
     attachment_path: parsed.data.type === "pdf" ? parsed.data.attachmentPath : null,
     duration_seconds: parsed.data.durationSeconds ?? null,
     is_preview: parsed.data.isPreview === "on",
-    sort_order: parsed.data.sortOrder,
   };
 
   const { error } = parsed.data.id
     ? await supabase.from("lessons").update(row).eq("id", parsed.data.id)
-    : await supabase.from("lessons").insert(row);
+    : await supabase.from("lessons").insert({
+        ...row,
+        sort_order: await nextLessonSortOrder(supabase, parsed.data.moduleId),
+      });
 
   if (error) {
     console.error("upsertLesson failed", error);

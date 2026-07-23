@@ -51,7 +51,7 @@ export function LessonForm({
         </Field>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Type" required>
           {(props) => (
             <Select
@@ -73,16 +73,6 @@ export function LessonForm({
               name="durationSeconds"
               type="number"
               defaultValue={lesson?.duration_seconds ?? ""}
-            />
-          )}
-        </Field>
-        <Field label="Sort order">
-          {(props) => (
-            <Input
-              {...props}
-              name="sortOrder"
-              type="number"
-              defaultValue={lesson?.sort_order ?? 0}
             />
           )}
         </Field>

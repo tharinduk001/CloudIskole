@@ -109,33 +109,21 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
         </Field>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        <Field
-          label="Price (Rs)"
-          hint="Ignored when marked free"
-          error={fieldErrors?.priceRupees}
-        >
-          {(props) => (
-            <Input
-              {...props}
-              name="priceRupees"
-              type="number"
-              step="0.01"
-              defaultValue={course ? course.price_cents / 100 : ""}
-            />
-          )}
-        </Field>
-        <Field label="Sort order" hint="Lower shows first in the catalogue">
-          {(props) => (
-            <Input
-              {...props}
-              name="sortOrder"
-              type="number"
-              defaultValue={course?.sort_order ?? 0}
-            />
-          )}
-        </Field>
-      </div>
+      <Field
+        label="Price (Rs)"
+        hint="Ignored when marked free"
+        error={fieldErrors?.priceRupees}
+      >
+        {(props) => (
+          <Input
+            {...props}
+            name="priceRupees"
+            type="number"
+            step="0.01"
+            defaultValue={course ? course.price_cents / 100 : ""}
+          />
+        )}
+      </Field>
 
       <CheckboxField
         name="isFree"
