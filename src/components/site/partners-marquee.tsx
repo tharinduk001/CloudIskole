@@ -7,7 +7,7 @@ export function PartnersMarquee({ partners }: { partners: Partner[] }) {
   if (partners.length === 0) return null;
 
   return (
-    <Section className="bg-cream">
+    <Section className="bg-cream py-14 sm:py-16 lg:py-20">
       <Container size="wide">
         <SectionHeading
           size="xl"
@@ -19,7 +19,7 @@ export function PartnersMarquee({ partners }: { partners: Partner[] }) {
       </Container>
 
       <div
-        className="border-hairline relative mt-14 overflow-hidden border-y"
+        className="border-hairline relative mt-10 overflow-hidden border-y"
         role="img"
         aria-label={`Partner and collaborating organisations: ${partners.map((p) => p.name).join(", ")}`}
       >

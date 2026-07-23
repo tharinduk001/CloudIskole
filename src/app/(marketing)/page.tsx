@@ -140,7 +140,7 @@ function Hero() {
 
 function TechStack() {
   return (
-    <Section className="bg-cream">
+    <Section className="bg-cream py-14 sm:py-16 lg:py-20">
       <Container size="wide">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <SectionHeading
@@ -163,7 +163,7 @@ function TechStack() {
 
 function Features() {
   return (
-    <Section className="border-hairline bg-surface border-y">
+    <Section className="border-hairline bg-surface border-y py-14 sm:py-16 lg:py-20">
       <Container size="wide">
         <SectionHeading
           size="xl"
@@ -203,7 +203,7 @@ function Moments({ photos }: { photos: Highlight[] }) {
   if (photos.length === 0) return null;
 
   return (
-    <Section className="bg-cream">
+    <Section className="bg-cream py-14 sm:py-16 lg:py-20">
       <Container size="wide">
         <SectionHeading
           size="xl"
@@ -225,7 +225,7 @@ function Moments({ photos }: { photos: Highlight[] }) {
 
 function HowItWorks() {
   return (
-    <Section className="bg-cream">
+    <Section className="bg-cream py-14 sm:py-16 lg:py-20">
       <Container size="wide">
         <SectionHeading
           size="xl"
@@ -264,7 +264,7 @@ function HowItWorks() {
 
 function Faq() {
   return (
-    <Section id="faq" className="border-hairline bg-surface border-y">
+    <Section id="faq" className="border-hairline bg-surface border-y py-14 sm:py-16 lg:py-20">
       <Container size="narrow">
         <SectionHeading
           size="xl"
@@ -307,7 +307,7 @@ function Faq() {
 
 function FinalCta() {
   return (
-    <Section className="bg-cream">
+    <Section className="bg-cream py-14 sm:py-16 lg:py-20">
       <Container size="wide">
         <div className="bg-onyx relative overflow-hidden px-6 py-16 text-center sm:px-12 lg:py-20">
           <Liyawel
