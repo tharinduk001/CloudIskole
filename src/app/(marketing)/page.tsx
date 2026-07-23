@@ -142,15 +142,15 @@ function TechStack() {
   return (
     <Section className="bg-cream">
       <Container size="wide">
-        <SectionHeading
-          size="xl"
-          eyebrow="What you'll actually use"
-          title="The stack behind every track"
-          description="Not toy examples — the exact tools that show up in job postings, taught hands-on from lesson one."
-          eyebrowClassName="text-terracotta-600"
-          titleClassName="text-onyx"
-        />
-        <div className="mt-14">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <SectionHeading
+            align="left"
+            eyebrow="What you'll actually use"
+            title="The stack behind every track"
+            description="Not toy examples — the exact tools that show up in job postings, taught hands-on from lesson one."
+            eyebrowClassName="text-terracotta-600"
+            titleClassName="text-onyx"
+          />
           <TechCubeGrid />
         </div>
       </Container>

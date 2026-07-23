@@ -151,7 +151,7 @@ function Tile({ tool }: { tool: (typeof TOOLS)[number] }) {
 export function TechCubeGrid() {
   return (
     <div
-      className="border-hairline mx-auto grid max-w-lg grid-cols-4 gap-px overflow-hidden border bg-[var(--color-hairline)] sm:grid-cols-6 lg:grid-cols-8"
+      className="border-hairline grid w-full grid-cols-4 gap-px overflow-hidden border bg-[var(--color-hairline)] sm:grid-cols-6 lg:grid-cols-8"
       role="img"
       aria-label={`Tools covered across bootcamps: ${TOOLS.map((t) => t.name).join(", ")}`}
     >
