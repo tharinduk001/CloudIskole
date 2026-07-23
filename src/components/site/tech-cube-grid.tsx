@@ -2,35 +2,51 @@ import { Cloud, type LucideIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 import {
   siAnsible,
+  siApachekafka,
   siArgo,
   siChef,
+  siCircleci,
+  siCloudflare,
   siConsul,
+  siDatadog,
   siDigitalocean,
   siDocker,
+  siElasticsearch,
   siGit,
   siGithub,
   siGithubactions,
   siGitlab,
   siGnubash,
+  siGo,
   siGooglecloud,
   siGrafana,
   siHelm,
   siIstio,
   siJenkins,
+  siJira,
+  siKibana,
   siKubernetes,
   siLinux,
   siMongodb,
   siMysql,
+  siNewrelic,
   siNginx,
   siNodedotjs,
+  siOpentofu,
   siPacker,
+  siPagerduty,
   siPostgresql,
   siPrometheus,
   siPuppet,
   siPython,
   siRabbitmq,
+  siRedhat,
   siRedis,
+  siRust,
+  siSplunk,
   siTerraform,
+  siTravisci,
+  siVagrant,
   siVault,
   type SimpleIcon,
 } from "simple-icons";
@@ -77,6 +93,22 @@ const TOOLS: { name: string; hex: string; icon: SimpleIcon | LucideIcon }[] = [
   { name: "Node.js", hex: siNodedotjs.hex, icon: siNodedotjs },
   { name: "DigitalOcean", hex: siDigitalocean.hex, icon: siDigitalocean },
   { name: "Packer", hex: siPacker.hex, icon: siPacker },
+  { name: "CircleCI", hex: siCircleci.hex, icon: siCircleci },
+  { name: "Red Hat", hex: siRedhat.hex, icon: siRedhat },
+  { name: "Vagrant", hex: siVagrant.hex, icon: siVagrant },
+  { name: "Elasticsearch", hex: siElasticsearch.hex, icon: siElasticsearch },
+  { name: "Kibana", hex: siKibana.hex, icon: siKibana },
+  { name: "Datadog", hex: siDatadog.hex, icon: siDatadog },
+  { name: "New Relic", hex: siNewrelic.hex, icon: siNewrelic },
+  { name: "PagerDuty", hex: siPagerduty.hex, icon: siPagerduty },
+  { name: "Cloudflare", hex: siCloudflare.hex, icon: siCloudflare },
+  { name: "OpenTofu", hex: siOpentofu.hex, icon: siOpentofu },
+  { name: "Go", hex: siGo.hex, icon: siGo },
+  { name: "Apache Kafka", hex: siApachekafka.hex, icon: siApachekafka },
+  { name: "Jira", hex: siJira.hex, icon: siJira },
+  { name: "Splunk", hex: siSplunk.hex, icon: siSplunk },
+  { name: "Travis CI", hex: siTravisci.hex, icon: siTravisci },
+  { name: "Rust", hex: siRust.hex, icon: siRust },
 ];
 
 function isSimpleIcon(icon: SimpleIcon | LucideIcon): icon is SimpleIcon {
@@ -91,7 +123,7 @@ function Tile({ tool }: { tool: (typeof TOOLS)[number] }) {
   return (
     <div
       title={name}
-      className="bg-surface group hover:bg-[var(--tool-tint)] relative flex aspect-square items-center justify-center p-2 transition-colors duration-200"
+      className="bg-surface group hover:bg-[var(--tool-tint)] relative flex aspect-square items-center justify-center p-3 transition-colors duration-200"
       style={{ "--tool-tint": `${color}14` } as CSSProperties}
     >
       <span
@@ -99,13 +131,13 @@ function Tile({ tool }: { tool: (typeof TOOLS)[number] }) {
         style={{ color }}
       >
         {LucideMark ? (
-          <LucideMark className="size-4" aria-hidden="true" />
+          <LucideMark className="size-5" aria-hidden="true" />
         ) : (
           <svg
             viewBox="0 0 24 24"
             role="img"
             aria-hidden="true"
-            className="size-4 fill-current"
+            className="size-5 fill-current"
           >
             <path d={(icon as SimpleIcon).path} />
           </svg>
@@ -119,7 +151,7 @@ function Tile({ tool }: { tool: (typeof TOOLS)[number] }) {
 export function TechCubeGrid() {
   return (
     <div
-      className="border-hairline mx-auto grid max-w-sm grid-cols-[repeat(auto-fit,minmax(44px,1fr))] gap-px overflow-hidden border bg-[var(--color-hairline)]"
+      className="border-hairline mx-auto grid max-w-lg grid-cols-4 gap-px overflow-hidden border bg-[var(--color-hairline)] sm:grid-cols-6 lg:grid-cols-8"
       role="img"
       aria-label={`Tools covered across bootcamps: ${TOOLS.map((t) => t.name).join(", ")}`}
     >
