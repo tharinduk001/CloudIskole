@@ -1558,6 +1558,114 @@ reset role;
 rollback to savepoint s17;
 
 -- ===========================================================================
+-- 18 · Course reviews — submit-once, enrollment-gated, admin-moderated
+-- ===========================================================================
+
+savepoint s18;
+
+select tests.act_as(:'alice');
+
+-- Reuses the free course Alice can self-enroll in (see section 4).
+insert into public.enrollments (user_id, course_id)
+values (:'alice', 'aaaaaaaa-0000-4000-8000-000000000001');
+
+insert into public.course_reviews (course_id, user_id, rating, body)
+values ('aaaaaaaa-0000-4000-8000-000000000001', :'alice', 5, 'Loved it');
+
+select tests.ok(
+  (select count(*) from public.course_reviews where user_id = :'alice') = 1,
+  'an enrolled student can submit a review'
+);
+
+select tests.must_fail(
+  format($f$insert into public.course_reviews (course_id, user_id, rating)
+           values ('aaaaaaaa-0000-4000-8000-000000000001', %L, 4)$f$, :'alice'),
+  'a student cannot submit a second review for the same course (unique constraint)'
+);
+
+reset role;
+select tests.act_as(:'bob');
+
+select tests.must_fail(
+  format($f$insert into public.course_reviews (course_id, user_id, rating)
+           values ('aaaaaaaa-0000-4000-8000-000000000001', %L, 5)$f$, :'bob'),
+  'an unenrolled student cannot review a course'
+);
+
+reset role;
+-- Bob enrolls (superuser insert, mirrors the pattern used elsewhere in this
+-- file for setting up fixtures ahead of an impersonated test).
+insert into public.enrollments (user_id, course_id)
+values (:'bob', 'aaaaaaaa-0000-4000-8000-000000000001');
+
+select tests.act_as(:'bob');
+
+select tests.must_fail(
+  format($f$insert into public.course_reviews (course_id, user_id, rating, status)
+           values ('aaaaaaaa-0000-4000-8000-000000000001', %L, 5, 'approved')$f$, :'bob'),
+  'an enrolled student cannot self-approve a review at insert time'
+);
+
+select tests.act_as(:'alice');
+
+-- No update policy for students at all: submit-once by product decision.
+-- Same USING-filtered shape as the founder_profile case in section 11 - the
+-- statement succeeds but silently matches zero rows, rather than erroring.
+update public.course_reviews set rating = 1 where user_id = :'alice';
+select tests.ok(
+  (select rating from public.course_reviews where user_id = :'alice') = 5,
+  'a student cannot edit her own review - the update above silently matched zero rows'
+);
+
+select tests.ok(
+  (select count(*) from public.course_reviews where user_id = :'alice') = 1,
+  'a student can read her own pending review'
+);
+
+select tests.act_as_anon();
+
+select tests.ok(
+  (select count(*) from public.course_reviews
+   where course_id = 'aaaaaaaa-0000-4000-8000-000000000001') = 0,
+  'anon cannot see a pending review'
+);
+
+select tests.act_as(:'admin');
+
+update public.course_reviews set status = 'approved', moderated_by = :'admin'
+  where user_id = :'alice';
+select tests.ok(
+  (select status from public.course_reviews where user_id = :'alice') = 'approved',
+  'an admin can approve a review'
+);
+
+reset role;
+select tests.act_as_anon();
+
+select tests.ok(
+  (select count(*) from public.course_reviews
+   where course_id = 'aaaaaaaa-0000-4000-8000-000000000001' and status = 'approved') = 1,
+  'anon can see an approved review'
+);
+select tests.ok(
+  (select review_count from public.course_review_stats
+   where course_id = 'aaaaaaaa-0000-4000-8000-000000000001') = 1,
+  'course_review_stats reflects the approved review'
+);
+
+select tests.act_as(:'admin');
+
+delete from public.course_reviews where user_id = :'alice';
+select tests.ok(
+  (select count(*) from public.course_reviews where user_id = :'alice') = 0,
+  'an admin can delete a review'
+);
+
+reset role;
+
+rollback to savepoint s18;
+
+-- ===========================================================================
 -- 11 · Every public table has RLS enabled
 --
 -- Guards against the most likely future mistake: adding a table and

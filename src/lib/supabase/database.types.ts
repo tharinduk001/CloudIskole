@@ -284,6 +284,95 @@ export type Database = {
           },
         ]
       }
+      course_reviews: {
+        Row: {
+          body: string | null
+          course_id: string
+          created_at: string
+          id: string
+          moderated_at: string | null
+          moderated_by: string | null
+          rating: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          course_id: string
+          created_at?: string
+          id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          rating: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          rating?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_reviews_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_reviews_moderated_by_fkey"
+            columns: ["moderated_by"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_all_time"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "course_reviews_moderated_by_fkey"
+            columns: ["moderated_by"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_monthly"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "course_reviews_moderated_by_fkey"
+            columns: ["moderated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_all_time"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "course_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_monthly"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "course_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
           category: string | null
@@ -291,6 +380,7 @@ export type Database = {
           description: string | null
           duration_minutes: number | null
           id: string
+          intro_video_youtube_id: string | null
           is_free: boolean
           level: Database["public"]["Enums"]["course_level"]
           price_cents: number
@@ -309,6 +399,7 @@ export type Database = {
           description?: string | null
           duration_minutes?: number | null
           id?: string
+          intro_video_youtube_id?: string | null
           is_free?: boolean
           level?: Database["public"]["Enums"]["course_level"]
           price_cents?: number
@@ -327,6 +418,7 @@ export type Database = {
           description?: string | null
           duration_minutes?: number | null
           id?: string
+          intro_video_youtube_id?: string | null
           is_free?: boolean
           level?: Database["public"]["Enums"]["course_level"]
           price_cents?: number
@@ -1609,6 +1701,22 @@ export type Database = {
       }
     }
     Views: {
+      course_review_stats: {
+        Row: {
+          average_rating: number | null
+          course_id: string | null
+          review_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_reviews_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leaderboard_all_time: {
         Row: {
           avatar_url: string | null

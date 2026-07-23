@@ -3,6 +3,8 @@
 import { PlayCircle } from "lucide-react";
 import * as React from "react";
 
+import { cn } from "@/lib/utils";
+
 declare global {
   interface Window {
     YT?: {
@@ -54,9 +56,11 @@ function loadYouTubeApi(): Promise<void> {
 export function SecureVideoPlayer({
   youtubeId,
   title,
+  className,
 }: {
   youtubeId: string;
   title: string;
+  className?: string;
 }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const playerRef = React.useRef<{ playVideo: () => void; destroy: () => void } | null>(
@@ -100,7 +104,10 @@ export function SecureVideoPlayer({
 
   return (
     <div
-      className="border-line relative aspect-video overflow-hidden rounded-2xl border bg-black"
+      className={cn(
+        "border-line relative aspect-video overflow-hidden rounded-2xl border bg-black",
+        className,
+      )}
       onContextMenu={(e) => e.preventDefault()}
     >
       <div ref={containerRef} className="size-full" />

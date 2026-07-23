@@ -103,6 +103,26 @@ export async function listCoursesAdmin() {
   return data;
 }
 
+export type AdminReviewRow = Database["public"]["Tables"]["course_reviews"]["Row"] & {
+  course: { title: string };
+  reviewer: { full_name: string; email: string };
+};
+
+/** Every review regardless of status, pending first then most recent. */
+export async function listAllReviews(): Promise<AdminReviewRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("course_reviews")
+    .select(
+      "*, course:courses(title), reviewer:profiles!course_reviews_user_id_fkey(full_name, email)",
+    )
+    .order("status", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(`Failed to load reviews: ${error.message}`);
+  return data as unknown as AdminReviewRow[];
+}
+
 export type AdminModule = Database["public"]["Tables"]["modules"]["Row"] & {
   lessons: Database["public"]["Tables"]["lessons"]["Row"][];
 };

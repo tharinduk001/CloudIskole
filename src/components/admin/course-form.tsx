@@ -90,6 +90,19 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
         )}
       </Field>
 
+      <Field
+        label="Intro video YouTube id"
+        hint="The 11-character id, e.g. dQw4w9WgXcQ - shown at the top of the course page. Leave blank to show the cover image instead."
+      >
+        {(props) => (
+          <Input
+            {...props}
+            name="introVideoYoutubeId"
+            defaultValue={course?.intro_video_youtube_id ?? ""}
+          />
+        )}
+      </Field>
+
       <div className="grid gap-6 sm:grid-cols-3">
         <Field label="Level" required>
           {(props) => (

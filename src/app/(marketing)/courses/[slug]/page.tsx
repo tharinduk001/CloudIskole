@@ -1,12 +1,16 @@
 import { CheckCircle2, Clock, Lock, PlayCircle } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import {
   EnrollFreeButton,
   StartCheckoutButton,
 } from "@/components/courses/enroll-button";
+import { ReviewForm } from "@/components/courses/review-form";
+import { StarRating } from "@/components/courses/star-rating";
 import { Liyawel } from "@/components/brand/liyawel";
+import { SecureVideoPlayer } from "@/components/video/secure-video-player";
 import { StartQuizButton } from "@/components/quizzes/start-quiz-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +25,11 @@ import {
 } from "@/lib/data/courses";
 import { formatDuration, formatLevel, formatLkr } from "@/lib/format";
 import { listMyAttempts, listQuizzesForCourse } from "@/lib/data/quizzes";
+import {
+  getCourseReviewStats,
+  getMyReview,
+  listApprovedReviews,
+} from "@/lib/data/reviews";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -71,6 +80,13 @@ export default async function CourseDetailPage({
     })),
   );
 
+  const [reviewStats, reviews, myReview] = await Promise.all([
+    getCourseReviewStats(course.id),
+    listApprovedReviews(course.id),
+    profile ? getMyReview(course.id, profile.id) : Promise.resolve(null),
+  ]);
+  const canReview = isEnrolled && !myReview;
+
   return (
     <>
       <section className="bg-mural-wash border-hairline relative overflow-hidden border-b">
@@ -113,6 +129,16 @@ export default async function CourseDetailPage({
               ) : null}
 
               <div className="text-mist-soft mt-6 flex flex-wrap items-center gap-5 text-sm">
+                {reviewStats ? (
+                  <span className="inline-flex items-center gap-2">
+                    <StarRating rating={reviewStats.average_rating} size="sm" />
+                    <span className="text-onyx-soft font-medium">
+                      {reviewStats.average_rating}
+                    </span>
+                    ({reviewStats.review_count}{" "}
+                    {reviewStats.review_count === 1 ? "rating" : "ratings"})
+                  </span>
+                ) : null}
                 <span className="inline-flex items-center gap-1.5">
                   <PlayCircle className="size-4" aria-hidden="true" />
                   {lessons.length} lessons
@@ -126,59 +152,79 @@ export default async function CourseDetailPage({
               </div>
             </div>
 
-            <Card className="border-hairline rounded-none p-6">
-              {isEnrolled ? (
-                <>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-mist">Your progress</span>
-                    <span className="text-terracotta-600 font-semibold">
-                      {enrollment?.progress_pct ?? 0}%
-                    </span>
-                  </div>
-                  <div className="bg-hairline mt-2 h-2 overflow-hidden">
-                    <div
-                      className="bg-terracotta-600 h-full transition-[width] duration-300"
-                      style={{ width: `${enrollment?.progress_pct ?? 0}%` }}
-                    />
-                  </div>
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-terracotta-600 hover:bg-terracotta-700 mt-5 w-full rounded-none"
-                  >
-                    <Link href={lessonHref(course.slug, nextLesson)}>
-                      {enrollment?.status === "completed"
-                        ? "Review course"
-                        : "Continue learning"}
-                    </Link>
-                  </Button>
-                </>
-              ) : !profile ? (
-                <div className="flex flex-col gap-3">
-                  <p className="text-mist text-sm leading-relaxed">
-                    Sign in or create a free account to enrol.
-                  </p>
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
-                  >
-                    <Link
-                      href={`/sign-in?next=${encodeURIComponent(`/courses/${course.slug}`)}`}
-                    >
-                      Sign in to enrol
-                    </Link>
-                  </Button>
-                </div>
-              ) : course.is_free ? (
-                <EnrollFreeButton
-                  courseId={course.id}
-                  courseSlug={course.slug}
-                  firstLessonHref={lessonHref(course.slug, firstLesson)}
+            <Card className="border-hairline overflow-hidden rounded-none p-0">
+              {course.intro_video_youtube_id ? (
+                <SecureVideoPlayer
+                  youtubeId={course.intro_video_youtube_id}
+                  title={course.title}
+                  className="rounded-none border-0"
                 />
-              ) : (
-                <StartCheckoutButton courseId={course.id} />
-              )}
+              ) : course.thumbnail_path ? (
+                <div className="relative aspect-video overflow-hidden bg-black">
+                  <Image
+                    src={course.thumbnail_path}
+                    alt={course.title}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 38vw, 100vw"
+                  />
+                </div>
+              ) : null}
+
+              <div className="p-6">
+                {isEnrolled ? (
+                  <>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-mist">Your progress</span>
+                      <span className="text-terracotta-600 font-semibold">
+                        {enrollment?.progress_pct ?? 0}%
+                      </span>
+                    </div>
+                    <div className="bg-hairline mt-2 h-2 overflow-hidden">
+                      <div
+                        className="bg-terracotta-600 h-full transition-[width] duration-300"
+                        style={{ width: `${enrollment?.progress_pct ?? 0}%` }}
+                      />
+                    </div>
+                    <Button
+                      asChild
+                      size="lg"
+                      className="bg-terracotta-600 hover:bg-terracotta-700 mt-5 w-full rounded-none"
+                    >
+                      <Link href={lessonHref(course.slug, nextLesson)}>
+                        {enrollment?.status === "completed"
+                          ? "Review course"
+                          : "Continue learning"}
+                      </Link>
+                    </Button>
+                  </>
+                ) : !profile ? (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-mist text-sm leading-relaxed">
+                      Sign in or create a free account to enrol.
+                    </p>
+                    <Button
+                      asChild
+                      size="lg"
+                      className="bg-terracotta-600 hover:bg-terracotta-700 rounded-none"
+                    >
+                      <Link
+                        href={`/sign-in?next=${encodeURIComponent(`/courses/${course.slug}`)}`}
+                      >
+                        Sign in to enrol
+                      </Link>
+                    </Button>
+                  </div>
+                ) : course.is_free ? (
+                  <EnrollFreeButton
+                    courseId={course.id}
+                    courseSlug={course.slug}
+                    firstLessonHref={lessonHref(course.slug, firstLesson)}
+                  />
+                ) : (
+                  <StartCheckoutButton courseId={course.id} />
+                )}
+              </div>
             </Card>
           </div>
         </Container>
@@ -347,6 +393,76 @@ export default async function CourseDetailPage({
                 </div>
               ) : null}
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section className="bg-cream border-hairline border-t">
+        <Container size="wide">
+          <div className="max-w-3xl">
+            <h2 className="font-display text-onyx text-xl font-semibold">
+              Ratings &amp; Reviews
+            </h2>
+
+            {reviewStats ? (
+              <div className="mt-3 flex items-center gap-3">
+                <span className="font-display text-onyx text-3xl font-semibold">
+                  {reviewStats.average_rating}
+                </span>
+                <div>
+                  <StarRating rating={reviewStats.average_rating} />
+                  <p className="text-mist mt-0.5 text-xs">
+                    {reviewStats.review_count}{" "}
+                    {reviewStats.review_count === 1 ? "review" : "reviews"}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-mist mt-3 text-sm">No reviews yet.</p>
+            )}
+
+            <div className="mt-6">
+              {canReview ? (
+                <ReviewForm courseId={course.id} courseSlug={course.slug} />
+              ) : myReview ? (
+                <p className="border-hairline bg-surface rounded-none border p-4 text-sm">
+                  {myReview.status === "pending" ? (
+                    <span className="text-mist">
+                      Your review is awaiting approval and isn&apos;t public yet.
+                    </span>
+                  ) : (
+                    <span className="text-onyx">Thanks for reviewing this course!</span>
+                  )}
+                </p>
+              ) : null}
+            </div>
+
+            {reviews.length > 0 ? (
+              <ul className="border-hairline mt-8 divide-y divide-[var(--color-hairline)] border-t">
+                {reviews.map((review) => (
+                  <li key={review.id} className="py-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-onyx text-sm font-medium">
+                        {review.reviewer_name}
+                      </span>
+                      <span className="text-mist-soft text-xs">
+                        {new Date(review.created_at).toLocaleDateString("en-LK", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <StarRating rating={review.rating} size="sm" className="mt-1.5" />
+                    {review.body ? (
+                      <p className="text-mist mt-2 text-sm leading-relaxed">
+                        {review.body}
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
         </Container>
       </Section>

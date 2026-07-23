@@ -53,6 +53,7 @@ const courseSchema = z.object({
     .trim()
     .optional()
     .transform((v) => (v ? Number(v) : undefined)),
+  introVideoYoutubeId: z.string().trim().max(20).optional(),
 });
 
 /** One past the highest existing `sort_order` in `courses`, so new rows sort last. */
@@ -117,6 +118,7 @@ export async function upsertCourse(
     isFree: formData.get("isFree"),
     priceRupees: isFree ? undefined : formData.get("priceRupees") || undefined,
     durationMinutes: formData.get("durationMinutes") || undefined,
+    introVideoYoutubeId: formData.get("introVideoYoutubeId") || undefined,
   });
 
   if (!parsed.success) {
@@ -139,6 +141,7 @@ export async function upsertCourse(
     is_free: isFree,
     price_cents: isFree ? 0 : parsed.data.priceRupees,
     duration_minutes: parsed.data.durationMinutes ?? null,
+    intro_video_youtube_id: parsed.data.introVideoYoutubeId || null,
   };
 
   if (parsed.data.id) {

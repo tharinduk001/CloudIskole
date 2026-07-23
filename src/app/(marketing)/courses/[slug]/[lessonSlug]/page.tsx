@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { LessonMarkdown } from "@/components/lesson/lesson-markdown";
 import { MarkCompleteButton } from "@/components/lesson/mark-complete-button";
-import { SecureVideoPlayer } from "@/components/lesson/secure-video-player";
+import { SecureVideoPlayer } from "@/components/video/secure-video-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/layout";

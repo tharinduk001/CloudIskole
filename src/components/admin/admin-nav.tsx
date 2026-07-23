@@ -10,6 +10,7 @@ import {
   Menu,
   ReceiptText,
   ScrollText,
+  Star,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/admin/courses", label: "Courses", icon: BookOpen },
   { href: "/admin/quizzes", label: "Quizzes", icon: ListChecks },
   { href: "/admin/orders", label: "Orders", icon: ReceiptText },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/audit", label: "Audit & payments", icon: ScrollText },
   { href: "/admin/site-content", label: "Site content", icon: Images },
 ];
