@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { LessonMarkdown } from "@/components/lesson/lesson-markdown";
 import { MarkCompleteButton } from "@/components/lesson/mark-complete-button";
+import { SecureVideoPlayer } from "@/components/lesson/secure-video-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/layout";
@@ -135,15 +136,7 @@ export default async function LessonPage({
 
             <div className="mt-6">
               {lesson.type === "video" && lesson.youtube_id ? (
-                <div className="border-line aspect-video overflow-hidden rounded-2xl border bg-black">
-                  <iframe
-                    className="size-full"
-                    src={`https://www.youtube-nocookie.com/embed/${lesson.youtube_id}?rel=0`}
-                    title={lesson.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
+                <SecureVideoPlayer youtubeId={lesson.youtube_id} title={lesson.title} />
               ) : null}
 
               {lesson.type === "text" && lesson.content_mdx ? (
