@@ -96,6 +96,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "audit_logs_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
         ]
       }
       badges: {
@@ -191,6 +198,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "bank_transfers_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
         ]
       }
       contact_messages: {
@@ -262,6 +276,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "contact_messages_handled_by_fkey"
+            columns: ["handled_by"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "contact_messages_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -280,6 +301,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -351,6 +379,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "course_reviews_moderated_by_fkey"
+            columns: ["moderated_by"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "course_reviews_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -369,6 +404,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -501,6 +543,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enrollments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -716,6 +765,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "lesson_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
         ]
       }
       lessons: {
@@ -890,6 +946,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
         ]
       }
       orders: {
@@ -968,6 +1031,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -1062,6 +1132,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "payment_events_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "payment_events_order_id_fkey"
             columns: ["order_id"]
             isOneToOne: false
@@ -1121,6 +1198,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "phone_otp_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -1280,6 +1364,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_attempts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -1499,6 +1590,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "session_registrations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
         ]
       }
       sessions: {
@@ -1601,6 +1699,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_activity_days_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_badges: {
@@ -1646,6 +1751,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_badges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -1695,6 +1807,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xp_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "student_admin_summary"
             referencedColumns: ["id"]
           },
         ]
@@ -1799,6 +1918,42 @@ export type Database = {
           },
         ]
       }
+      student_admin_summary: {
+        Row: {
+          completed_count: number | null
+          created_at: string | null
+          email: string | null
+          enrollment_count: number | null
+          full_name: string | null
+          id: string | null
+          phone: string | null
+          total_spent_cents: number | null
+          total_xp: number | null
+        }
+        Insert: {
+          completed_count?: never
+          created_at?: string | null
+          email?: string | null
+          enrollment_count?: never
+          full_name?: string | null
+          id?: string | null
+          phone?: string | null
+          total_spent_cents?: never
+          total_xp?: never
+        }
+        Update: {
+          completed_count?: never
+          created_at?: string | null
+          email?: string | null
+          enrollment_count?: never
+          full_name?: string | null
+          id?: string | null
+          phone?: string | null
+          total_spent_cents?: never
+          total_xp?: never
+        }
+        Relationships: []
+      }
     }
     Functions: {
       admin_set_user_role: {
@@ -1868,6 +2023,13 @@ export type Database = {
       }
       current_streak: { Args: { p_user_id: string }; Returns: number }
       enqueue_session_reminders: { Args: never; Returns: number }
+      enrollments_over_time: {
+        Args: { p_since: string }
+        Returns: {
+          day: string
+          enrollment_count: number
+        }[]
+      }
       get_attempt_result: { Args: { p_attempt_id: string }; Returns: Json }
       get_course_outline_public: {
         Args: { p_course_id: string }
@@ -1903,6 +2065,13 @@ export type Database = {
         Returns: undefined
       }
       request_phone_otp: { Args: { p_phone: string }; Returns: string }
+      revenue_over_time: {
+        Args: { p_since: string }
+        Returns: {
+          day: string
+          revenue_cents: number
+        }[]
+      }
       session_seats_taken: { Args: { p_session_id: string }; Returns: number }
       start_quiz_attempt: { Args: { p_quiz_id: string }; Returns: string }
       submit_bank_transfer_slip: {

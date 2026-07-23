@@ -11,6 +11,7 @@ import {
   ReceiptText,
   ScrollText,
   Star,
+  Users,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/students", label: "Students", icon: Users },
   { href: "/admin/sessions", label: "Sessions", icon: CalendarDays },
   { href: "/admin/courses", label: "Courses", icon: BookOpen },
   { href: "/admin/quizzes", label: "Quizzes", icon: ListChecks },

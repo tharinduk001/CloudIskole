@@ -33,16 +33,28 @@ export async function listOrdersForReview(): Promise<AdminOrderRow[]> {
   return data as unknown as AdminOrderRow[];
 }
 
-/** Every order, most recent first — for the general orders list. */
-export async function listAllOrders(): Promise<AdminOrderRow[]> {
+type OrderStatus = Database["public"]["Enums"]["order_status"];
+
+/** Every order, most recent first — for the general orders list, optionally filtered. */
+export async function listAllOrders(filters?: {
+  status?: OrderStatus;
+  from?: string;
+  to?: string;
+}): Promise<AdminOrderRow[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("orders")
     .select(
       "*, course:courses(title, slug), student:profiles!orders_user_id_fkey(full_name, email), bank_transfer:bank_transfers(*)",
     )
     .order("created_at", { ascending: false })
     .limit(100);
+
+  if (filters?.status) query = query.eq("status", filters.status);
+  if (filters?.from) query = query.gte("created_at", filters.from);
+  if (filters?.to) query = query.lte("created_at", filters.to);
+
+  const { data, error } = await query;
 
   if (error) throw new Error(`Failed to load orders: ${error.message}`);
   return data as unknown as AdminOrderRow[];
@@ -201,24 +213,111 @@ export async function getQuizForAdmin(quizId: string) {
 /** Dashboard headline numbers for the admin overview page. */
 export async function getAdminOverview() {
   const supabase = await createClient();
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [{ count: pendingReview }, { count: totalStudents }, { count: totalCourses }] =
-    await Promise.all([
-      supabase
-        .from("orders")
-        .select("*", { count: "exact", head: true })
-        .in("status", ["under_review", "pending"]),
-      supabase
-        .from("profiles")
-        .select("*", { count: "exact", head: true })
-        .eq("role", "student"),
-      supabase.from("courses").select("*", { count: "exact", head: true }),
-    ]);
+  const [
+    { count: pendingReview },
+    { count: totalStudents },
+    { count: totalCourses },
+    { data: paidOrders },
+    { count: newEnrollmentsThisWeek },
+  ] = await Promise.all([
+    supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .in("status", ["under_review", "pending"]),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "student"),
+    supabase.from("courses").select("*", { count: "exact", head: true }),
+    supabase.from("orders").select("amount_cents").eq("status", "paid"),
+    supabase
+      .from("enrollments")
+      .select("*", { count: "exact", head: true })
+      .gte("enrolled_at", weekAgo),
+  ]);
 
   return {
     pendingReview: pendingReview ?? 0,
     totalStudents: totalStudents ?? 0,
     totalCourses: totalCourses ?? 0,
+    revenueAllTimeCents: (paidOrders ?? []).reduce((sum, o) => sum + o.amount_cents, 0),
+    newEnrollmentsThisWeek: newEnrollmentsThisWeek ?? 0,
+  };
+}
+
+export type StudentSummaryRow = Database["public"]["Views"]["student_admin_summary"]["Row"];
+
+/** Paginated, search-filterable student list for the admin students page. */
+export async function listStudents({
+  search,
+  page = 1,
+  pageSize = 20,
+}: {
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ students: StudentSummaryRow[]; total: number }> {
+  const supabase = await createClient();
+
+  let query = supabase
+    .from("student_admin_summary")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false });
+
+  if (search) {
+    const term = `%${search}%`;
+    query = query.or(`full_name.ilike.${term},email.ilike.${term}`);
+  }
+
+  const from = (page - 1) * pageSize;
+  const { data, error, count } = await query.range(from, from + pageSize - 1);
+
+  if (error) throw new Error(`Failed to load students: ${error.message}`);
+  return { students: data ?? [], total: count ?? 0 };
+}
+
+export type StudentEnrollmentRow = Database["public"]["Tables"]["enrollments"]["Row"] & {
+  course: { title: string; slug: string };
+};
+export type StudentOrderRow = Database["public"]["Tables"]["orders"]["Row"] & {
+  course: { title: string };
+};
+
+/** One student's profile, enrollments and order history — for the detail page. */
+export async function getStudentDetail(studentId: string) {
+  const supabase = await createClient();
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", studentId)
+    .maybeSingle();
+
+  if (profileError || !profile) notFound();
+
+  const [
+    { data: enrollments, error: enrollmentsError },
+    { data: orders, error: ordersError },
+  ] = await Promise.all([
+    supabase
+      .from("enrollments")
+      .select("*, course:courses(title, slug)")
+      .eq("user_id", studentId)
+      .order("enrolled_at", { ascending: false }),
+    supabase
+      .from("orders")
+      .select("*, course:courses(title)")
+      .eq("user_id", studentId)
+      .order("created_at", { ascending: false }),
+  ]);
+
+  if (enrollmentsError)
+    throw new Error(`Failed to load enrollments: ${enrollmentsError.message}`);
+  if (ordersError) throw new Error(`Failed to load orders: ${ordersError.message}`);
+
+  return {
+    profile,
+    enrollments: (enrollments ?? []) as unknown as StudentEnrollmentRow[],
+    orders: (orders ?? []) as unknown as StudentOrderRow[],
   };
 }
 
