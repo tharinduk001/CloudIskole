@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { toFieldErrors, type ActionResult } from "@/lib/actions/result";
 import { brand } from "@/lib/brand";
+import { serverEnv } from "@/lib/env";
 import { sendEmail } from "@/lib/notifications/resend";
 import { rateLimit } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
@@ -115,8 +116,10 @@ export async function submitContactMessage(
 
   // The message is already durably stored above — this is a best-effort
   // heads-up. A visitor should never see an error because Resend hiccuped.
+  // CONTACT_NOTIFICATION_EMAIL overrides the destination for cases where
+  // brand.contact.email has no mailbox actually receiving mail behind it.
   const emailResult = await sendEmail(
-    brand.contact.email,
+    serverEnv().CONTACT_NOTIFICATION_EMAIL || brand.contact.email,
     `New contact message${parsed.data.subject ? `: ${parsed.data.subject}` : ""}`,
     `<p><strong>From:</strong> ${escapeHtml(parsed.data.name)} &lt;${escapeHtml(parsed.data.email)}&gt;</p>` +
       (parsed.data.phone

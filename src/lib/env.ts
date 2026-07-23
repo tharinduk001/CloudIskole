@@ -55,6 +55,11 @@ const serverSchema = z.object({
   // the modules that consume them assert their presence at point of use.
   RESEND_API_KEY: z.string().min(1).optional(),
   RESEND_FROM_EMAIL: z.string().min(1).optional(),
+  // Where contact-form notifications land. Falls back to brand.contact.email
+  // (see src/lib/contact/actions.ts) when unset — set this to a real,
+  // already-working inbox (Gmail, etc.) if the brand address has no mailbox
+  // behind it yet.
+  CONTACT_NOTIFICATION_EMAIL: z.email().optional(),
   TEXTLK_API_TOKEN: z.string().min(1).optional(),
   TEXTLK_SENDER_ID: z.string().min(1).optional(),
   UPSTASH_REDIS_REST_URL: z.url().optional(),
