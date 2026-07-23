@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import * as React from "react";
 import { useActionState } from "react";
 
+import { DurationField } from "@/components/admin/duration-field";
 import { Button } from "@/components/ui/button";
 import { CheckboxField, Field, Input, Select, Textarea } from "@/components/ui/field";
 import { useAutoSlug } from "@/hooks/use-auto-slug";
@@ -78,16 +79,7 @@ export function LessonForm({
             </Select>
           )}
         </Field>
-        <Field label="Duration (seconds)">
-          {(props) => (
-            <Input
-              {...props}
-              name="durationSeconds"
-              type="number"
-              defaultValue={lesson?.duration_seconds ?? ""}
-            />
-          )}
-        </Field>
+        <DurationField name="durationSeconds" defaultSeconds={lesson?.duration_seconds} />
       </div>
 
       {type === "video" ? (
