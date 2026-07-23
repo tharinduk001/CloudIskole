@@ -13,7 +13,7 @@ import Link from "next/link";
 import { Liyawel } from "@/components/brand/liyawel";
 import { PartnersMarquee } from "@/components/site/partners-marquee";
 import { PhotoGrid } from "@/components/site/photo-grid";
-import { ToolMarquee } from "@/components/site/tool-marquee";
+import { TechCubeGrid } from "@/components/site/tech-cube-grid";
 import {
   Accordion,
   AccordionContent,
@@ -40,8 +40,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <ToolMarquee />
       <PartnersMarquee partners={partners} />
+      <TechStack />
       <Features />
       <HowItWorks />
       <Moments photos={highlights} />
@@ -133,6 +133,28 @@ function Hero() {
         </ul>
       </Container>
     </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function TechStack() {
+  return (
+    <Section className="bg-cream">
+      <Container size="wide">
+        <SectionHeading
+          size="xl"
+          eyebrow="What you'll actually use"
+          title="The stack behind every track"
+          description="Not toy examples — the exact tools that show up in job postings, taught hands-on from lesson one."
+          eyebrowClassName="text-terracotta-600"
+          titleClassName="text-onyx"
+        />
+        <div className="mt-14">
+          <TechCubeGrid />
+        </div>
+      </Container>
+    </Section>
   );
 }
 
