@@ -40,10 +40,10 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <PartnersMarquee partners={partners} />
-      <TechStack />
       <Features />
+      <PartnersMarquee partners={partners} />
       <HowItWorks />
+      <TechStack />
       <Moments photos={highlights} />
       <Faq />
       <FinalCta />
