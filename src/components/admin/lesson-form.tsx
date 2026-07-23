@@ -6,6 +6,7 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { CheckboxField, Field, Input, Select, Textarea } from "@/components/ui/field";
+import { useAutoSlug } from "@/hooks/use-auto-slug";
 import { idleResult } from "@/lib/actions/result";
 import { upsertLesson } from "@/lib/admin/courses-actions";
 import type { LessonRow } from "@/lib/data/courses";
@@ -23,6 +24,7 @@ export function LessonForm({
 }) {
   const [state, action, pending] = useActionState(upsertLesson, idleResult);
   const [type, setType] = React.useState<LessonRow["type"]>(lesson?.type ?? "video");
+  const { slug, onTitleChange, onSlugChange } = useAutoSlug(lesson?.slug);
 
   React.useEffect(() => {
     if (state.status === "success") onDone?.();
@@ -41,12 +43,22 @@ export function LessonForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Title" required>
           {(props) => (
-            <Input {...props} name="title" required defaultValue={lesson?.title} />
+            <Input
+              {...props}
+              name="title"
+              required
+              defaultValue={lesson?.title}
+              onChange={(e) => onTitleChange(e.target.value)}
+            />
           )}
         </Field>
-        <Field label="Slug" required hint="Unique within the course">
+        <Field
+          label="Slug"
+          required
+          hint="Auto-generated from the title, unique within the course - edit if needed"
+        >
           {(props) => (
-            <Input {...props} name="slug" required defaultValue={lesson?.slug} />
+            <Input {...props} name="slug" required value={slug} onChange={onSlugChange} />
           )}
         </Field>
       </div>

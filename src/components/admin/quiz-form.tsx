@@ -6,6 +6,7 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { CheckboxField, Field, Input, Select, Textarea } from "@/components/ui/field";
+import { useAutoSlug } from "@/hooks/use-auto-slug";
 import { idleResult } from "@/lib/actions/result";
 import { upsertQuiz } from "@/lib/admin/quizzes-actions";
 import type { QuizRow } from "@/lib/data/quizzes";
@@ -19,6 +20,7 @@ export function QuizForm({
 }) {
   const [state, action, pending] = useActionState(upsertQuiz, idleResult);
   const [scope, setScope] = React.useState<QuizRow["scope"]>(quiz?.scope ?? "exam");
+  const { slug, onTitleChange, onSlugChange } = useAutoSlug(quiz?.slug);
 
   return (
     <form action={action} className="flex flex-col gap-6">
@@ -41,11 +43,23 @@ export function QuizForm({
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Title" required>
           {(props) => (
-            <Input {...props} name="title" required defaultValue={quiz?.title} />
+            <Input
+              {...props}
+              name="title"
+              required
+              defaultValue={quiz?.title}
+              onChange={(e) => onTitleChange(e.target.value)}
+            />
           )}
         </Field>
-        <Field label="Slug" required hint="Used in the URL for standalone exams">
-          {(props) => <Input {...props} name="slug" required defaultValue={quiz?.slug} />}
+        <Field
+          label="Slug"
+          required
+          hint="Auto-generated from the title - edit if you need a different one"
+        >
+          {(props) => (
+            <Input {...props} name="slug" required value={slug} onChange={onSlugChange} />
+          )}
         </Field>
       </div>
 

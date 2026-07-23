@@ -8,10 +8,12 @@ import { CheckboxField, Field, Input, Select, Textarea } from "@/components/ui/f
 import { idleResult } from "@/lib/actions/result";
 import { upsertCourse } from "@/lib/admin/courses-actions";
 import type { CourseSummary } from "@/lib/data/courses";
+import { useAutoSlug } from "@/hooks/use-auto-slug";
 
 export function CourseForm({ course }: { course?: CourseSummary }) {
   const [state, action, pending] = useActionState(upsertCourse, idleResult);
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
+  const { slug, onTitleChange, onSlugChange } = useAutoSlug(course?.slug);
 
   return (
     <form action={action} className="flex flex-col gap-6">
@@ -34,17 +36,23 @@ export function CourseForm({ course }: { course?: CourseSummary }) {
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Title" required error={fieldErrors?.title}>
           {(props) => (
-            <Input {...props} name="title" required defaultValue={course?.title} />
+            <Input
+              {...props}
+              name="title"
+              required
+              defaultValue={course?.title}
+              onChange={(e) => onTitleChange(e.target.value)}
+            />
           )}
         </Field>
         <Field
           label="Slug"
           required
           error={fieldErrors?.slug}
-          hint="Used in the URL, e.g. cloud-foundations"
+          hint="Auto-generated from the title - edit if you need a different one"
         >
           {(props) => (
-            <Input {...props} name="slug" required defaultValue={course?.slug} />
+            <Input {...props} name="slug" required value={slug} onChange={onSlugChange} />
           )}
         </Field>
       </div>

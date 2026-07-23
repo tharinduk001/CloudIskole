@@ -5,6 +5,7 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { CheckboxField, Field, Input, Select, Textarea } from "@/components/ui/field";
+import { useAutoSlug } from "@/hooks/use-auto-slug";
 import { idleResult } from "@/lib/actions/result";
 import { upsertSession } from "@/lib/admin/sessions-actions";
 import type { Database } from "@/lib/supabase/database.types";
@@ -33,6 +34,7 @@ export function SessionForm({
 }) {
   const [state, action, pending] = useActionState(upsertSession, idleResult);
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
+  const { slug, onTitleChange, onSlugChange } = useAutoSlug(session?.slug);
 
   return (
     <form action={action} className="flex flex-col gap-6">
@@ -55,17 +57,23 @@ export function SessionForm({
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label="Title" required error={fieldErrors?.title}>
           {(props) => (
-            <Input {...props} name="title" required defaultValue={session?.title} />
+            <Input
+              {...props}
+              name="title"
+              required
+              defaultValue={session?.title}
+              onChange={(e) => onTitleChange(e.target.value)}
+            />
           )}
         </Field>
         <Field
           label="Slug"
           required
           error={fieldErrors?.slug}
-          hint="Used in the URL, e.g. intro-to-docker"
+          hint="Auto-generated from the title - edit if you need a different one"
         >
           {(props) => (
-            <Input {...props} name="slug" required defaultValue={session?.slug} />
+            <Input {...props} name="slug" required value={slug} onChange={onSlugChange} />
           )}
         </Field>
       </div>
