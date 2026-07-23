@@ -22,8 +22,6 @@ export type Profile = {
   avatar_url: string | null;
   phone: string | null;
   phone_verified_at: string | null;
-  district: string | null;
-  al_year: number | null;
   role: "student" | "admin";
   leaderboard_opt_in: boolean;
   marketing_opt_in: boolean;
@@ -31,7 +29,7 @@ export type Profile = {
 };
 
 const PROFILE_COLUMNS =
-  "id, email, full_name, avatar_url, phone, phone_verified_at, district, al_year, role, leaderboard_opt_in, marketing_opt_in, created_at";
+  "id, email, full_name, avatar_url, phone, phone_verified_at, role, leaderboard_opt_in, marketing_opt_in, created_at";
 
 /**
  * The verified current user, or a redirect to sign-in.

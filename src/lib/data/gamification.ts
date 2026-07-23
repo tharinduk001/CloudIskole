@@ -20,7 +20,6 @@ export type LeaderboardEntry = {
   user_id: string;
   full_name: string;
   avatar_url: string | null;
-  district: string | null;
   xp: number;
   rank: number;
 };
@@ -34,7 +33,6 @@ function toLeaderboardEntry(
     // has an empty string, not null — `??` alone would not catch that.
     full_name: row.full_name || "Anonymous",
     avatar_url: row.avatar_url,
-    district: row.district,
     xp: row.xp ?? 0,
     rank: row.rank ?? 0,
   };

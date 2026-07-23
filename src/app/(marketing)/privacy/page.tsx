@@ -39,8 +39,8 @@ export default function PrivacyPage() {
               number when you register.
             </li>
             <li>
-              <strong>Profile details</strong> - optional information such as your
-              district, profile photo and the year you sat your A/Ls.
+              <strong>Profile details</strong> - optional information such as your profile
+              photo.
             </li>
             <li>
               <strong>Payment records</strong> - for bank transfers, the deposit slip you

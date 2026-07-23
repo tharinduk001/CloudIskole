@@ -72,9 +72,6 @@ function LeaderboardTable({
                 <span className="text-terracotta-600"> (you)</span>
               ) : null}
             </p>
-            {entry.district ? (
-              <p className="text-mist-soft text-xs">{entry.district}</p>
-            ) : null}
           </div>
           <span className="text-onyx font-display text-sm font-semibold">
             {entry.xp} XP

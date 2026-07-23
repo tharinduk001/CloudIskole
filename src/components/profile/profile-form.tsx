@@ -4,10 +4,9 @@ import { CheckCircle2, Loader2, ShieldCheck, ShieldQuestion } from "lucide-react
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { CheckboxField, Field, Input, Select } from "@/components/ui/field";
+import { CheckboxField, Field, Input } from "@/components/ui/field";
 import { idleResult } from "@/lib/actions/result";
 import { updateProfile } from "@/lib/profile/actions";
-import { sriLankanDistricts } from "@/lib/sri-lanka";
 import type { Profile } from "@/lib/data/auth";
 
 export function ProfileForm({ profile }: { profile: Profile }) {
@@ -75,42 +74,11 @@ export function ProfileForm({ profile }: { profile: Profile }) {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        <Field label="District" error={fieldErrors?.district}>
-          {(props) => (
-            <Select {...props} name="district" defaultValue={profile.district ?? ""}>
-              <option value="">Select district</option>
-              {sriLankanDistricts.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </Select>
-          )}
-        </Field>
-
-        <Field
-          label="A/L year"
-          error={fieldErrors?.alYear}
-          hint="The year you sat your A/Ls."
-        >
-          {(props) => (
-            <Input
-              {...props}
-              name="alYear"
-              inputMode="numeric"
-              placeholder="2025"
-              defaultValue={profile.al_year ?? ""}
-            />
-          )}
-        </Field>
-      </div>
-
       <div className="border-line flex flex-col gap-4 border-t pt-6">
         <CheckboxField
           name="leaderboardOptIn"
           label="Show me on the public leaderboard"
-          description="Off by default. Your name and district are shown if you turn this on."
+          description="Off by default. Your name is shown if you turn this on."
           defaultChecked={profile.leaderboard_opt_in}
         />
         <CheckboxField

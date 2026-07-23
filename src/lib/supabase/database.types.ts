@@ -1035,10 +1035,8 @@ export type Database = {
       }
       profiles: {
         Row: {
-          al_year: number | null
           avatar_url: string | null
           created_at: string
-          district: string | null
           email: string
           full_name: string
           id: string
@@ -1050,10 +1048,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          al_year?: number | null
           avatar_url?: string | null
           created_at?: string
-          district?: string | null
           email: string
           full_name?: string
           id: string
@@ -1065,10 +1061,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          al_year?: number | null
           avatar_url?: string | null
           created_at?: string
-          district?: string | null
           email?: string
           full_name?: string
           id?: string
@@ -1618,7 +1612,6 @@ export type Database = {
       leaderboard_all_time: {
         Row: {
           avatar_url: string | null
-          district: string | null
           full_name: string | null
           rank: number | null
           user_id: string | null
@@ -1629,7 +1622,6 @@ export type Database = {
       leaderboard_monthly: {
         Row: {
           avatar_url: string | null
-          district: string | null
           full_name: string | null
           rank: number | null
           user_id: string | null

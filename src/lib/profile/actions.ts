@@ -4,22 +4,10 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { toFieldErrors, type ActionResult } from "@/lib/actions/result";
-import { sriLankanDistricts } from "@/lib/sri-lanka";
 import { createClient } from "@/lib/supabase/server";
-
-const currentYear = new Date().getFullYear();
 
 const profileSchema = z.object({
   fullName: z.string().trim().min(2, "Please enter your full name.").max(120),
-  district: z.enum(sriLankanDistricts).optional().or(z.literal("")),
-  alYear: z
-    .string()
-    .trim()
-    .optional()
-    .transform((v) => (v ? Number(v) : undefined))
-    .refine((v) => v === undefined || (v >= 1990 && v <= currentYear + 1), {
-      message: `Enter a year between 1990 and ${currentYear + 1}.`,
-    }),
   leaderboardOptIn: z.union([z.literal("on"), z.null()]).optional(),
   marketingOptIn: z.union([z.literal("on"), z.null()]).optional(),
 });
@@ -40,8 +28,6 @@ export async function updateProfile(
 ): Promise<ActionResult> {
   const parsed = profileSchema.safeParse({
     fullName: formData.get("fullName"),
-    district: formData.get("district"),
-    alYear: formData.get("alYear"),
     leaderboardOptIn: formData.get("leaderboardOptIn"),
     marketingOptIn: formData.get("marketingOptIn"),
   });
@@ -67,8 +53,6 @@ export async function updateProfile(
     .from("profiles")
     .update({
       full_name: parsed.data.fullName,
-      district: parsed.data.district || null,
-      al_year: parsed.data.alYear ?? null,
       leaderboard_opt_in: parsed.data.leaderboardOptIn === "on",
       marketing_opt_in: parsed.data.marketingOptIn === "on",
     })
