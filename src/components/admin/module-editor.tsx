@@ -1,10 +1,11 @@
 "use client";
 
-import { FileText, PlayCircle, Plus } from "lucide-react";
+import { FileText, PenSquare, PlayCircle, Plus } from "lucide-react";
 import * as React from "react";
 
 import { ConfirmDeleteButton } from "@/components/admin/confirm-delete-button";
 import { LessonForm } from "@/components/admin/lesson-form";
+import { ModuleForm } from "@/components/admin/module-form";
 import { Badge } from "@/components/ui/badge";
 import { deleteLesson, deleteModule } from "@/lib/admin/courses-actions";
 import type { AdminModule } from "@/lib/data/admin";
@@ -16,27 +17,46 @@ export function ModuleEditor({
   courseId: string;
   module: AdminModule;
 }) {
+  const [editingModule, setEditingModule] = React.useState(false);
   const [addingLesson, setAddingLesson] = React.useState(false);
   const [editingLessonId, setEditingLessonId] = React.useState<string | null>(null);
 
   return (
     <div className="border-line bg-surface rounded-2xl border p-5">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h3 className="text-ink text-sm font-semibold">
-            {mod.title}{" "}
-            <span className="text-ink-subtle font-normal">· sort {mod.sort_order}</span>
-          </h3>
-          {mod.summary ? (
-            <p className="text-ink-muted mt-0.5 text-xs">{mod.summary}</p>
-          ) : null}
-        </div>
-        <ConfirmDeleteButton
-          label="Delete module"
-          confirmMessage={`Delete "${mod.title}" and all its lessons?`}
-          onDelete={() => deleteModule(mod.id, courseId)}
+      {editingModule ? (
+        <ModuleForm
+          courseId={courseId}
+          module={mod}
+          onDone={() => setEditingModule(false)}
         />
-      </div>
+      ) : (
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h3 className="text-ink text-sm font-semibold">
+              {mod.title}{" "}
+              <span className="text-ink-subtle font-normal">· sort {mod.sort_order}</span>
+            </h3>
+            {mod.summary ? (
+              <p className="text-ink-muted mt-0.5 text-xs">{mod.summary}</p>
+            ) : null}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label="Edit module"
+              onClick={() => setEditingModule(true)}
+              className="text-ink-subtle hover:text-teal-700"
+            >
+              <PenSquare className="size-4" aria-hidden="true" />
+            </button>
+            <ConfirmDeleteButton
+              label="Delete module"
+              confirmMessage={`Delete "${mod.title}" and all its lessons?`}
+              onDelete={() => deleteModule(mod.id, courseId)}
+            />
+          </div>
+        </div>
+      )}
 
       <ul className="border-line mt-4 divide-y divide-[var(--color-line)] overflow-hidden rounded-xl border">
         {mod.lessons.map((lesson) => (
