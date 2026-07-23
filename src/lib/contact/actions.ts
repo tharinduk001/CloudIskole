@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { toFieldErrors, type ActionResult } from "@/lib/actions/result";
+import { brand } from "@/lib/brand";
+import { sendEmail } from "@/lib/notifications/resend";
 import { rateLimit } from "@/lib/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
@@ -33,6 +35,16 @@ function toE164(input: string): string | null {
   if (digits.startsWith("+94")) return digits;
   if (digits.startsWith("0")) return `+94${digits.slice(1)}`;
   return `+94${digits}`;
+}
+
+/** Escapes visitor-typed text before it goes into an HTML email body. */
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 export async function submitContactMessage(
@@ -99,6 +111,22 @@ export async function submitContactMessage(
       message:
         "We could not send your message just now. Please email us directly at hello@cloudiskole.lk.",
     };
+  }
+
+  // The message is already durably stored above — this is a best-effort
+  // heads-up. A visitor should never see an error because Resend hiccuped.
+  const emailResult = await sendEmail(
+    brand.contact.email,
+    `New contact message${parsed.data.subject ? `: ${parsed.data.subject}` : ""}`,
+    `<p><strong>From:</strong> ${escapeHtml(parsed.data.name)} &lt;${escapeHtml(parsed.data.email)}&gt;</p>` +
+      (parsed.data.phone
+        ? `<p><strong>Phone:</strong> ${escapeHtml(toE164(parsed.data.phone) ?? parsed.data.phone)}</p>`
+        : "") +
+      `<p><strong>Message:</strong></p><p>${escapeHtml(parsed.data.message).replace(/\n/g, "<br>")}</p>`,
+    { replyTo: parsed.data.email },
+  );
+  if (!emailResult.ok) {
+    console.error("contact notification email failed", emailResult.error);
   }
 
   return {

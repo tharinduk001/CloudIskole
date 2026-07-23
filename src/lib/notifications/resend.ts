@@ -15,6 +15,7 @@ export async function sendEmail(
   to: string,
   subject: string,
   html: string,
+  options?: { replyTo?: string },
 ): Promise<SendResult> {
   const { RESEND_API_KEY, RESEND_FROM_EMAIL } = serverEnv();
 
@@ -30,7 +31,13 @@ export async function sendEmail(
         Authorization: `Bearer ${RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to, subject, html }),
+      body: JSON.stringify({
+        from: RESEND_FROM_EMAIL,
+        to,
+        subject,
+        html,
+        ...(options?.replyTo ? { reply_to: options.replyTo } : {}),
+      }),
     });
 
     if (!res.ok) {
