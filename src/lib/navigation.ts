@@ -12,11 +12,11 @@ export interface NavItem {
 
 /** Primary header navigation. */
 export const mainNav: NavItem[] = [
+  { label: "About", href: "/about" },
   { label: "Courses", href: "/courses" },
   { label: "Sessions", href: "/sessions" },
   { label: "Exams", href: "/exams" },
   { label: "Leaderboard", href: "/leaderboard" },
-  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
