@@ -95,7 +95,7 @@ function Hero() {
               className="bg-terracotta-600 hover:bg-terracotta-700 active:bg-terracotta-700 rounded-none"
             >
               <Link href="/sign-up">
-                Start learning free
+                Start learning
                 <ArrowRight aria-hidden="true" />
               </Link>
             </Button>
@@ -110,7 +110,7 @@ function Hero() {
           </div>
 
           <p className="text-mist-soft mt-5 text-sm">
-            Free to join · Learn on any laptop · Badges on completion
+            Learn on any laptop · Badges on completion
           </p>
         </div>
 
@@ -349,7 +349,7 @@ function FinalCta() {
               Your A/L results do not decide your career. Your skills do.
             </h2>
             <p className="mt-5 text-base leading-relaxed text-white/70 sm:text-lg">
-              Join free today and finish your first course before university even calls.
+              Join today and finish your first course before university even calls.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
               <Button
@@ -358,7 +358,7 @@ function FinalCta() {
                 className="bg-terracotta-500 hover:bg-terracotta-400 rounded-none text-white"
               >
                 <Link href="/sign-up">
-                  Create free account
+                  Create account
                   <ArrowRight aria-hidden="true" />
                 </Link>
               </Button>

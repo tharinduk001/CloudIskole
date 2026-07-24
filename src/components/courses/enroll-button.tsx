@@ -47,7 +47,7 @@ export function EnrollFreeButton({
         className="bg-terracotta-600 hover:bg-terracotta-700 w-full rounded-none"
       >
         {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
-        Enrol for free
+        Enrol now
       </Button>
       {state.status === "error" ? (
         <p role="alert" className="text-danger text-xs">

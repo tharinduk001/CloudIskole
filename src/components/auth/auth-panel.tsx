@@ -101,7 +101,7 @@ export function AuthPanel({ mode }: { mode: "sign-in" | "sign-up" }) {
           {stage === "code"
             ? "Check your email"
             : isSignUp
-              ? "Create your free account"
+              ? "Create your account"
               : "Welcome back"}
         </h1>
         <p className="text-ink-muted mt-2 text-sm leading-relaxed">
@@ -242,7 +242,7 @@ export function AuthPanel({ mode }: { mode: "sign-in" | "sign-up" }) {
           <>
             New to CloudIskole?{" "}
             <Link href="/sign-up" className="font-medium text-teal-600 hover:underline">
-              Create a free account
+              Create an account
             </Link>
           </>
         )}

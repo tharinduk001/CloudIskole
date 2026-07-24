@@ -7,9 +7,9 @@
 export const features = [
   {
     icon: "wallet" as const,
-    title: "Start free, always",
+    title: "Priced for Sri Lanka",
     description:
-      "Full courses at no cost, with paid tracks priced in rupees for Sri Lankan students - not converted from dollars.",
+      "Courses priced in rupees for Sri Lankan students - not converted from dollars, so it stays affordable.",
   },
   {
     icon: "users" as const,
@@ -33,7 +33,7 @@ export const features = [
 
 export const steps = [
   {
-    title: "Create your free account",
+    title: "Create your account",
     description:
       "Sign up with Google or your email in under a minute. No card, no commitment.",
   },
@@ -54,11 +54,6 @@ export const faqs = [
     question: "Do I need any programming experience to start?",
     answer:
       "No. The Cloud Foundations and Linux & Networking tracks assume you have never opened a terminal before. If you passed A/Ls in any stream - Maths, Bio, Commerce or Arts - you can follow along.",
-  },
-  {
-    question: "Is it really free?",
-    answer:
-      "Several complete courses are free with no time limit and no card required. Advanced tracks are paid, priced in Sri Lankan rupees to stay affordable for students.",
   },
   {
     question: "How do I pay for a paid course?",

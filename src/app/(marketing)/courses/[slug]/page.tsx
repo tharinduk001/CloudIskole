@@ -201,7 +201,7 @@ export default async function CourseDetailPage({
                 ) : !profile ? (
                   <div className="flex flex-col gap-3">
                     <p className="text-mist text-sm leading-relaxed">
-                      Sign in or create a free account to enrol.
+                      Sign in or create an account to enrol.
                     </p>
                     <Button
                       asChild

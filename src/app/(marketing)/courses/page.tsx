@@ -67,7 +67,7 @@ export default async function CoursesPage({
                 Courses are coming very soon
               </h2>
               <p className="text-mist mx-auto mt-3 max-w-md text-sm leading-relaxed">
-                We are putting the finishing touches on the first tracks. Create a free
+                We are putting the finishing touches on the first tracks. Create an
                 account and we will let you know the moment they open.
               </p>
             </div>

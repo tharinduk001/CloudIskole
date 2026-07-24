@@ -4,9 +4,9 @@ import { Suspense } from "react";
 import { AuthPanel } from "@/components/auth/auth-panel";
 
 export const metadata: Metadata = {
-  title: "Create your free account",
+  title: "Create your account",
   description:
-    "Join CloudIskole free and start learning Cloud, DevOps and Software Engineering.",
+    "Join CloudIskole and start learning Cloud, DevOps and Software Engineering.",
   robots: { index: false, follow: false },
 };
 
