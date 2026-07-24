@@ -1,12 +1,4 @@
-import {
-  ArrowRight,
-  Award,
-  Sparkles,
-  Target,
-  Users,
-  Wallet,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, Award, Target, Users, Wallet, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,7 +13,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
@@ -86,12 +77,7 @@ function Hero() {
         className="relative z-10 pt-16 pb-20 sm:pt-24 lg:pt-28 lg:pb-28"
       >
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-          <Badge className="animate-in-up bg-terracotta-50 text-terracotta-600 rounded-none border-0">
-            <Sparkles aria-hidden="true" />
-            Free courses open now - no card needed
-          </Badge>
-
-          <h1 className="animate-in-up font-display text-onyx mt-6 text-5xl leading-[0.98] tracking-tight sm:text-7xl lg:text-8xl">
+          <h1 className="animate-in-up font-display text-onyx text-5xl leading-[0.98] tracking-tight sm:text-7xl lg:text-8xl">
             Start your <span className="text-terracotta-500">Cloud &amp; DevOps</span>{" "}
             career, right after A/Ls.
           </h1>
