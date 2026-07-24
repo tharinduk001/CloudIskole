@@ -165,6 +165,70 @@ export async function deleteHighlight(id: string): Promise<ActionResult> {
   return { status: "success" };
 }
 
+// --- Testimonials (home page reviews widget) ----------------------------
+
+const testimonialSchema = z.object({
+  id: z.uuid().optional(),
+  studentName: z.string().trim().min(2).max(200),
+  quote: z.string().trim().min(2).max(600),
+  sortOrder: sortOrderField,
+});
+
+export async function upsertTestimonial(
+  _prev: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = testimonialSchema.safeParse({
+    id: formData.get("id") || undefined,
+    studentName: formData.get("studentName"),
+    quote: formData.get("quote"),
+    sortOrder: formData.get("sortOrder") || undefined,
+  });
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Please check the highlighted fields.",
+      fieldErrors: toFieldErrors(parsed.error),
+    };
+  }
+
+  const supabase = await createClient();
+  const row = {
+    student_name: parsed.data.studentName,
+    quote: parsed.data.quote,
+    sort_order: parsed.data.sortOrder,
+  };
+
+  const { error } = parsed.data.id
+    ? await supabase.from("testimonials").update(row).eq("id", parsed.data.id)
+    : await supabase.from("testimonials").insert(row);
+
+  if (error) {
+    console.error("upsertTestimonial failed", error);
+    return { status: "error", message: "Could not save this review." };
+  }
+
+  revalidatePath("/admin/site-content");
+  revalidatePublicPages();
+  return { status: "success", message: "Review saved." };
+}
+
+export async function deleteTestimonial(id: string): Promise<ActionResult> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { error } = await supabase.from("testimonials").delete().eq("id", id);
+  if (error) {
+    console.error("deleteTestimonial failed", error);
+    return { status: "error", message: "Could not delete this review." };
+  }
+  revalidatePath("/admin/site-content");
+  revalidatePublicPages();
+  return { status: "success" };
+}
+
 // --- Founder profile (singleton) ----------------------------------------
 
 const founderProfileSchema = z.object({

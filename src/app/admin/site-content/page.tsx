@@ -7,14 +7,21 @@ import { FounderExperienceManager } from "@/components/admin/founder-experience-
 import { FounderProfileForm } from "@/components/admin/founder-profile-form";
 import { HighlightsManager } from "@/components/admin/highlights-manager";
 import { PartnersManager } from "@/components/admin/partners-manager";
-import { getFounderProfile, getHighlights, getPartners } from "@/lib/data/site-content";
+import { TestimonialsManager } from "@/components/admin/testimonials-manager";
+import {
+  getFounderProfile,
+  getHighlights,
+  getPartners,
+  getTestimonials,
+} from "@/lib/data/site-content";
 
 export const metadata: Metadata = { title: "Site content" };
 
 export default async function AdminSiteContentPage() {
-  const [partners, highlights, founder] = await Promise.all([
+  const [partners, highlights, testimonials, founder] = await Promise.all([
     getPartners(),
     getHighlights(),
+    getTestimonials(),
     getFounderProfile(),
   ]);
 
@@ -23,8 +30,8 @@ export default async function AdminSiteContentPage() {
       <div>
         <h1 className="font-display text-2xl font-semibold">Site content</h1>
         <p className="text-ink-muted mt-1 text-sm">
-          The home page partners strip, moments photo grid, and the about page founder
-          bio.
+          The home page partners strip, moments photo grid, student reviews widget, and
+          the about page founder bio.
         </p>
       </div>
 
@@ -39,6 +46,11 @@ export default async function AdminSiteContentPage() {
             id: "highlights",
             label: "Moments photos",
             content: <HighlightsManager highlights={highlights} />,
+          },
+          {
+            id: "testimonials",
+            label: "Student reviews",
+            content: <TestimonialsManager testimonials={testimonials} />,
           },
           {
             id: "founder-profile",

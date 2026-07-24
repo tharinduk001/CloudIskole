@@ -1664,6 +1664,33 @@ export type Database = {
           },
         ]
       }
+      testimonials: {
+        Row: {
+          created_at: string
+          id: string
+          quote: string
+          sort_order: number
+          student_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          quote: string
+          sort_order?: number
+          student_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          quote?: string
+          sort_order?: number
+          student_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_activity_days: {
         Row: {
           activity_date: string

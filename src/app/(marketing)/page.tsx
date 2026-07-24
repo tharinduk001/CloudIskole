@@ -14,6 +14,7 @@ import { Liyawel } from "@/components/brand/liyawel";
 import { PartnersMarquee } from "@/components/site/partners-marquee";
 import { PhotoGrid } from "@/components/site/photo-grid";
 import { TechCubeGrid } from "@/components/site/tech-cube-grid";
+import { TestimonialsCarousel } from "@/components/site/testimonials-carousel";
 import {
   Accordion,
   AccordionContent,
@@ -25,7 +26,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
 import { faqs, features, steps } from "@/content/home";
-import { getHighlights, getPartners, type Highlight } from "@/lib/data/site-content";
+import {
+  getHighlights,
+  getPartners,
+  getTestimonials,
+  type Highlight,
+  type Testimonial,
+} from "@/lib/data/site-content";
 
 const featureIcons: Record<(typeof features)[number]["icon"], LucideIcon> = {
   wallet: Wallet,
@@ -35,7 +42,11 @@ const featureIcons: Record<(typeof features)[number]["icon"], LucideIcon> = {
 };
 
 export default async function HomePage() {
-  const [partners, highlights] = await Promise.all([getPartners(), getHighlights()]);
+  const [partners, highlights, testimonials] = await Promise.all([
+    getPartners(),
+    getHighlights(),
+    getTestimonials(),
+  ]);
 
   return (
     <>
@@ -44,6 +55,7 @@ export default async function HomePage() {
       <PartnersMarquee partners={partners} />
       <HowItWorks />
       <TechStack />
+      <Testimonials testimonials={testimonials} />
       <Moments photos={highlights} />
       <Faq />
       <FinalCta />
@@ -153,6 +165,29 @@ function TechStack() {
             titleClassName="text-onyx"
           />
           <TechCubeGrid />
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  if (testimonials.length === 0) return null;
+
+  return (
+    <Section className="border-hairline bg-surface border-y py-14 sm:py-16 lg:py-20">
+      <Container size="wide">
+        <SectionHeading
+          size="xl"
+          eyebrow="What students say"
+          title="Reviews from real CloudIskole students"
+          eyebrowClassName="text-terracotta-600"
+          titleClassName="text-onyx"
+        />
+        <div className="mt-14">
+          <TestimonialsCarousel testimonials={testimonials} />
         </div>
       </Container>
     </Section>

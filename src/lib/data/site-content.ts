@@ -5,6 +5,7 @@ import type { Database } from "@/lib/supabase/database.types";
 
 export type Partner = Database["public"]["Tables"]["partners"]["Row"];
 export type Highlight = Database["public"]["Tables"]["highlights"]["Row"];
+export type Testimonial = Database["public"]["Tables"]["testimonials"]["Row"];
 export type FounderEducation = Database["public"]["Tables"]["founder_education"]["Row"];
 export type FounderExperience = Database["public"]["Tables"]["founder_experience"]["Row"];
 export type FounderCertification =
@@ -42,6 +43,17 @@ export async function getHighlights(): Promise<Highlight[]> {
     .order("sort_order", { ascending: true });
 
   if (error) throw new Error(`Failed to load highlights: ${error.message}`);
+  return data;
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("testimonials")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  if (error) throw new Error(`Failed to load testimonials: ${error.message}`);
   return data;
 }
 
