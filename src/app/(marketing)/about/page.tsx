@@ -72,7 +72,7 @@ export default async function AboutPage() {
                 strokeClassName="stroke-terracotta-400"
                 className="absolute inset-0 m-auto size-2/3 opacity-40"
               />
-              <Logo className="relative h-20 w-auto sm:h-28" />
+              <Logo className="relative text-4xl sm:text-5xl" />
             </div>
 
             <div className="measure text-mist flex flex-col gap-5 text-base leading-relaxed">
