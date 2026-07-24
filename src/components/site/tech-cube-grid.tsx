@@ -123,7 +123,7 @@ function Tile({ tool }: { tool: (typeof TOOLS)[number] }) {
   return (
     <div
       title={name}
-      className="bg-surface group hover:bg-[var(--tool-tint)] relative flex aspect-square items-center justify-center p-3 transition-colors duration-200"
+      className="bg-surface group hover:bg-[var(--tool-tint)] relative z-0 flex aspect-square scale-100 items-center justify-center p-3 shadow-none transition-[transform,background-color,box-shadow] duration-200 ease-out hover:z-10 hover:scale-125 hover:shadow-lg"
       style={{ "--tool-tint": `${color}14` } as CSSProperties}
     >
       <span
@@ -151,7 +151,7 @@ function Tile({ tool }: { tool: (typeof TOOLS)[number] }) {
 export function TechCubeGrid() {
   return (
     <div
-      className="border-hairline grid w-full grid-cols-4 gap-px overflow-hidden border bg-[var(--color-hairline)] sm:grid-cols-6 lg:grid-cols-8"
+      className="border-hairline grid w-full grid-cols-4 gap-px border bg-[var(--color-hairline)] sm:grid-cols-6 lg:grid-cols-8"
       role="img"
       aria-label={`Tools covered across bootcamps: ${TOOLS.map((t) => t.name).join(", ")}`}
     >
