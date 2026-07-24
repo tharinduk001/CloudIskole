@@ -59,7 +59,7 @@ export default async function AdminStudentsPage({
               <th className="px-4 py-3">Enrollments</th>
               <th className="px-4 py-3">Completed</th>
               <th className="px-4 py-3">Total spent</th>
-              <th className="px-4 py-3">XP</th>
+              <th className="px-4 py-3">CloudCoins</th>
             </tr>
           </thead>
           <tbody className="divide-line divide-y">

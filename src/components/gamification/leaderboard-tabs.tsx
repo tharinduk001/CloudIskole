@@ -1,6 +1,6 @@
 "use client";
 
-import { Medal } from "lucide-react";
+import { Coins, Medal } from "lucide-react";
 import Image from "next/image";
 import * as React from "react";
 
@@ -73,8 +73,9 @@ function LeaderboardTable({
               ) : null}
             </p>
           </div>
-          <span className="text-onyx font-display text-sm font-semibold">
-            {entry.xp} XP
+          <span className="text-onyx flex shrink-0 items-center gap-1 font-display text-sm font-semibold">
+            <Coins className="size-4 text-gold-500" aria-hidden="true" />
+            {entry.coins}
           </span>
         </li>
       ))}

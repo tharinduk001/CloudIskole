@@ -3,9 +3,9 @@ import {
   Award,
   BookOpen,
   CalendarDays,
+  Coins,
   Flame,
   Radio,
-  Trophy,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -70,14 +70,14 @@ export default async function DashboardPage() {
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <Card className="flex items-center gap-3 p-5">
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-teal-50 text-teal-600">
-              <Trophy className="size-5" aria-hidden="true" />
+            <span className="bg-gold-50 text-gold-600 grid size-11 shrink-0 place-items-center rounded-xl">
+              <Coins className="size-5" aria-hidden="true" />
             </span>
             <div>
               <p className="font-display text-2xl font-semibold">
-                {gamification.totalXp}
+                {gamification.totalCoins}
               </p>
-              <p className="text-ink-muted text-xs">Total XP</p>
+              <p className="text-ink-muted text-xs">CloudCoins</p>
             </div>
           </Card>
           <Card className="flex items-center gap-3 p-5">

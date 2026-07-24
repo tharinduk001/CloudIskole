@@ -9,7 +9,7 @@ import { listLeaderboard } from "@/lib/data/gamification";
 export const metadata: Metadata = {
   title: "Leaderboard",
   description:
-    "See the top CloudIskole learners by XP earned from lessons, quizzes and live sessions.",
+    "See the top CloudIskole learners by CloudCoins earned from lessons, quizzes and live sessions.",
 };
 
 export default async function LeaderboardPage() {
@@ -24,7 +24,7 @@ export default async function LeaderboardPage() {
       <PageHeader
         eyebrow="Compete"
         title="Leaderboard"
-        description="Earn XP for finishing lessons, passing quizzes and attending sessions - then see where you stand. Appearing publicly is always your choice, from your profile."
+        description="Earn CloudCoins for finishing lessons, passing quizzes and attending sessions - then see where you stand. Appearing publicly is always your choice, from your profile."
       />
 
       <Section>

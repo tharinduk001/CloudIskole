@@ -1,4 +1,4 @@
-import { Award, Flame, Zap } from "lucide-react";
+import { Award, Coins, Flame } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -55,8 +55,8 @@ export default async function AdminStudentDetailPage({
         </div>
         <div className="flex gap-3">
           <span className="border-line bg-surface inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm">
-            <Zap className="text-gold-400 size-4" aria-hidden="true" />
-            {gamification.totalXp} XP
+            <Coins className="text-gold-500 size-4" aria-hidden="true" />
+            {gamification.totalCoins} CloudCoins
           </span>
           <span className="border-line bg-surface inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm">
             <Flame className="text-danger size-4" aria-hidden="true" />

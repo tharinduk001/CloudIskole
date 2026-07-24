@@ -4,7 +4,11 @@ import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
 /**
- * Gamification data access — XP, streaks, badges, leaderboard.
+ * Gamification data access — CloudCoins, streaks, badges, leaderboard.
+ *
+ * "CloudCoins" is the on-site name for what the schema still tracks as XP
+ * (table `xp_events`, function `award_xp()`) — the underlying ledger wasn't
+ * renamed, only the name and icon students actually see.
  *
  * Everything here runs as the signed-in user (or anon) through plain RLS;
  * the only privileged writes are `award_xp()` and `record_activity()`, and
@@ -20,7 +24,7 @@ export type LeaderboardEntry = {
   user_id: string;
   full_name: string;
   avatar_url: string | null;
-  xp: number;
+  coins: number;
   rank: number;
 };
 
@@ -33,7 +37,7 @@ function toLeaderboardEntry(
     // has an empty string, not null — `??` alone would not catch that.
     full_name: row.full_name || "Anonymous",
     avatar_url: row.avatar_url,
-    xp: row.xp ?? 0,
+    coins: row.xp ?? 0,
     rank: row.rank ?? 0,
   };
 }
@@ -58,17 +62,17 @@ export type BadgeRow = Database["public"]["Tables"]["badges"]["Row"];
 export type UserBadge = { badge: BadgeRow; awarded_at: string };
 
 export type MyGamification = {
-  totalXp: number;
+  totalCoins: number;
   streak: number;
   badges: UserBadge[];
   leaderboardOptIn: boolean;
 };
 
-/** XP total, current streak and badges for one user — used on the dashboard/profile. */
+/** CloudCoins total, current streak and badges for one user — used on the dashboard/profile. */
 export async function getMyGamification(userId: string): Promise<MyGamification> {
   const supabase = await createClient();
 
-  const [{ data: xpRows }, { data: streak }, { data: badgeRows }, { data: profile }] =
+  const [{ data: coinRows }, { data: streak }, { data: badgeRows }, { data: profile }] =
     await Promise.all([
       supabase.from("xp_events").select("points").eq("user_id", userId),
       supabase.rpc("current_streak", { p_user_id: userId }),
@@ -83,10 +87,10 @@ export async function getMyGamification(userId: string): Promise<MyGamification>
         .maybeSingle(),
     ]);
 
-  const totalXp = (xpRows ?? []).reduce((sum, r) => sum + r.points, 0);
+  const totalCoins = (coinRows ?? []).reduce((sum, r) => sum + r.points, 0);
 
   return {
-    totalXp,
+    totalCoins,
     streak: streak ?? 0,
     badges: (
       (badgeRows ?? []) as unknown as { awarded_at: string; badge: BadgeRow }[]

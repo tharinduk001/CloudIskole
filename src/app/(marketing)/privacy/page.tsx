@@ -59,7 +59,7 @@ export default function PrivacyPage() {
             <li>Courses you enrol in and lessons you complete.</li>
             <li>Quiz and exam attempts, answers and marks.</li>
             <li>Sessions you register for and attend.</li>
-            <li>XP, streaks and badges earned.</li>
+            <li>CloudCoins, streaks and badges earned.</li>
           </ul>
 
           <h3>Information collected automatically</h3>
