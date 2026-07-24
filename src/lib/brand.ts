@@ -7,8 +7,6 @@
  */
 export const brand = {
   name: "CloudIskole",
-  /** Used where the two halves are styled differently in the wordmark. */
-  nameParts: { first: "Cloud", second: "Iskole" },
   tagline: "Sri Lanka's launchpad into Cloud & DevOps careers",
   description:
     "Practical, affordable Cloud, DevOps and Software Engineering courses built for Sri Lankan students after A/Ls. Learn the skills employers actually hire for.",

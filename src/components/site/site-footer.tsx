@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Liyawel } from "@/components/brand/liyawel";
+import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/ui/layout";
 import { brand } from "@/lib/brand";
 import { footerNav } from "@/lib/navigation";
@@ -31,10 +32,7 @@ export function SiteFooter() {
       <Container size="wide" className="relative py-14 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
           <div className="flex flex-col gap-5">
-            <span className="font-display text-[1.35rem] leading-none font-semibold tracking-tight text-white">
-              {brand.nameParts.first}
-              <span className="text-terracotta-400">{brand.nameParts.second}</span>
-            </span>
+            <Logo className="h-10 w-auto brightness-0 invert" />
             <p className="measure text-sm leading-relaxed text-white/70">
               {brand.description}
             </p>
