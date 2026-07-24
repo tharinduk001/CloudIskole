@@ -75,7 +75,7 @@ export default async function AdminStudentsPage({
                   <div className="text-ink-subtle text-xs">{s.email}</div>
                 </td>
                 <td className="text-ink-subtle px-4 py-3 text-xs">
-                  {s.created_at ? new Date(s.created_at).toLocaleDateString("en-LK") : "—"}
+                  {s.created_at ? new Date(s.created_at).toLocaleDateString("en-LK") : "-"}
                 </td>
                 <td className="text-ink px-4 py-3">{s.enrollment_count}</td>
                 <td className="text-ink px-4 py-3">{s.completed_count}</td>

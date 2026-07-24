@@ -9,7 +9,7 @@ const exports = [
     icon: Database,
     title: "Full database backup",
     description:
-      "Every table in the public schema as one JSON file — the closest thing to a manual pg_dump without shell access to the production database. Auth credentials live in Supabase's own auth schema and aren't included.",
+      "Every table in the public schema as one JSON file, the closest thing to a manual pg_dump without shell access to the production database. Auth credentials live in Supabase's own auth schema and aren't included.",
     cta: "Download backup (.json)",
   },
   {
@@ -17,7 +17,7 @@ const exports = [
     icon: ScrollText,
     title: "Audit log",
     description:
-      "Every administrative action ever recorded — role changes, publishing, enrollment grants. Not just the last 100 shown above.",
+      "Every administrative action ever recorded: role changes, publishing, enrollment grants. Not just the last 100 shown above.",
     cta: "Download audit log (.csv)",
   },
   {
@@ -25,7 +25,7 @@ const exports = [
     icon: ReceiptText,
     title: "Payment events",
     description:
-      "The full append-only financial log — every order transition, success or failure.",
+      "The full append-only financial log: every order transition, success or failure.",
     cta: "Download payment log (.csv)",
   },
 ];

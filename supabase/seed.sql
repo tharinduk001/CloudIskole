@@ -5,7 +5,7 @@
 -- advertised on the home page (src/content/home.ts) so the catalogue, course
 -- detail, and lesson viewer pages all have something real to render.
 --
--- YouTube ids below are PLACEHOLDERS for local development only — swap them
+-- YouTube ids below are PLACEHOLDERS for local development only, swap them
 -- for real unlisted course videos before this ever runs against production.
 -- ===========================================================================
 
@@ -20,7 +20,7 @@ values (
   '10000000-0000-4000-8000-000000000001',
   'cloud-foundations',
   'Cloud Foundations',
-  'How the cloud actually works — compute, storage, networking and identity.',
+  'How the cloud actually works, compute, storage, networking and identity.',
   'Cloud Foundations is your first step into infrastructure. You will create a real AWS free-tier account and learn the services that every other track builds on: compute, storage, networking and identity. By the end you will be comfortable navigating the AWS console and explaining what actually happens when a website is "in the cloud".',
   'beginner', 'Cloud', true, 0, 'published', 240, 1, now()
 );
@@ -44,9 +44,9 @@ Cloud computing means using someone else's servers over the internet instead of 
 
 Almost every Sri Lankan tech job posting now mentions AWS, Azure or GCP. Companies stopped buying physical servers years ago because the cloud is:
 
-- **Elastic** — you can add or remove capacity in minutes, not weeks
-- **Pay-as-you-go** — you are billed for what you use, not for hardware sitting idle
-- **Global** — your app can run close to users anywhere in the world
+- **Elastic**: you can add or remove capacity in minutes, not weeks
+- **Pay-as-you-go**: you are billed for what you use, not for hardware sitting idle
+- **Global**: your app can run close to users anywhere in the world
 
 ## The three service models
 
@@ -56,7 +56,7 @@ Almost every Sri Lankan tech job posting now mentions AWS, Azure or GCP. Compani
 | PaaS | Just your app | OS, runtime, scaling | AWS Elastic Beanstalk |
 | SaaS | Nothing | Everything | Gmail, Slack |
 
-This course focuses on **IaaS** — the layer closest to the metal, and the one that teaches you the most about how systems actually work.
+This course focuses on **IaaS**, the layer closest to the metal, and the one that teaches you the most about how systems actually work.
 
 > Every lesson from here uses AWS's free tier. You will not need to enter a credit card that gets charged for anything in this course.$md$,
    null, 360, 1, true),
@@ -69,14 +69,14 @@ This course focuses on **IaaS** — the layer closest to the metal, and the one 
    '10000000-0000-4000-8000-000000000001', 'Understanding EC2', 'understanding-ec2',
    'text', $md$## What is EC2?
 
-**EC2 (Elastic Compute Cloud)** is AWS's virtual server service. An EC2 "instance" is a virtual machine you control completely — you choose the operating system, install whatever software you want, and pay only while it is running.
+**EC2 (Elastic Compute Cloud)** is AWS's virtual server service. An EC2 "instance" is a virtual machine you control completely: you choose the operating system, install whatever software you want, and pay only while it is running.
 
 ## Key concepts
 
-- **AMI (Amazon Machine Image)** — a template containing the OS and pre-installed software your instance boots from
-- **Instance type** — the hardware profile (CPU, RAM) you are renting, e.g. `t2.micro` is free-tier eligible
-- **Security group** — a virtual firewall controlling what traffic can reach your instance
-- **Key pair** — the SSH credential used to log in, since there is no password by default
+- **AMI (Amazon Machine Image)**: a template containing the OS and pre-installed software your instance boots from
+- **Instance type**: the hardware profile (CPU, RAM) you are renting, e.g. `t2.micro` is free-tier eligible
+- **Security group**: a virtual firewall controlling what traffic can reach your instance
+- **Key pair**: the SSH credential used to log in, since there is no password by default
 
 ## Try it yourself
 
@@ -85,14 +85,14 @@ This course focuses on **IaaS** — the layer closest to the metal, and the one 
 ssh -i my-key.pem ec2-user@<public-ip>
 ```
 
-Free tier gives you 750 hours per month of a `t2.micro` instance — enough to run one instance continuously for a full month at zero cost.$md$,
+Free tier gives you 750 hours per month of a `t2.micro` instance, enough to run one instance continuously for a full month at zero cost.$md$,
    null, 300, 1, false),
 
   ('10000000-0002-4000-8000-000000000004', '10000000-0001-4000-8000-000000000002',
    '10000000-0000-4000-8000-000000000001', 'Understanding S3', 'understanding-s3',
    'text', $md$## What is S3?
 
-**S3 (Simple Storage Service)** stores files ("objects") in containers called **buckets**. Unlike a hard drive, S3 has no folders in the traditional sense — object keys like `images/profile/avatar.png` just look like a path.
+**S3 (Simple Storage Service)** stores files ("objects") in containers called **buckets**. Unlike a hard drive, S3 has no folders in the traditional sense: object keys like `images/profile/avatar.png` just look like a path.
 
 ## Why it matters
 
@@ -108,7 +108,7 @@ S3 is where CloudIskole itself stores payment slips and course PDFs. It is durab
 
 ## Bucket policies matter
 
-An S3 bucket is **private by default**. Every major cloud data leak you have read about involving "an exposed S3 bucket" happened because someone changed that default without understanding the consequences. Always ask: *who should be able to read this, and who should be able to write it?* — the same question our own database's row-level security answers for every table.$md$,
+An S3 bucket is **private by default**. Every major cloud data leak you have read about involving "an exposed S3 bucket" happened because someone changed that default without understanding the consequences. Always ask: *who should be able to read this, and who should be able to write it?* That's the same question our own database's row-level security answers for every table.$md$,
    null, 300, 2, false),
 
   ('10000000-0002-4000-8000-000000000005', '10000000-0001-4000-8000-000000000002',
@@ -127,7 +127,7 @@ values (
   'linux-networking',
   'Linux & Networking',
   'Command line fluency, servers, SSH and the networking every interview asks about.',
-  'The ground floor of every IT career. This course builds real command-line fluency and the networking fundamentals — DNS, HTTP, TCP/IP — that show up in almost every technical interview, regardless of which specialisation you choose next.',
+  'The ground floor of every IT career. This course builds real command-line fluency and the networking fundamentals (DNS, HTTP, TCP/IP) that show up in almost every technical interview, regardless of which specialisation you choose next.',
   'beginner', 'Linux', true, 0, 'published', 200, 2, now()
 );
 
@@ -144,15 +144,15 @@ values
    '20000000-0000-4000-8000-000000000001', 'Why Every Engineer Needs Linux', 'why-every-engineer-needs-linux',
    'text', $md$## Linux runs the internet
 
-Over 95% of the world's cloud servers run Linux. Every AWS EC2 instance, every Docker container, every Kubernetes node — almost all of it is Linux underneath. If DevOps or Cloud is your goal, the terminal is not optional.
+Over 95% of the world's cloud servers run Linux. Every AWS EC2 instance, every Docker container, every Kubernetes node: almost all of it is Linux underneath. If DevOps or Cloud is your goal, the terminal is not optional.
 
 ## The good news
 
-You do not need to memorise hundreds of commands. Real engineers use maybe 20 commands daily and look up the rest. This course teaches you those 20, plus — more importantly — how to *think* about a Linux system: everything is a file, every program can be piped into another, and the manual (`man <command>`) is always one keystroke away.
+You do not need to memorise hundreds of commands. Real engineers use maybe 20 commands daily and look up the rest. This course teaches you those 20, and (more importantly) how to *think* about a Linux system: everything is a file, every program can be piped into another, and the manual (`man <command>`) is always one keystroke away.
 
 ## What's next
 
-The next lesson gets your hands on a real terminal — no installation needed, since AWS's free-tier EC2 instance from the Cloud Foundations course works perfectly here too.$md$,
+The next lesson gets your hands on a real terminal, no installation needed, since AWS's free-tier EC2 instance from the Cloud Foundations course works perfectly here too.$md$,
    null, 240, 1, true),
 
   ('20000000-0002-4000-8000-000000000002', '20000000-0001-4000-8000-000000000001',
@@ -160,11 +160,11 @@ The next lesson gets your hands on a real terminal — no installation needed, s
    'text', $md$## The core commands
 
 ```bash
-pwd                 # print working directory — where am I?
+pwd                 # print working directory, where am I?
 ls -la               # list everything, including hidden files, with details
 cd /var/log          # change directory
 cat app.log           # print a whole file to the screen
-tail -f app.log        # watch a file as new lines are appended — essential for debugging
+tail -f app.log        # watch a file as new lines are appended, essential for debugging
 ```
 
 ## Everything is a file
@@ -178,7 +178,7 @@ ls -l app.sh
 # -rwxr-xr-- 1 ubuntu ubuntu 220 Jul 19 10:02 app.sh
 ```
 
-That `rwxr-xr--` breaks into three groups of three: **owner**, **group**, **everyone else** — each with **r**ead, **w**rite, **execute**. This is the same owner-vs-everyone-else thinking behind every access-control system you will meet later, including the row-level security that protects this very course platform's database.$md$,
+That `rwxr-xr--` breaks into three groups of three: **owner**, **group**, **everyone else**, each with **r**ead, **w**rite, **execute**. This is the same owner-vs-everyone-else thinking behind every access-control system you will meet later, including the row-level security that protects this very course platform's database.$md$,
    null, 300, 2, false),
 
   ('20000000-0002-4000-8000-000000000003', '20000000-0001-4000-8000-000000000002',
@@ -202,7 +202,7 @@ Computers address each other by IP address (e.g. `142.250.183.78`), but humans t
 | A | Maps a name to an IPv4 address |
 | CNAME | Maps a name to another name (an alias) |
 | MX | Where email for this domain should be delivered |
-| TXT | Arbitrary text — often used to prove domain ownership |
+| TXT | Arbitrary text, often used to prove domain ownership |
 
 Next time a website feels slow to load, it is sometimes DNS resolution, not the server itself.$md$,
    null, 280, 1, false),
@@ -212,7 +212,7 @@ Next time a website feels slow to load, it is sometimes DNS resolution, not the 
    'video', null, 'dQw4w9WgXcQ', 540, 2, false);
 
 -- ---------------------------------------------------------------------------
--- Course 3: DevOps Engineering (paid — Rs 25,000)
+-- Course 3: DevOps Engineering (paid, Rs 25,000)
 -- ---------------------------------------------------------------------------
 
 insert into public.courses
@@ -252,7 +252,7 @@ git push -u origin feature/payment-retry
 
 ## The pull request is the real deliverable
 
-A commit message explains *what* changed. A pull request explains *why* — and is where a teammate reviews your code before it reaches production. Write commit messages and PR descriptions as if the reader has none of the context in your head, because in six months, neither will you.$md$,
+A commit message explains *what* changed. A pull request explains *why*, and is where a teammate reviews your code before it reaches production. Write commit messages and PR descriptions as if the reader has none of the context in your head, because in six months, neither will you.$md$,
    null, 360, 1, true),
 
   ('30000000-0002-4000-8000-000000000002', '30000000-0001-4000-8000-000000000001',
@@ -262,7 +262,7 @@ A commit message explains *what* changed. A pull request explains *why* — and 
 Without an agreed strategy, a shared repository turns into chaos within a week. Two common approaches:
 
 ### Trunk-based development
-Everyone branches briefly off `main` and merges back within a day or two. Favoured by teams that deploy continuously — fewer long-lived branches means fewer painful merges.
+Everyone branches briefly off `main` and merges back within a day or two. Favoured by teams that deploy continuously: fewer long-lived branches means fewer painful merges.
 
 ### GitFlow
 Separate `develop`, `feature/*`, `release/*` and `hotfix/*` branches with stricter rules. Better suited to software shipped in scheduled releases rather than deployed continuously.
@@ -280,7 +280,7 @@ The specific strategy matters less than everyone on the team following the *same
    '30000000-0000-4000-8000-000000000001', 'Writing Your First Dockerfile', 'writing-your-first-dockerfile',
    'text', $md$## What a Dockerfile does
 
-A `Dockerfile` is a recipe for building a container image — a snapshot containing your app plus everything it needs to run, so it behaves identically on your laptop, a teammate's laptop, and in production.
+A `Dockerfile` is a recipe for building a container image, a snapshot containing your app plus everything it needs to run, so it behaves identically on your laptop, a teammate's laptop, and in production.
 
 ```dockerfile
 FROM node:22-alpine
@@ -294,10 +294,10 @@ CMD ["node", "server.js"]
 
 ## Line by line
 
-- `FROM` — the base image to start from (a minimal Node.js runtime here)
-- `WORKDIR` — sets the working directory inside the container
-- `COPY package*.json` then `RUN npm ci` **before** copying the rest of the code — this lets Docker cache the dependency install step, so it only reruns when `package.json` actually changes
-- `CMD` — the command that runs when a container starts from this image
+- `FROM`: the base image to start from (a minimal Node.js runtime here)
+- `WORKDIR`: sets the working directory inside the container
+- `COPY package*.json` then `RUN npm ci` **before** copying the rest of the code: this lets Docker cache the dependency install step, so it only reruns when `package.json` actually changes
+- `CMD`: the command that runs when a container starts from this image
 
 Build it with `docker build -t my-app .` and run it with `docker run -p 3000:3000 my-app`.$md$,
    null, 300, 2, false),
@@ -307,7 +307,7 @@ Build it with `docker build -t my-app .` and run it with `docker run -p 3000:300
    'video', null, 'dQw4w9WgXcQ', 660, 1, false);
 
 -- ---------------------------------------------------------------------------
--- Course 4: Software Engineering (paid — Rs 18,000)
+-- Course 4: Software Engineering (paid, Rs 18,000)
 -- ---------------------------------------------------------------------------
 
 insert into public.courses
@@ -348,7 +348,7 @@ Answering these *before* writing code is the actual skill. The code itself is of
 
 ## What comes next
 
-The next lessons introduce Python — chosen because its syntax gets out of the way of the thinking, which is exactly what you are here to practise first.$md$,
+The next lessons introduce Python, chosen because its syntax gets out of the way of the thinking, which is exactly what you are here to practise first.$md$,
    null, 300, 1, true),
 
   ('40000000-0002-4000-8000-000000000002', '40000000-0001-4000-8000-000000000001',
@@ -363,7 +363,7 @@ al_year = 2025
 is_enrolled = True
 ```
 
-Python figures out the type automatically — `student_name` is a string, `al_year` is an integer, `is_enrolled` is a boolean. This is different from languages like Java where you must declare the type yourself.
+Python figures out the type automatically: `student_name` is a string, `al_year` is an integer, `is_enrolled` is a boolean. This is different from languages like Java where you must declare the type yourself.
 
 ## The core types
 
@@ -399,7 +399,7 @@ git commit -m "Add score validation"   # save a snapshot with a message
 
 ## Commit often, in small pieces
 
-A common beginner mistake is writing 300 lines of code before the first commit. If something breaks, you cannot tell which part caused it. Commit every time you reach a small working state — after adding one function, after fixing one bug — so `git log` becomes a readable story of how the code grew.
+A common beginner mistake is writing 300 lines of code before the first commit. If something breaks, you cannot tell which part caused it. Commit every time you reach a small working state (after adding one function, after fixing one bug) so `git log` becomes a readable story of how the code grew.
 
 ## Undo without fear
 

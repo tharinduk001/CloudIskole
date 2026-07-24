@@ -146,7 +146,7 @@ function TechStack() {
             size="xl"
             eyebrow="What you'll actually use"
             title="The stack behind every track"
-            description="Not toy examples — the exact tools that show up in job postings, taught hands-on from lesson one."
+            description="Not toy examples, the exact tools that show up in job postings, taught hands-on from lesson one."
             eyebrowClassName="text-terracotta-600"
             titleClassName="text-onyx"
           />
