@@ -19,7 +19,7 @@
 -- 4 rows), silently multiplying every sum/count by however many rows the
 -- OTHER joins happened to contribute. Subqueries keep each aggregate scoped
 -- to exactly the table it counts.
-create view public.student_admin_summary as
+create or replace view public.student_admin_summary as
 select
   p.id,
   p.full_name,
